@@ -11,6 +11,11 @@ plugins {
     id 'application'
 }
 
+
+tasks.withType(JavaCompile){
+    options.encoding = 'UTF-8'
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -27,4 +32,14 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'laba.App'
+}
+
+run {
+    standardInput = System.in
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'laba.App'
+    }
 }

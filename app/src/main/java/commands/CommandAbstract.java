@@ -8,6 +8,10 @@ public abstract class CommandAbstract {
 
     public abstract void execute();
 
+    public String showInfoCommand(){
+        return String.format("%s : %s", title, description);
+    }
+
     public String getTitle() {
         return title;
     }
