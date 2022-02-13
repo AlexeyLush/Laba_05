@@ -1,4 +1,6 @@
-package models;
+package dao;
+
+import models.LabWork;
 
 import java.util.Map;
 

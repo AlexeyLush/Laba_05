@@ -5,11 +5,10 @@ import exception.NotFoundCommandException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Scanner;
 
-public class CommandsManager {
+public final class CommandsManager {
 
-    private Map<String, CommandAbstract> commandsList = new LinkedHashMap<String, CommandAbstract>();
+    private final Map<String, CommandAbstract> commandsList = new LinkedHashMap<String, CommandAbstract>();
 
     public CommandsManager(){
         addCommand(new HelpCommand());
@@ -28,7 +27,7 @@ public class CommandsManager {
                 throw new NotFoundCommandException();
             }
         } catch (NotFoundCommandException e){
-            System.out.println(e);
+            e.outputException();
         }
     }
 

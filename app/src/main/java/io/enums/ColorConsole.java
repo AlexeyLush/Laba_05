@@ -1,6 +1,6 @@
 package io.enums;
 
-public enum Color {
+public enum ColorConsole {
     ANSI_RESET("\u001B[0m"),
     ANSI_BLACK("\u001B[30m"),
     ANSI_RED("\u001B[31m"),
@@ -11,7 +11,14 @@ public enum Color {
     ANSI_CYAN("\u001B[36m"),
     ANSI_WHITE("\u001B[37m");
 
-    Color(String s) {
-        
+    private final String color;
+
+    ColorConsole(String color) {
+        this.color = color;
+    }
+
+    @Override
+    public String toString() {
+        return this.color;
     }
 }

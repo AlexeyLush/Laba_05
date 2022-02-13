@@ -1,8 +1,7 @@
 package exception;
 
-public class NotFoundCommandException extends Exception {
-    @Override
-    public String toString() {
-        return "Команда не найдена.";
+public class NotFoundCommandException extends CustomException {
+    public NotFoundCommandException(){
+        setMessage("Команда не найдена");
     }
 }
