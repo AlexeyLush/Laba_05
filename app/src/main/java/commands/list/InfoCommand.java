@@ -8,7 +8,7 @@ public class InfoCommand extends CommandAbstract {
 
     public InfoCommand() {
         setTitle("info");
-        setDescription("вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)");
+        setDescription("info : вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)");
     }
 
     @Override
