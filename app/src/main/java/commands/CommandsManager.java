@@ -28,7 +28,7 @@ public final class CommandsManager {
     public void inputCommand(String commandTitle, LabWorkDAO labWorkDAO) {
         try{
             if (commandsList.containsKey(commandTitle)){
-                commandsList.get(commandTitle).execute(labWorkDAO, this);
+                commandsList.get(commandTitle).execute(labWorkDAO, this, commandTitle);
             }
             else{
                 throw new NotFoundCommandException();

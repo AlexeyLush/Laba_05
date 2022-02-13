@@ -7,12 +7,12 @@ import dao.LabWorkDAO;
 public class InsertCommand extends CommandAbstract {
 
     public InsertCommand(){
-        setTitle("insert null {element}");
-        setDescription("добавить новый элемент с заданным ключом");
+        setTitle("insert");
+        setDescription("insert null {element}: добавить новый элемент с заданным ключом");
     }
 
     @Override
-    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager) {
+    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
 
     }
 }
