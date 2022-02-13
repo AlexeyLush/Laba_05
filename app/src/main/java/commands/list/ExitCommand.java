@@ -4,13 +4,12 @@ import commands.CommandAbstract;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
 
-public class HelpCommand extends CommandAbstract {
+public class ExitCommand extends CommandAbstract {
 
-    public HelpCommand(){
-        setTitle("help");
-        setDescription("help : вывести справку по доступным командам");
+    public ExitCommand(){
+        setTitle("exit");
+        setDescription("exit : завершить программу (без сохранения в файл)");
     }
-
     @Override
     public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
 

@@ -4,13 +4,12 @@ import commands.CommandAbstract;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
 
-public class HelpCommand extends CommandAbstract {
+public class ClearCommand extends CommandAbstract {
 
-    public HelpCommand(){
-        setTitle("help");
-        setDescription("help : вывести справку по доступным командам");
+    public ClearCommand(){
+        setTitle("clear");
+        setDescription("clear: очистить коллекцию");
     }
-
     @Override
     public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
 
