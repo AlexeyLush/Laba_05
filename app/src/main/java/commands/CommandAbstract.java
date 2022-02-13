@@ -7,11 +7,12 @@ public abstract class CommandAbstract {
 
     private String title;
     private String description;
+    private int argumentsCount = 0;
 
     public abstract void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager);
 
     public String showInfoCommand(){
-        return String.format("%s : %s", title, description);
+        return getDescription();
     }
 
     public String getTitle() {
@@ -28,5 +29,13 @@ public abstract class CommandAbstract {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getArgumentsCount() {
+        return argumentsCount;
+    }
+
+    public void setArgumentsCount(int argumentsCount) {
+        this.argumentsCount = argumentsCount;
     }
 }

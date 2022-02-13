@@ -8,7 +8,7 @@ public class HelpCommand extends CommandAbstract {
 
     public HelpCommand() {
         setTitle("help");
-        setDescription("вывести справку по доступным командам");
+        setDescription("help : вывести справку по доступным командам");
     }
 
     @Override
