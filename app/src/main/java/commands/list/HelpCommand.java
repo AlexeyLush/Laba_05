@@ -6,7 +6,7 @@ import dao.LabWorkDAO;
 
 public class HelpCommand extends CommandAbstract {
 
-    public HelpCommand() {
+    public HelpCommand(){
         setTitle("help");
         setDescription("help : вывести справку по доступным командам");
     }

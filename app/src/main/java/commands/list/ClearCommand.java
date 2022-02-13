@@ -6,12 +6,12 @@ import dao.LabWorkDAO;
 
 public class ClearCommand extends CommandAbstract {
 
-    public ClearCommand() {
+    public ClearCommand(){
         setTitle("clear");
         setDescription("clear: очистить коллекцию");
     }
     @Override
-    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager) {
+    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
 
     }
 }

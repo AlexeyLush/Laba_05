@@ -6,12 +6,12 @@ import dao.LabWorkDAO;
 
 public class SaveCommand extends CommandAbstract {
 
-    public SaveCommand() {
+    public SaveCommand(){
         setTitle("save");
         setDescription("save : сохранить коллекцию в файл");
     }
     @Override
-    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager) {
+    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
 
     }
 }

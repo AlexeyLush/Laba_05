@@ -1,7 +1,6 @@
 package commands;
 
-import commands.list.HelpCommand;
-import commands.list.InfoCommand;
+import commands.list.*;
 import dao.LabWorkDAO;
 import exception.NotFoundCommandException;
 
@@ -15,6 +14,20 @@ public final class CommandsManager {
     public CommandsManager(){
         addCommand(new HelpCommand());
         addCommand(new InfoCommand());
+        addCommand(new ClearCommand());
+        addCommand(new ExitCommand());
+        addCommand(new SaveCommand());
+        addCommand(new ExecuteScriptCommand());
+        addCommand(new RemoveGreaterCommand());
+        addCommand(new RemoveLowerCommand());
+        addCommand(new RemoveKeyCommand());
+        addCommand(new InsertCommand());
+        addCommand(new ShowCommand());
+        addCommand(new UpdateCommand());
+        addCommand(new ReplaceIfLoweCommand());
+        addCommand(new SumOfMinimalPointCommand());
+        addCommand(new GroupCountingByNameCommand());
+        addCommand(new FilterGreaterThanDescriptionCommand());
     }
 
     private void addCommand(CommandAbstract command){
