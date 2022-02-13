@@ -1,6 +1,8 @@
 package commands;
 
 import commands.list.HelpCommand;
+import commands.list.InfoCommand;
+import dao.LabWorkDAO;
 import exception.NotFoundCommandException;
 
 import java.util.LinkedHashMap;
@@ -12,16 +14,21 @@ public final class CommandsManager {
 
     public CommandsManager(){
         addCommand(new HelpCommand());
+        addCommand(new InfoCommand());
     }
 
     private void addCommand(CommandAbstract command){
         commandsList.put(command.getTitle(), command);
     }
 
-    public void inputCommand(String commandTitle) {
+    public Map<String, CommandAbstract> getCommandsList(){
+        return new LinkedHashMap<>(this.commandsList);
+    }
+
+    public void inputCommand(String commandTitle, LabWorkDAO labWorkDAO) {
         try{
             if (commandsList.containsKey(commandTitle)){
-                System.out.println(commandsList.get(commandTitle).showInfoCommand());
+                commandsList.get(commandTitle).execute(labWorkDAO, this);
             }
             else{
                 throw new NotFoundCommandException();

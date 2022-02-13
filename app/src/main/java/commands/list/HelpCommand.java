@@ -1,6 +1,8 @@
 package commands.list;
 
 import commands.CommandAbstract;
+import commands.CommandsManager;
+import dao.LabWorkDAO;
 
 public class HelpCommand extends CommandAbstract {
 
@@ -10,7 +12,7 @@ public class HelpCommand extends CommandAbstract {
     }
 
     @Override
-    public void execute() {
-        System.out.println("Отработана команда help");
+    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager) {
+
     }
 }

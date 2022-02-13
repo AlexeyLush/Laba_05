@@ -13,11 +13,12 @@ public class App {
     public static void main(String[] args) {
 
         CommandsManager commandsManager = new CommandsManager();
+        LabWorkDAO labWorkDAO = new LabWorkDAO();
 
         Scanner scanner = new Scanner(System.in);
 
         while (true){
-            commandsManager.inputCommand(scanner.nextLine());
+            commandsManager.inputCommand(scanner.nextLine(), labWorkDAO);
         }
 
 

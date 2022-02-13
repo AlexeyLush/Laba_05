@@ -1,6 +1,7 @@
 package exception;
 
 import io.ConsoleManager;
+import io.enums.ColorConsole;
 
 public abstract class CustomException extends Exception {
 

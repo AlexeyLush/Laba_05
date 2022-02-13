@@ -1,12 +1,14 @@
 package commands;
 
 
+import dao.LabWorkDAO;
+
 public abstract class CommandAbstract {
 
     private String title;
     private String description;
 
-    public abstract void execute();
+    public abstract void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager);
 
     public String showInfoCommand(){
         return String.format("%s : %s", title, description);
