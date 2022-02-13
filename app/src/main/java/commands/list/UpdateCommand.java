@@ -11,7 +11,7 @@ public class UpdateCommand extends CommandAbstract {
         setDescription("обновить значение элемента коллекции, id которого равен заданному");
     }
     @Override
-    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager) {
+    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
 
     }
 }

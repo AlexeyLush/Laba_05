@@ -12,7 +12,7 @@ public class HelpCommand extends CommandAbstract {
     }
 
     @Override
-    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager) {
+    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
 
     }
 }
