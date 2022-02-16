@@ -1,8 +1,10 @@
 package laba;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
+import io.ConsoleManager;
 import models.LabWork;
 
+import java.io.Console;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,13 +14,12 @@ public class App {
 
     public static void main(String[] args) {
 
-        CommandsManager commandsManager = new CommandsManager();
+        ConsoleManager consoleManager = new ConsoleManager();
+        CommandsManager commandsManager = new CommandsManager(consoleManager);
         LabWorkDAO labWorkDAO = new LabWorkDAO();
 
-        Scanner scanner = new Scanner(System.in);
-
         while (true){
-            commandsManager.inputCommand(scanner.nextLine(), labWorkDAO);
+            commandsManager.inputCommand(labWorkDAO);
         }
 
 

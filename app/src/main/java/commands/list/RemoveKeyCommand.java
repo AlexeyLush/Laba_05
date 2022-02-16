@@ -3,6 +3,7 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
+import io.ConsoleManager;
 
 public class RemoveKeyCommand extends CommandAbstract {
 
@@ -10,8 +11,9 @@ public class RemoveKeyCommand extends CommandAbstract {
         setTitle("remove_key");
         setDescription("remove_key null : удалить элемент из коллекции по его ключу");
     }
+
     @Override
-    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, String command) {
+    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, String command) {
 
     }
 }

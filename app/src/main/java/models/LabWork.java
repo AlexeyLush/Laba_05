@@ -31,8 +31,12 @@ public class LabWork{
         return name;
     }
 
-    public void setName(String name) {
+    public Boolean setName(String name) {
+        if (name == null || name.isEmpty()){
+            return false;
+        }
         this.name = name;
+        return true;
     }
 
     public Coordinates getCoordinates() {
