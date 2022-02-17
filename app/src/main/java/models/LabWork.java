@@ -15,12 +15,12 @@ public class LabWork{
     private Difficulty difficulty; //Поле может быть null
     private Person author; //Поле может быть null
 
-    public LabWork() {
-        setId();
-    }
-
-    private void setId(){
-        this.id = GenerationID.newId();
+    public boolean setId(int id){
+        if (id <= 0){
+            return false;
+        }
+        this.id = id;
+        return true;
     }
 
     public int getId() {
@@ -32,7 +32,7 @@ public class LabWork{
     }
 
     public Boolean setName(String name) {
-        if (name == null || name.isEmpty()){
+        if (name == null || name.isEmpty() || name.split(" ").length == 0 || name.split("\t").length == 0){
             return false;
         }
         this.name = name;
@@ -59,16 +59,25 @@ public class LabWork{
         return minimalPoint;
     }
 
-    public void setMinimalPoint(Float minimalPoint) {
+    public boolean setMinimalPoint(Float minimalPoint) {
+        if (minimalPoint <= 0){
+            return false;
+        }
         this.minimalPoint = minimalPoint;
+        return true;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public boolean setDescription(String description) {
+        if (description == null || description.isEmpty() || description.split(" ").length == 0
+                || description.split("\t").length == 0){
+            return false;
+        }
         this.description = description;
+        return true;
     }
 
     public Difficulty getDifficulty() {

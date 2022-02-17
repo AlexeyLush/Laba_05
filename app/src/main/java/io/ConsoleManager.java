@@ -21,7 +21,6 @@ public class ConsoleManager implements ConsoleOutput, MessageOutput {
         System.out.println(color + message + ColorConsole.ANSI_RESET);
     }
 
-
     @Override
     public void info(String message) {
         output(message);

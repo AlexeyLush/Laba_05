@@ -5,10 +5,7 @@ import dao.LabWorkDAO;
 import exception.NotFoundCommandException;
 import io.ConsoleManager;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public final class CommandsManager {
 
@@ -47,20 +44,21 @@ public final class CommandsManager {
 
         consoleManager.output("Введите команду: ");
         Scanner scanner = new Scanner(System.in);
-        String command = scanner.nextLine();
 
         try{
+            String command = scanner.nextLine();
             String commandName = command.split(" ")[0];
             if (commandsList.containsKey(commandName)){
                 commandsList.get(commandName).execute(labWorkDAO, this, consoleManager, command);
+                consoleManager.successfully(String.format("Команда %s успешно выполнена", commandName));
             }
             else{
                 throw new NotFoundCommandException();
             }
         } catch (NotFoundCommandException e){
-            e.outputException();
-        } catch (ArrayIndexOutOfBoundsException e){
-            new NotFoundCommandException().outputException();
+            e.outputException(consoleManager);
+        } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e){
+            new NotFoundCommandException().outputException(consoleManager);
         }
     }
 

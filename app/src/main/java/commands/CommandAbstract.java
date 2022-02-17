@@ -8,7 +8,7 @@ public abstract class CommandAbstract {
 
     private String title;
     private String description;
-    private int argumentsCount = 0;
+
 
     public abstract void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, String command);
 
@@ -32,11 +32,4 @@ public abstract class CommandAbstract {
         this.description = description;
     }
 
-    public int getArgumentsCount() {
-        return argumentsCount;
-    }
-
-    public void setArgumentsCount(int argumentsCount) {
-        this.argumentsCount = argumentsCount;
-    }
 }

@@ -1,7 +1,7 @@
 package exception;
 
-public class EmptyNameException extends CustomException{
-    public EmptyNameException() {
-        setMessage("Вы не ввели имя");
+public class EmptyFieldException extends CustomException{
+    public EmptyFieldException() {
+        setMessage("Вы не ввели значение");
     }
 }

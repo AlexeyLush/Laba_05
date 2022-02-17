@@ -7,13 +7,6 @@ public class Person {
     private long weight; //Значение поля должно быть больше 0
     private String passportID; //Поле не может быть null
 
-    // Конструктор
-    public Person(String name, long weight, String passportID){
-        this.name = name;
-        this.weight = weight;
-        this.passportID = passportID;
-    }
-
     // Геттеры
     public String getName(){
         return name;
@@ -26,14 +19,27 @@ public class Person {
     }
 
     // Сеттеры
-    public void setName(String name){
+    public boolean setName(String name){
+        if (name == null || name.isEmpty() || name.split(" ").length == 0 || name.split("\t").length == 0){
+            return false;
+        }
         this.name = name;
+        return true;
     }
-    public void setWeight(long weight){
+    public boolean setWeight(long weight){
+        if (weight <= 0){
+            return false;
+        }
         this.weight = weight;
+        return true;
     }
-    public void setPassportID(String passportID){
+    public boolean setPassportID(String passportID){
+        if (passportID == null || passportID.isEmpty() || passportID.split(" ").length == 0
+                || passportID.split("\t").length == 0){
+            return false;
+        }
         this.passportID = passportID;
+        return true;
     }
 
     @Override

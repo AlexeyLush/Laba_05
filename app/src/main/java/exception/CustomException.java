@@ -1,7 +1,6 @@
 package exception;
 
 import io.ConsoleManager;
-import io.enums.ColorConsole;
 
 public abstract class CustomException extends Exception {
 
@@ -11,8 +10,7 @@ public abstract class CustomException extends Exception {
         this.message = message;
     }
 
-    public void outputException(){
-        ConsoleManager manager = new ConsoleManager();
+    public void outputException(ConsoleManager manager){
         manager.error(message);
     }
 
