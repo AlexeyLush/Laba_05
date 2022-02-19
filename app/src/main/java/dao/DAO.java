@@ -8,6 +8,7 @@ public interface DAO {
     int create(LabWork labWork);
     void update(LabWork labWork);
     void delete(int id);
+    void clear();
     LabWork get(int id);
     Map<Integer, LabWork> getAll();
 }

@@ -38,6 +38,11 @@ public class LabWorkDAO implements DAO{
     }
 
     @Override
+    public void clear() {
+        labWorkList = new LinkedHashMap<>();
+    }
+
+    @Override
     public LabWork get(int id) {
         return labWorkList.get(id);
     }

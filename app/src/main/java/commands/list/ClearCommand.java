@@ -14,6 +14,6 @@ public class ClearCommand extends CommandAbstract {
 
     @Override
     public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, String command) {
-
+        labWorkDAO.clear();
     }
 }
