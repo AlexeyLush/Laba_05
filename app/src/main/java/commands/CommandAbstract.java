@@ -2,6 +2,8 @@ package commands;
 
 
 import dao.LabWorkDAO;
+import files.DataFileManager;
+import files.ExecuteFileManager;
 import io.ConsoleManager;
 
 public abstract class CommandAbstract {
@@ -10,7 +12,7 @@ public abstract class CommandAbstract {
     private String description;
     private String element;
 
-    public abstract void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, String command);
+    public abstract void execute(String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager);
 
     public String showInfoCommand(){
         return getDescription();

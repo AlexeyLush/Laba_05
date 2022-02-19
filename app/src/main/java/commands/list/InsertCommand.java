@@ -4,8 +4,9 @@ import commands.CommandAbstract;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
 import exception.*;
+import files.DataFileManager;
+import files.ExecuteFileManager;
 import io.ConsoleManager;
-import exception.*;
 import models.Coordinates;
 import models.Difficulty;
 import models.LabWork;
@@ -16,6 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class InsertCommand extends CommandAbstract {
+
 
     public InsertCommand() {
         setTitle("insert");
@@ -233,12 +235,12 @@ public class InsertCommand extends CommandAbstract {
     }
 
     @Override
-    public void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, String command) {
+    public void execute(String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager) {
 
         Scanner scanner = new Scanner(System.in);
         LabWork labWork = new LabWork();
 
-        checkIdUser(command, scanner, labWork, labWorkDAO, consoleManager);
+        checkIdUser(this.command, scanner, labWork, labWorkDAO, consoleManager);
         checkNameLab(scanner, labWork, consoleManager);
         checkCoordinates(scanner, labWork, consoleManager);
         checkMinimalPoint(scanner, labWork, consoleManager);

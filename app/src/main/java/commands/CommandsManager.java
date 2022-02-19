@@ -49,7 +49,7 @@ public final class CommandsManager {
             String command = scanner.nextLine();
             String commandName = command.split(" ")[0];
             if (commandsList.containsKey(commandName)){
-                commandsList.get(commandName).execute(labWorkDAO, this, consoleManager, command);
+                commandsList.get(commandName).execute(command, labWorkDAO, this, consoleManager, , );
                 consoleManager.successfully(String.format("Команда %s успешно выполнена", commandName));
             }
             else{
