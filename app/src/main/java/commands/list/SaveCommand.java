@@ -1,11 +1,7 @@
 package commands.list;
 
 import commands.CommandAbstract;
-import commands.CommandsManager;
-import dao.LabWorkDAO;
-import files.DataFileManager;
-import files.ExecuteFileManager;
-import io.ConsoleManager;
+import commands.models.CommandFields;
 
 public class SaveCommand extends CommandAbstract {
 
@@ -15,8 +11,7 @@ public class SaveCommand extends CommandAbstract {
     }
 
     @Override
-    public void execute(String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager,
-                        ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager) {
-        dataFileManager.save(labWorkDAO.getAll());
+    public void execute(CommandFields commandFields) {
+        commandFields.getDataFileManager().save(commandFields.getLabWorkDAO().getAll());
     }
 }

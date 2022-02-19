@@ -2,6 +2,7 @@ package laba;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
 import files.DataFileManager;
+import files.ExecuteFileManager;
 import files.file.FileManager;
 import io.ConsoleManager;
 import models.LabWork;
@@ -21,11 +22,15 @@ public class App {
     public static void main(String[] args) {
 
         ConsoleManager consoleManager = new ConsoleManager();
-        CommandsManager commandsManager = new CommandsManager(consoleManager);
+
         LabWorkDAO labWorkDAO = new LabWorkDAO();
 
         String dataFileName = System.getenv("LABWORKS_FILE_PATH");
-        FileManager dataFileManager = new DataFileManager(dataFileName);
+
+        DataFileManager dataFileManager = new DataFileManager(dataFileName);
+        ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName);
+
+        CommandsManager commandsManager = new CommandsManager(consoleManager, dataFileManager, executeFileManager);
 
         while (isRun){
             commandsManager.inputCommand(labWorkDAO);

@@ -1,11 +1,9 @@
 package commands.list;
 
 import commands.CommandAbstract;
-import commands.CommandsManager;
+import commands.models.CommandFields;
 import dao.LabWorkDAO;
 import exception.*;
-import files.DataFileManager;
-import files.ExecuteFileManager;
 import io.ConsoleManager;
 import models.Coordinates;
 import models.Difficulty;
@@ -235,20 +233,20 @@ public class InsertCommand extends CommandAbstract {
     }
 
     @Override
-    public void execute(String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager) {
+    public void execute(CommandFields commandFields) {
 
         Scanner scanner = new Scanner(System.in);
         LabWork labWork = new LabWork();
 
-        checkIdUser(this.command, scanner, labWork, labWorkDAO, consoleManager);
-        checkNameLab(scanner, labWork, consoleManager);
-        checkCoordinates(scanner, labWork, consoleManager);
-        checkMinimalPoint(scanner, labWork, consoleManager);
-        checkDescription(scanner, labWork, consoleManager);
-        checkDifficulty(scanner, labWork, consoleManager);
-        checkAuthor(scanner, labWork, consoleManager);
+        checkIdUser(commandFields.getCommand(), scanner, labWork, commandFields.getLabWorkDAO(), commandFields.getConsoleManager());
+        checkNameLab(scanner, labWork, commandFields.getConsoleManager());
+        checkCoordinates(scanner, labWork, commandFields.getConsoleManager());
+        checkMinimalPoint(scanner, labWork, commandFields.getConsoleManager());
+        checkDescription(scanner, labWork, commandFields.getConsoleManager());
+        checkDifficulty(scanner, labWork, commandFields.getConsoleManager());
+        checkAuthor(scanner, labWork, commandFields.getConsoleManager());
 
-        labWorkDAO.create(labWork);
+        commandFields.getLabWorkDAO().create(labWork);
 
     }
 }

@@ -1,10 +1,8 @@
 package commands.list;
 
 import commands.CommandAbstract;
-import commands.CommandsManager;
+import commands.models.CommandFields;
 import dao.LabWorkDAO;
-import files.DataFileManager;
-import files.ExecuteFileManager;
 import io.ConsoleManager;
 import exception.NotEnteredKeyException;
 import exception.NotFoundElementException;
@@ -89,7 +87,6 @@ public class UpdateCommand extends CommandAbstract {
         return labWorkForUpdate;
 
     }
-
     private void outputFiled(String field, ConsoleManager consoleManager, boolean isUpdateField){
         if (isUpdateField){
             consoleManager.outpunln(String.format("%d. %s", counterFiled, field));
@@ -111,10 +108,10 @@ public class UpdateCommand extends CommandAbstract {
 
 
     @Override
-    public void execute(String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager) {
+    public void execute(CommandFields commandFields) {
 
         Scanner scanner = new Scanner(System.in);
-        LabWork labWork = getLabWork(command, scanner, labWorkDAO, consoleManager);
+        LabWork labWork = getLabWork(commandFields.getCommand(), scanner, commandFields.getLabWorkDAO(), commandFields.getConsoleManager());
 
     }
 }

@@ -1,9 +1,13 @@
 package commands;
 
 import commands.list.*;
+import commands.models.CommandFields;
 import dao.LabWorkDAO;
 import exception.NotFoundCommandException;
+import files.DataFileManager;
+import files.ExecuteFileManager;
 import io.ConsoleManager;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.*;
 
@@ -11,8 +15,12 @@ public final class CommandsManager {
 
     private final Map<String, CommandAbstract> commandsList = new LinkedHashMap<String, CommandAbstract>();
     private final ConsoleManager consoleManager;
+    private final DataFileManager dataFileManager;
+    private final ExecuteFileManager executeFileManager;
 
-    public CommandsManager(ConsoleManager consoleManager){
+    public CommandsManager(ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager){
+        this.dataFileManager = dataFileManager;
+        this.executeFileManager = executeFileManager;
         this.consoleManager = consoleManager;
         addCommand(new HelpCommand());
         addCommand(new InfoCommand());
@@ -49,7 +57,10 @@ public final class CommandsManager {
             String command = scanner.nextLine();
             String commandName = command.split(" ")[0];
             if (commandsList.containsKey(commandName)){
-                commandsList.get(commandName).execute(command, labWorkDAO, this, consoleManager, , );
+
+                CommandFields commandFields = new CommandFields(command, labWorkDAO,
+                        this, consoleManager, dataFileManager, executeFileManager);
+                commandsList.get(commandName).execute(commandFields);
                 consoleManager.successfully(String.format("Команда %s успешно выполнена", commandName));
             }
             else{
