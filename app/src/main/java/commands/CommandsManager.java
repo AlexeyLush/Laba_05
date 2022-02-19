@@ -19,9 +19,11 @@ public final class CommandsManager {
     private final ExecuteFileManager executeFileManager;
 
     public CommandsManager(ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager){
+
         this.dataFileManager = dataFileManager;
         this.executeFileManager = executeFileManager;
         this.consoleManager = consoleManager;
+
         addCommand(new HelpCommand());
         addCommand(new InfoCommand());
         addCommand(new ClearCommand());

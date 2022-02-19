@@ -22,15 +22,12 @@ public class App {
     public static void main(String[] args) {
 
         ConsoleManager consoleManager = new ConsoleManager();
-
         LabWorkDAO labWorkDAO = new LabWorkDAO();
-
         String dataFileName = System.getenv("LABWORKS_FILE_PATH");
 
-        DataFileManager dataFileManager = new DataFileManager(dataFileName);
+        DataFileManager dataFileManager = new DataFileManager(dataFileName, consoleManager);
         labWorkDAO.initialMap(dataFileManager.readFile());
-        System.out.println(dataFileManager.readFile().size());
-        ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName);
+        ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
 
         CommandsManager commandsManager = new CommandsManager(consoleManager, dataFileManager, executeFileManager);
 

@@ -7,7 +7,9 @@ import exception.ProblemWithFileException;
 import files.file.FileCreator;
 import files.file.FileManager;
 import files.file.FileWork;
+import io.ConsoleManager;
 import models.*;
+import models.service.GenerationID;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -16,12 +18,14 @@ import java.util.Map;
 
 public class DataFileManager extends FileManager implements FileWork<Integer, LabWork>, FileCreator {
 
-    public DataFileManager(String fileName) {
-        super(fileName);
+    public DataFileManager(String fileName, ConsoleManager consoleManager) {
+        super(fileName, consoleManager);
         File data = new File(fileName);
         try {
             if (data.createNewFile()){
+                getConsoleManager().warning("Идёт создание файла...");
                 createFile();
+                getConsoleManager().successfully("Файл успешно создан!");
             }
         } catch (IOException ioException) {
             new ProblemWithFileException().outputException();
@@ -44,13 +48,19 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
             while((temp=reader.readLine())!=null) {
                 s += temp;
             }
-            
+
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
             labWorkMap = mapper.readValue(s, typeRef);
 
         } catch (IOException e) {
             new ProblemWithFileException().outputException();
+            getConsoleManager().warning("Идёт перезапись файла значениями по умолчанию...");
+            createFile();
+            getConsoleManager().successfully("Файл успешно перезаписан!");
+            getConsoleManager().warning("Идёт повторное считывание данных...");
+            readFile();
+            getConsoleManager().successfully("Данные успешно считаны!");
         }
         return labWorkMap;
     }
@@ -75,6 +85,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
             Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
 
+            GenerationID.reset();
             LabWork labWork = new LabWork();
 
             labWork.setName("Лабораторная работа №1");
