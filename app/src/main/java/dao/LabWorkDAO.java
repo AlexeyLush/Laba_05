@@ -5,7 +5,7 @@ import models.LabWork;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class LabWorkDAO implements DAO{
+public class LabWorkDAO implements DAO<Integer, LabWork>{
 
     private Map<Integer, LabWork> labWorkList = new LinkedHashMap<Integer, LabWork>();
 

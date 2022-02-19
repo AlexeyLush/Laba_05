@@ -5,9 +5,9 @@ import commands.CommandsManager;
 import dao.LabWorkDAO;
 import io.ConsoleManager;
 
-public class ReplaceIfLoweCommand extends CommandAbstract {
+public class ReplaceIfLowerCommand extends CommandAbstract {
 
-    public ReplaceIfLoweCommand(){
+    public ReplaceIfLowerCommand(){
         setTitle("replace_if_lowe");
         setDescription("replace_if_lowe null {element} : заменить значение по ключу, если новое значение меньше старого");
     }

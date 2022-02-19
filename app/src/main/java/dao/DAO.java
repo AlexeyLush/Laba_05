@@ -4,11 +4,11 @@ import models.LabWork;
 
 import java.util.Map;
 
-public interface DAO {
-    int create(LabWork labWork);
-    void update(LabWork labWork);
+public interface DAO<K,V> {
+    int create(V labWork);
+    void update(V labWork);
     void delete(int id);
     void clear();
-    LabWork get(int id);
-    Map<Integer, LabWork> getAll();
+    V get(int id);
+    Map<K, V> getAll();
 }

@@ -5,7 +5,7 @@ import files.file.FileCheck;
 import java.io.Reader;
 import java.io.Writer;
 
-public abstract class FileManager implements FileCheck {
+public abstract class FileManager {
 
     private final String fileName;
 

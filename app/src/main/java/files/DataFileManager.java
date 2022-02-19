@@ -1,6 +1,7 @@
 package files;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import commands.CommandAbstract;
 import exception.ProblemWithFileException;
 import files.file.FileCreator;
@@ -12,10 +13,11 @@ import models.LabWork;
 import models.Person;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DataFileManager extends FileManager implements FileWork<Integer, CommandAbstract>, FileCreator {
+public class DataFileManager extends FileManager implements FileWork<Integer, LabWork>, FileCreator {
 
     public DataFileManager(String fileName) {
         super(fileName);
@@ -25,34 +27,46 @@ public class DataFileManager extends FileManager implements FileWork<Integer, Co
                 createFile();
             }
         } catch (IOException ioException) {
-            System.out.println(ioException);
+            new ProblemWithFileException().outputException();
         }
     }
 
+
     @Override
-    public boolean isCreatedFile() {
-        return false;
+    public Map<Integer, LabWork> readFile() {
+
+        Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(getFileName()))) {
+
+            String s;
+            Gson gson = new Gson();
+
+            Type itemsMapType = new TypeToken<Map<Integer, LabWork>>() {}.getType();
+
+            while((s=reader.readLine())!=null){
+                LabWork labWork = gson.fromJson(s, itemsMapType);
+                labWorkMap.put(labWork.getId(),labWork);
+            }
+
+        } catch (IOException e) {
+            new ProblemWithFileException().outputException();
+        }
+
+        return labWorkMap;
     }
 
-
     @Override
-    public void write(CommandAbstract element) {
+    public void save(Map<Integer, LabWork> labWorkMap) {
+        try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
-    }
+            Gson gson = new Gson();
+            String json = gson.toJson(labWorkMap);
+            writer.write(json);
 
-    @Override
-    public void writeMap(Map<Integer, CommandAbstract> elements) {
-
-    }
-
-    @Override
-    public Map<Integer, CommandAbstract> readFile() {
-        return null;
-    }
-
-    @Override
-    public void save() {
-
+        } catch (IOException e) {
+            new ProblemWithFileException().outputException();
+        }
     }
 
     @Override

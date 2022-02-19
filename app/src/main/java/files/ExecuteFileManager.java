@@ -9,9 +9,6 @@ public class ExecuteFileManager extends FileManager implements ReadCommand {
 
     public ExecuteFileManager(String fileName) {
         super(fileName);
-        if (!isCreatedFile()){
-
-        }
     }
 
     @Override
@@ -19,9 +16,5 @@ public class ExecuteFileManager extends FileManager implements ReadCommand {
         return null;
     }
 
-    @Override
-    public boolean isCreatedFile() {
-        return false;
-    }
 
 }

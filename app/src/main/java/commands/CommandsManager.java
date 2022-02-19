@@ -26,7 +26,7 @@ public final class CommandsManager {
         addCommand(new InsertCommand());
         addCommand(new ShowCommand());
         addCommand(new UpdateCommand());
-        addCommand(new ReplaceIfLoweCommand());
+        addCommand(new ReplaceIfLowerCommand());
         addCommand(new SumOfMinimalPointCommand());
         addCommand(new GroupCountingByNameCommand());
         addCommand(new FilterGreaterThanDescriptionCommand());
