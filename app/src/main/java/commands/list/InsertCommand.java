@@ -22,6 +22,54 @@ public class InsertCommand extends CommandAbstract {
         setDescription("insert null {element}: добавить новый элемент с заданным ключом");
     }
 
+    private boolean checkerId(int id, LabWorkDAO labWorkDAO){
+        boolean isTrue = true;
+        try {
+            LabWork labWork = new LabWork();
+
+            if (!labWork.setId(id)){
+                throw new NumberMinimalException(0);
+            }
+            if (labWorkDAO.getAll().containsKey(id)){
+                throw new NotUniqueKeyException();
+            }
+        }  catch (NoSuchElementException noSuchElementException) {
+            new NotNumberException().outputException();
+            isTrue = false;
+        } catch (NotUniqueKeyException notUniqueKeyException) {
+            notUniqueKeyException.outputException();
+            isTrue = false;
+        } catch (NumberMinimalException numberMinimalException) {
+            numberMinimalException.outputException();
+            isTrue = false;
+        }
+        return isTrue;
+    }
+    private boolean checkUserId(String command, LabWorkDAO labWorkDAO, boolean isUserInput){
+        boolean isTrue = false;
+        try {
+            String[] splitCommand = command.split(" ");
+            if (splitCommand.length == 2 && isUserInput){
+                String idStr = command.split(" ")[1];
+                return checkerId(Integer.parseInt(idStr), labWorkDAO);
+            } else if (splitCommand.length == 1 && isUserInput){
+                int id = GenerationID.newId();
+                return checkerId(id, labWorkDAO);
+            } else if (splitCommand.length > 2){
+                String idStr = splitCommand[1];
+                if (checkerId(Integer.parseInt(idStr), labWorkDAO)){
+                    splitCommand[0] = "";
+                    splitCommand[1] = "";
+                    String json = String.join(" ", splitCommand);
+                }
+            }
+        } catch (NumberFormatException numberFormatException){
+            new NotNumberException().outputException();
+        }
+        return isTrue;
+    }
+
+
     private void checkIdUser(String command, Scanner scanner, LabWork labWork, LabWorkDAO labWorkDAO, ConsoleManager consoleManager){
 
         int id;

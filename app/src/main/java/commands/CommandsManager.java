@@ -61,7 +61,7 @@ public final class CommandsManager {
             if (commandsList.containsKey(commandName)){
 
                 CommandFields commandFields = new CommandFields(command, labWorkDAO,
-                        this, consoleManager, dataFileManager, executeFileManager);
+                        this, consoleManager, dataFileManager, executeFileManager, true);
                 commandsList.get(commandName).execute(commandFields);
                 consoleManager.successfully(String.format("Команда %s успешно выполнена", commandName));
             }

@@ -10,6 +10,7 @@ import files.file.FileWork;
 import io.ConsoleManager;
 import models.*;
 import models.service.GenerationID;
+import services.parsers.ParserJSON;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -49,9 +50,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
                 s += temp;
             }
 
-            ObjectMapper mapper = new ObjectMapper();
-            TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
-            labWorkMap = mapper.readValue(s, typeRef);
+            labWorkMap = new ParserJSON().deserializeMap(s);
 
         } catch (IOException e) {
             new ProblemWithFileException().outputException();
@@ -69,8 +68,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
     public void save(Map<Integer, LabWork> labWorkMap) {
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(labWorkMap);
+            String json = new ParserJSON().serializeMap(labWorkMap);
             writer.write(json);
 
         } catch (IOException e) {
@@ -110,9 +108,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
             labWorkMap.put(labWork.getId(), labWork);
 
 
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(labWorkMap);
-
+            String json = new ParserJSON().serializeMap(labWorkMap);
             writer.write(json);
 
 

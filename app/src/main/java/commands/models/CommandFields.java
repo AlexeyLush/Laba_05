@@ -14,15 +14,17 @@ public class CommandFields {
     private final ConsoleManager consoleManager;
     private final DataFileManager dataFileManager;
     private final ExecuteFileManager executeFileManager;
+    private final boolean isUserInput;
 
     public CommandFields(String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager,
-                         ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager) {
+                         ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager, boolean isUserInput) {
         this.command = command;
         this.labWorkDAO = labWorkDAO;
         this.commandsManager = commandsManager;
         this.consoleManager = consoleManager;
         this.dataFileManager = dataFileManager;
         this.executeFileManager = executeFileManager;
+        this.isUserInput = isUserInput;
     }
 
     public String getCommand() {
