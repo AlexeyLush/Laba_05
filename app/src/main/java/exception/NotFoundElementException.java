@@ -1,8 +1,7 @@
 package exception;
 
-public class NotFoundElementException extends Exception{
-    @Override
-    public String toString() {
-        return "Элемент не найден.";
+public class NotFoundElementException extends CustomException{
+    public NotFoundElementException(){
+        setMessage("Элемент не найден");
     }
 }

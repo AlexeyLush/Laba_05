@@ -8,7 +8,7 @@ public abstract class CommandAbstract {
 
     private String title;
     private String description;
-
+    private String element;
 
     public abstract void execute(LabWorkDAO labWorkDAO, CommandsManager commandsManager, ConsoleManager consoleManager, String command);
 
@@ -30,6 +30,14 @@ public abstract class CommandAbstract {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getElement(){
+        return element;
+    }
+
+    public void setElement(String element){
+        this.element = element;
     }
 
 }
