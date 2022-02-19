@@ -56,9 +56,9 @@ public final class CommandsManager {
                 throw new NotFoundCommandException();
             }
         } catch (NotFoundCommandException e){
-            e.outputException(consoleManager);
+            e.outputException();
         } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e){
-            new NotFoundCommandException().outputException(consoleManager);
+            new NotFoundCommandException().outputException();
         }
     }
 

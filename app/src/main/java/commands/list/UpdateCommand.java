@@ -3,13 +3,13 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
-import exception.*;
 import io.ConsoleManager;
+import exception.NotEnteredKeyException;
+import exception.NotFoundElementException;
+import exception.NotNumberException;
 import models.LabWork;
-import models.service.GenerationID;
 
 import java.lang.reflect.Method;
-import java.text.NumberFormat;
 import java.util.LinkedHashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -47,12 +47,12 @@ public class UpdateCommand extends CommandAbstract {
                         break;
 
                     } catch (NumberFormatException numberFormatException) {
-                        new NotNumberException().outputException(consoleManager);
+                        new NotNumberException().outputException();
                         commandTemp = command.split(" ")[0];
                         idStr = "";
                     }
                     catch (NotFoundElementException notFoundElementException) {
-                        notFoundElementException.outputException(consoleManager);
+                        notFoundElementException.outputException();
                         idStr = "";
                     }
                 }
@@ -60,7 +60,7 @@ public class UpdateCommand extends CommandAbstract {
                     throw new NotEnteredKeyException();
                 }
             } catch (NotEnteredKeyException notEnteredKeyException){
-                notEnteredKeyException.outputException(consoleManager);
+                notEnteredKeyException.outputException();
 
                 while (idStr.isEmpty() || idStr.split(" ").length == 0 || idStr.split("\t").length == 0) {
                     scanner = new Scanner(System.in);
@@ -75,10 +75,10 @@ public class UpdateCommand extends CommandAbstract {
                         return labWorkForUpdate;
 
                     } catch (NoSuchElementException | NumberFormatException noSuchElementException) {
-                        new NotNumberException().outputException(consoleManager);
+                        new NotNumberException().outputException();
                         idStr = "";
                     } catch (NotFoundElementException notFoundElementException) {
-                        notFoundElementException.outputException(consoleManager);
+                        notFoundElementException.outputException();
                         idStr = "";
                     }
                 }

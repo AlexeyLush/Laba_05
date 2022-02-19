@@ -1,6 +1,8 @@
 package laba;
 import commands.CommandsManager;
 import dao.LabWorkDAO;
+import files.DataFileManager;
+import files.file.FileManager;
 import io.ConsoleManager;
 import models.LabWork;
 
@@ -9,8 +11,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
 public class App {
+
+    private static boolean isRun = true;
+    public static void exit(){
+        isRun = false;
+    }
 
     public static void main(String[] args) {
 
@@ -18,7 +24,10 @@ public class App {
         CommandsManager commandsManager = new CommandsManager(consoleManager);
         LabWorkDAO labWorkDAO = new LabWorkDAO();
 
-        while (true){
+        String dataFileName = System.getenv("LABWORKS_FILE_PATH");
+        FileManager dataFileManager = new DataFileManager(dataFileName);
+
+        while (isRun){
             commandsManager.inputCommand(labWorkDAO);
         }
 

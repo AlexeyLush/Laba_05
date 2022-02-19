@@ -5,13 +5,13 @@ import commands.CommandsManager;
 import dao.LabWorkDAO;
 import exception.*;
 import io.ConsoleManager;
+import exception.*;
 import models.Coordinates;
 import models.Difficulty;
 import models.LabWork;
 import models.Person;
 import models.service.GenerationID;
 
-import java.time.ZonedDateTime;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -52,7 +52,7 @@ public class InsertCommand extends CommandAbstract {
                 } catch (NumberFormatException e) {
 
                     commandTemp = command.split(" ")[0];
-                    new NotNumberException().outputException(consoleManager);
+                    new NotNumberException().outputException();
 
                     idStr = "";
                     while (idStr == null || idStr.isEmpty() || idStr.split(" ").length == 0 || idStr.split("\t").length == 0) {
@@ -60,16 +60,16 @@ public class InsertCommand extends CommandAbstract {
                             consoleManager.output("Введите ключ: ");
                             idStr = scanner.nextLine();
                         } catch (NoSuchElementException noSuchElementException) {
-                            new NotNumberException().outputException(consoleManager);
+                            new NotNumberException().outputException();
                         }
                     }
                     commandTemp += String.format(" %s", idStr);
                 } catch (NoSuchElementException noSuchElementException) {
-                    new NotNumberException().outputException(consoleManager);
+                    new NotNumberException().outputException();
                 } catch (NotUniqueKeyException notUniqueKeyException) {
-                    notUniqueKeyException.outputException(consoleManager);
+                    notUniqueKeyException.outputException();
                 } catch (NumberMinimalException numberMinimalException) {
-                    numberMinimalException.outputException(consoleManager);
+                    numberMinimalException.outputException();
                 }
             } else {
                 int tempId = GenerationID.newId();
@@ -94,9 +94,9 @@ public class InsertCommand extends CommandAbstract {
                     throw new EmptyFieldException();
                 }
             } catch (EmptyFieldException emptyFieldException) {
-                emptyFieldException.outputException(consoleManager);
+                emptyFieldException.outputException();
             } catch (NoSuchElementException noSuchElementException){
-                new EmptyFieldException().outputException(consoleManager);
+                new EmptyFieldException().outputException();
             }
         }
     }
@@ -113,9 +113,9 @@ public class InsertCommand extends CommandAbstract {
                     }
                     coordinates.setX(xCoord);
                 } catch (NumberFormatException | NoSuchElementException numberFormatException){
-                    new NotNumberException().outputException(consoleManager);
+                    new NotNumberException().outputException();
                 } catch (NumberLongerException numberLongerException) {
-                    numberLongerException.outputException(consoleManager);
+                    numberLongerException.outputException();
                 }
             }
 
@@ -127,7 +127,7 @@ public class InsertCommand extends CommandAbstract {
                     coordinates.setY(yCoord);
                     break;
                 } catch (NumberFormatException | NoSuchElementException numberFormatException){
-                    new NotNumberException().outputException(consoleManager);
+                    new NotNumberException().outputException();
                 }
             }
             labWork.setCoordinates(coordinates);
@@ -142,9 +142,9 @@ public class InsertCommand extends CommandAbstract {
                     throw new NumberMinimalException(0);
                 }
             } catch (NumberFormatException numberFormatException){
-                new NotNumberException().outputException(consoleManager);
+                new NotNumberException().outputException();
             } catch (NumberMinimalException numberMinimalException) {
-                numberMinimalException.outputException(consoleManager);
+                numberMinimalException.outputException();
             }
 
         }
@@ -157,10 +157,10 @@ public class InsertCommand extends CommandAbstract {
                 if (!labWork.setDescription(scanner.nextLine())){
                     throw new EmptyFieldException();
                 }
-            } catch (EmptyFieldException e) {
-                e.outputException(consoleManager);
+            } catch (EmptyFieldException emptyFieldException) {
+                emptyFieldException.outputException();
             } catch (NoSuchElementException noSuchElementException){
-                new EmptyFieldException().outputException(consoleManager);
+                new EmptyFieldException().outputException();
             }
         }
     }
@@ -191,10 +191,10 @@ public class InsertCommand extends CommandAbstract {
                     if (!author.setName(scanner.nextLine())){
                         throw new EmptyFieldException();
                     }
-                } catch (EmptyFieldException e) {
-                    e.outputException(consoleManager);
+                } catch (EmptyFieldException emptyFieldException) {
+                    emptyFieldException.outputException();
                 } catch (NoSuchElementException noSuchElementException){
-                    new EmptyFieldException().outputException(consoleManager);
+                    new EmptyFieldException().outputException();
                 }
             }
 
@@ -208,9 +208,9 @@ public class InsertCommand extends CommandAbstract {
                     }
                     break;
                 } catch (NumberFormatException | NoSuchElementException numberFormatException){
-                    new NotNumberException().outputException(consoleManager);
+                    new NotNumberException().outputException();
                 } catch (NumberMinimalException numberMinimalException) {
-                    numberMinimalException.outputException(consoleManager);
+                    numberMinimalException.outputException();
                 }
             }
 
@@ -221,9 +221,9 @@ public class InsertCommand extends CommandAbstract {
                         throw new EmptyFieldException();
                     }
                 } catch (EmptyFieldException e) {
-                    e.outputException(consoleManager);
+                    e.outputException();
                 } catch (NoSuchElementException noSuchElementException){
-                    new EmptyFieldException().outputException(consoleManager);
+                    new EmptyFieldException().outputException();
                 }
             }
 
@@ -241,7 +241,6 @@ public class InsertCommand extends CommandAbstract {
         checkIdUser(command, scanner, labWork, labWorkDAO, consoleManager);
         checkNameLab(scanner, labWork, consoleManager);
         checkCoordinates(scanner, labWork, consoleManager);
-        labWork.setCreationDate(ZonedDateTime.now());
         checkMinimalPoint(scanner, labWork, consoleManager);
         checkDescription(scanner, labWork, consoleManager);
         checkDifficulty(scanner, labWork, consoleManager);

@@ -15,6 +15,11 @@ public class LabWork{
     private Difficulty difficulty; //Поле может быть null
     private Person author; //Поле может быть null
 
+    public LabWork(){
+        setId(GenerationID.newId());
+        creationDate = ZonedDateTime.now();
+    }
+
     public boolean setId(int id){
         if (id <= 0){
             return false;
@@ -49,10 +54,6 @@ public class LabWork{
 
     public ZonedDateTime getCreationDate() {
         return creationDate;
-    }
-
-    public void setCreationDate(ZonedDateTime creationDate) {
-        this.creationDate = creationDate;
     }
 
     public Float getMinimalPoint() {
