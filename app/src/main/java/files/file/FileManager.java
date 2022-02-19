@@ -1,10 +1,6 @@
 package files.file;
 
-import files.file.FileCheck;
 import io.ConsoleManager;
-
-import java.io.Reader;
-import java.io.Writer;
 
 public abstract class FileManager {
 
