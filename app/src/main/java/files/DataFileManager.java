@@ -1,16 +1,13 @@
 package files;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commands.CommandAbstract;
 import exception.ProblemWithFileException;
 import files.file.FileCreator;
 import files.file.FileManager;
 import files.file.FileWork;
-import models.Coordinates;
-import models.Difficulty;
-import models.LabWork;
-import models.Person;
+import models.*;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -35,24 +32,26 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
     @Override
     public Map<Integer, LabWork> readFile() {
 
+
         Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
+
 
         try (BufferedReader reader = new BufferedReader(new FileReader(getFileName()))) {
 
-            String s;
-            Gson gson = new Gson();
+            String s = "";
+            String temp = "";
 
-            Type itemsMapType = new TypeToken<Map<Integer, LabWork>>() {}.getType();
-
-            while((s=reader.readLine())!=null){
-                LabWork labWork = gson.fromJson(s, itemsMapType);
-                labWorkMap.put(labWork.getId(),labWork);
+            while((temp=reader.readLine())!=null) {
+                s += temp;
             }
+            
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
+            labWorkMap = mapper.readValue(s, typeRef);
 
         } catch (IOException e) {
             new ProblemWithFileException().outputException();
         }
-
         return labWorkMap;
     }
 
@@ -60,8 +59,8 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
     public void save(Map<Integer, LabWork> labWorkMap) {
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
-            Gson gson = new Gson();
-            String json = gson.toJson(labWorkMap);
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(labWorkMap);
             writer.write(json);
 
         } catch (IOException e) {
@@ -99,10 +98,12 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
             labWorkMap.put(labWork.getId(), labWork);
 
-            Gson gson = new Gson();
-            String json = gson.toJson(labWorkMap);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(labWorkMap);
 
             writer.write(json);
+
 
         } catch (IOException e) {
             new ProblemWithFileException().outputException();

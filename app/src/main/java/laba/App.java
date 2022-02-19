@@ -28,6 +28,8 @@ public class App {
         String dataFileName = System.getenv("LABWORKS_FILE_PATH");
 
         DataFileManager dataFileManager = new DataFileManager(dataFileName);
+        labWorkDAO.initialMap(dataFileManager.readFile());
+        System.out.println(dataFileManager.readFile().size());
         ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName);
 
         CommandsManager commandsManager = new CommandsManager(consoleManager, dataFileManager, executeFileManager);

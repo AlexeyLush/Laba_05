@@ -38,6 +38,12 @@ public class LabWorkDAO implements DAO<Integer, LabWork>{
     }
 
     @Override
+    public void initialMap(Map<Integer, LabWork> elements) {
+        this.labWorkList = elements;
+
+    }
+
+    @Override
     public void clear() {
         labWorkList = new LinkedHashMap<>();
     }

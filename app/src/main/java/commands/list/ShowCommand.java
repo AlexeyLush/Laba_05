@@ -2,6 +2,9 @@ package commands.list;
 
 import commands.CommandAbstract;
 import commands.models.CommandFields;
+import models.LabWork;
+
+import java.util.Map;
 
 public class ShowCommand extends CommandAbstract {
 
@@ -12,6 +15,14 @@ public class ShowCommand extends CommandAbstract {
 
     @Override
     public void execute(CommandFields commandFields) {
+        try{
+            for (Map.Entry<Integer, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
+                commandFields.getConsoleManager().outpunln(entry.getValue().getName());
+            }
+        } catch (NullPointerException nullPointerException){
+            commandFields.getConsoleManager().error("dfsfsdfsdfsdf");
+        }
+
 
     }
 }
