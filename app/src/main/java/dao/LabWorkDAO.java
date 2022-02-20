@@ -5,40 +5,40 @@ import models.LabWork;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class LabWorkDAO implements DAO<Integer, LabWork>{
+public class LabWorkDAO implements DAO<String, LabWork>{
 
-    private Map<Integer, LabWork> labWorkList = new LinkedHashMap<Integer, LabWork>();
+    private Map<String, LabWork> labWorkList = new LinkedHashMap<>();
 
     @Override
-    public int create(LabWork labWork) {
-        labWorkList.put(labWork.getId(), labWork);
+    public int create(String key, LabWork labWork) {
+        labWorkList.put(key, labWork);
         return labWork.getId();
     }
 
     @Override
-    public void update(LabWork labWork) {
+    public void update(String key, LabWork labWork) {
 
-        LabWork labWorkInList = get(labWork.getId());
+        LabWork labWorkInList = get(key);
 
         if (labWorkInList != null){
-            labWorkList.replace(labWorkInList.getId(), labWork);
+            labWorkList.replace(key, labWork);
         }
 
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(String key) {
 
-        LabWork labWork = get(id);
+        LabWork labWork = get(key);
 
         if (labWork != null){
-            labWorkList.remove(id);
+            labWorkList.remove(key);
         }
 
     }
 
     @Override
-    public void initialMap(Map<Integer, LabWork> elements) {
+    public void initialMap(Map<String, LabWork> elements) {
         this.labWorkList = elements;
 
     }
@@ -49,12 +49,12 @@ public class LabWorkDAO implements DAO<Integer, LabWork>{
     }
 
     @Override
-    public LabWork get(int id) {
-        return labWorkList.get(id);
+    public LabWork get(String key) {
+        return labWorkList.get(key);
     }
 
     @Override
-    public Map<Integer, LabWork> getAll() {
+    public Map<String, LabWork> getAll() {
         return new LinkedHashMap<>(labWorkList);
     }
 }

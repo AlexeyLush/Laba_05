@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, LabWork> {
+public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, LabWork> {
 
     private final ObjectMapper mapper;
 
@@ -48,7 +48,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
     }
 
     @Override
-    public Map<Integer, LabWork> deserializeMap(String json) {
+    public Map<String, LabWork> deserializeMap(String json) {
         try {
             TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
             return new LinkedHashMap<>(mapper.readValue(json, typeRef));
@@ -59,7 +59,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
     }
 
     @Override
-    public String serializeMap(Map<Integer, LabWork> elements) {
+    public String serializeMap(Map<String, LabWork> elements) {
 
         String json = "";
         try {

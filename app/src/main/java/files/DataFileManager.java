@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DataFileManager extends FileManager implements FileWork<Integer, LabWork>, FileCreator {
+public class DataFileManager extends FileManager implements FileWork<String, LabWork>, FileCreator {
 
     public DataFileManager(String fileName, ConsoleManager consoleManager) {
         super(fileName, consoleManager);
@@ -35,10 +35,10 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
 
     @Override
-    public Map<Integer, LabWork> readFile() {
+    public Map<String, LabWork> readFile() {
 
 
-        Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
+        Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
 
 
         try (BufferedReader reader = new BufferedReader(new FileReader(getFileName()))) {
@@ -65,7 +65,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
     }
 
     @Override
-    public void save(Map<Integer, LabWork> labWorkMap) {
+    public void save(Map<String, LabWork> labWorkMap) {
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
             String json = new ParserJSON().serializeMap(labWorkMap);
@@ -81,7 +81,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
-            Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
+            Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
 
 
             LabWork labWork = new LabWork();
@@ -106,7 +106,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
             labWork.setAuthor(author);
 
-            labWorkMap.put(labWork.getId(), labWork);
+            labWorkMap.put("1", labWork);
 
 
             String json = new ParserJSON().serializeMap(labWorkMap);

@@ -262,17 +262,18 @@ public class InsertCommand extends CommandAbstract {
         Scanner scanner = new Scanner(System.in);
         LabWork labWork = new LabWork();
 
+        String[] splitCommand = new SplitCommandOnIdAndJSON().spitedCommand(commandFields.getCommand());
+
+        String key = splitCommand[0];
+        String json = splitCommand[1];
+
         if (commandFields.isUserInput()){
 
-            String[] splitCommand = new SplitCommandOnIdAndJSON().spitedCommand(commandFields.getCommand());
 
-            String id = splitCommand[0];
-            String json = splitCommand[1];
-
-            while (!checkUserId(json, id, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())){
+            while (!checkUserId(json, key, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())){
                 try{
                     commandFields.getConsoleManager().output("Введите ключ или оставьте поле пустым, чтобы сгенерировать ключ: ");
-                    id = scanner.nextLine();
+                    key = scanner.nextLine();
                 }
                 catch (NumberFormatException numberFormatException){
                     new NotNumberException().outputException();
@@ -288,7 +289,7 @@ public class InsertCommand extends CommandAbstract {
 //        checkDifficulty(scanner, labWork, commandFields.getConsoleManager());
 //        checkAuthor(scanner, labWork, commandFields.getConsoleManager());
 
-        commandFields.getLabWorkDAO().create(labWork);
+        commandFields.getLabWorkDAO().create(key, labWork);
 
     }
 }
