@@ -99,4 +99,18 @@ public class LabWork{
     public void setAuthor(Person author) {
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return "LabWork{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", coordinates=" + coordinates +
+                ", creationDate=" + creationDate +
+                ", minimalPoint=" + minimalPoint +
+                ", description='" + description + '\'' +
+                ", difficulty=" + difficulty +
+                ", author=" + author +
+                '}';
+    }
 }
