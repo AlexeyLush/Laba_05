@@ -51,4 +51,7 @@ public class CommandFields {
         return executeFileManager;
     }
 
+    public boolean isUserInput() {
+        return isUserInput;
+    }
 }

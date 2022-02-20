@@ -18,23 +18,33 @@ public class App {
     public static void exit(){
         isRun = false;
     }
+    public static void run(String dataFileName, ConsoleManager consoleManager, LabWorkDAO labWorkDAO){
+
+        CommandsManager commandsManager = null;
+
+        if (isRun){
+            DataFileManager dataFileManager = new DataFileManager(dataFileName, consoleManager);
+            labWorkDAO.initialMap(dataFileManager.readFile());
+            ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
+
+            commandsManager = new CommandsManager(consoleManager, dataFileManager, executeFileManager);
+        }
+        while (isRun){
+            commandsManager.inputCommand(labWorkDAO);
+        }
+    }
 
     public static void main(String[] args) {
 
         ConsoleManager consoleManager = new ConsoleManager();
         LabWorkDAO labWorkDAO = new LabWorkDAO();
+
         String dataFileName = System.getenv("LABWORKS_FILE_PATH");
-
-        DataFileManager dataFileManager = new DataFileManager(dataFileName, consoleManager);
-        labWorkDAO.initialMap(dataFileManager.readFile());
-        ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
-
-        CommandsManager commandsManager = new CommandsManager(consoleManager, dataFileManager, executeFileManager);
-
-        while (isRun){
-            commandsManager.inputCommand(labWorkDAO);
+        if (dataFileName == null){
+            consoleManager.error("Ошибка настройки переменного окружения! Программа завершает работу...");
+            App.exit();
         }
-
+        run(dataFileName, consoleManager, labWorkDAO);
 
     }
 }

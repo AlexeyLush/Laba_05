@@ -2,6 +2,7 @@ package commands.list;
 
 import commands.CommandAbstract;
 import commands.models.CommandFields;
+import commands.services.SplitCommandOnIdAndJSON;
 import dao.LabWorkDAO;
 import exception.*;
 import io.ConsoleManager;
@@ -10,6 +11,7 @@ import models.Difficulty;
 import models.LabWork;
 import models.Person;
 import models.service.GenerationID;
+import services.parsers.ParserJSON;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -31,7 +33,7 @@ public class InsertCommand extends CommandAbstract {
                 throw new NumberMinimalException(0);
             }
             if (labWorkDAO.getAll().containsKey(id)){
-                throw new NotUniqueKeyException();
+                throw new NotUniqueKeyException(id);
             }
         }  catch (NoSuchElementException noSuchElementException) {
             new NotNumberException().outputException();
@@ -45,94 +47,69 @@ public class InsertCommand extends CommandAbstract {
         }
         return isTrue;
     }
-    private boolean checkUserId(String command, LabWorkDAO labWorkDAO, boolean isUserInput){
+    private boolean checkUserId(String json, String id, LabWorkDAO labWorkDAO, LabWork labWork, ConsoleManager consoleManager){
         boolean isTrue = false;
+        int idTemp = 0;
         try {
-            String[] splitCommand = command.split(" ");
-            if (splitCommand.length == 2 && isUserInput){
-                String idStr = command.split(" ")[1];
-                return checkerId(Integer.parseInt(idStr), labWorkDAO);
-            } else if (splitCommand.length == 1 && isUserInput){
-                int id = GenerationID.newId();
-                return checkerId(id, labWorkDAO);
-            } else if (splitCommand.length > 2){
-                String idStr = splitCommand[1];
-                if (checkerId(Integer.parseInt(idStr), labWorkDAO)){
-                    splitCommand[0] = "";
-                    splitCommand[1] = "";
-                    String json = String.join(" ", splitCommand);
+
+            if (id != null){
+                if (id.isEmpty() || id.split(" ").length == 0 || id.split("\t").length == 0){
+                    idTemp = GenerationID.newId();
+                    while (labWorkDAO.getAll().containsKey(idTemp)){
+                        idTemp = GenerationID.newId();
+                    }
                 }
             }
+
+            if (id == null && json == null){
+
+                idTemp = GenerationID.newId();
+                while (labWorkDAO.getAll().containsKey(idTemp)){
+                    idTemp = GenerationID.newId();
+                }
+                labWork.setId(idTemp);
+                isTrue = checkerId(idTemp, labWorkDAO);
+
+            } else if (id != null && json == null){
+
+                idTemp = Integer.parseInt(id);
+                isTrue = checkerId(idTemp, labWorkDAO);
+                if (isTrue){
+                    labWork.setId(idTemp);
+                }
+
+            } else if (id == null && json != null){
+                LabWork labWorkUser = new ParserJSON().deserializeElement(json);
+                isTrue = checkerId(labWorkUser.getId(), labWorkDAO);
+                if (isTrue){
+                    labWork.setId(labWorkUser.getId());
+                }
+            } else if (id != null && json != null){
+
+                if (idTemp == 0){
+                    idTemp = Integer.parseInt(id);
+                }
+                LabWork labWorkUser = new ParserJSON().deserializeElement(json);
+                isTrue = checkerId(idTemp, labWorkDAO);
+                if (isTrue){
+                    labWork.setId(idTemp);
+                } else{
+                    isTrue = checkerId(labWorkUser.getId(), labWorkDAO);
+                    if (isTrue){
+                        labWork.setId(labWorkUser.getId());
+                    }
+                }
+            }
+
         } catch (NumberFormatException numberFormatException){
             new NotNumberException().outputException();
+        }
+        if (isTrue){
+            consoleManager.successfully(String.format("Ключ %d был успешно установлен!", labWork.getId()));
         }
         return isTrue;
     }
 
-
-    private void checkIdUser(String command, Scanner scanner, LabWork labWork, LabWorkDAO labWorkDAO, ConsoleManager consoleManager){
-
-        int id;
-        String commandTemp = command;
-
-        String idStr = "";
-
-        if (commandTemp.split(" ").length > 1){
-            idStr = commandTemp.split(" ")[1];
-        }
-
-        while (true) {
-            scanner = new Scanner(System.in);
-            if (commandTemp.split(" ").length > 1) {
-
-                try {
-                    int tempId = Integer.parseInt(idStr);
-                    if (labWorkDAO.getAll().containsKey(tempId)){
-                        idStr = "";
-                        throw new NotUniqueKeyException();
-                    }
-                    id = tempId;
-                    if (!labWork.setId(id)){
-                        idStr = "";
-                        throw new NumberMinimalException(0);
-                    }
-                    break;
-                } catch (NumberFormatException e) {
-
-                    commandTemp = command.split(" ")[0];
-                    new NotNumberException().outputException();
-
-                    idStr = "";
-                    while (idStr == null || idStr.isEmpty() || idStr.split(" ").length == 0 || idStr.split("\t").length == 0) {
-                        try {
-                            consoleManager.output("Введите ключ: ");
-                            idStr = scanner.nextLine();
-                        } catch (NoSuchElementException noSuchElementException) {
-                            new NotNumberException().outputException();
-                        }
-                    }
-                    commandTemp += String.format(" %s", idStr);
-                } catch (NoSuchElementException noSuchElementException) {
-                    new NotNumberException().outputException();
-                } catch (NotUniqueKeyException notUniqueKeyException) {
-                    notUniqueKeyException.outputException();
-                } catch (NumberMinimalException numberMinimalException) {
-                    numberMinimalException.outputException();
-                }
-            } else {
-                int tempId = GenerationID.newId();
-                while (labWorkDAO.getAll().containsKey(tempId)){
-                    tempId = GenerationID.newId();
-                }
-                id = tempId;
-                break;
-            }
-
-
-        }
-
-        labWork.setId(id);
-    }
     private void checkNameLab(Scanner scanner, LabWork labWork, ConsoleManager consoleManager){
         while (labWork.getName() == null){
             scanner = new Scanner(System.in);
@@ -282,17 +259,34 @@ public class InsertCommand extends CommandAbstract {
 
     @Override
     public void execute(CommandFields commandFields) {
-
         Scanner scanner = new Scanner(System.in);
         LabWork labWork = new LabWork();
 
-        checkIdUser(commandFields.getCommand(), scanner, labWork, commandFields.getLabWorkDAO(), commandFields.getConsoleManager());
-        checkNameLab(scanner, labWork, commandFields.getConsoleManager());
-        checkCoordinates(scanner, labWork, commandFields.getConsoleManager());
-        checkMinimalPoint(scanner, labWork, commandFields.getConsoleManager());
-        checkDescription(scanner, labWork, commandFields.getConsoleManager());
-        checkDifficulty(scanner, labWork, commandFields.getConsoleManager());
-        checkAuthor(scanner, labWork, commandFields.getConsoleManager());
+        if (commandFields.isUserInput()){
+
+            String[] splitCommand = new SplitCommandOnIdAndJSON().spitedCommand(commandFields.getCommand());
+
+            String id = splitCommand[0];
+            String json = splitCommand[1];
+
+            while (!checkUserId(json, id, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())){
+                try{
+                    commandFields.getConsoleManager().output("Введите ключ или оставьте поле пустым, чтобы сгенерировать ключ: ");
+                    id = scanner.nextLine();
+                }
+                catch (NumberFormatException numberFormatException){
+                    new NotNumberException().outputException();
+                }
+            }
+        }
+
+//        checkIdUser(commandFields.getCommand(), scanner, labWork, commandFields.getLabWorkDAO(), commandFields.getConsoleManager());
+//        checkNameLab(scanner, labWork, commandFields.getConsoleManager());
+//        checkCoordinates(scanner, labWork, commandFields.getConsoleManager());
+//        checkMinimalPoint(scanner, labWork, commandFields.getConsoleManager());
+//        checkDescription(scanner, labWork, commandFields.getConsoleManager());
+//        checkDifficulty(scanner, labWork, commandFields.getConsoleManager());
+//        checkAuthor(scanner, labWork, commandFields.getConsoleManager());
 
         commandFields.getLabWorkDAO().create(labWork);
 

@@ -83,8 +83,9 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
             Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
 
-            GenerationID.reset();
+
             LabWork labWork = new LabWork();
+            labWork.setId(GenerationID.newId());
 
             labWork.setName("Лабораторная работа №1");
 

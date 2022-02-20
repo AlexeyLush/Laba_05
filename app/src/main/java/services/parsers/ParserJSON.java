@@ -2,7 +2,10 @@ package services.parsers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import exception.ParserException;
 import models.LabWork;
 import services.parsers.interfaces.ParserElement;
@@ -11,13 +14,20 @@ import services.parsers.interfaces.ParserMap;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, LabWork> {
 
+    private final ObjectMapper mapper;
+
+    public ParserJSON(){
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JSR310Module());
+        mapper.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+    }
     @Override
     public LabWork deserializeElement(String json) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
             TypeReference<LabWork> typeRef = new TypeReference<LabWork>() {};
             return mapper.readValue(json, typeRef);
         } catch (IOException e) {
@@ -30,7 +40,6 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
     public String serializeElement(LabWork elements) {
         String json = "";
         try {
-            ObjectMapper mapper = new ObjectMapper();
             json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(elements);
         } catch (JsonProcessingException e) {
             new ParserException().outputException();
@@ -41,7 +50,6 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
     @Override
     public Map<Integer, LabWork> deserializeMap(String json) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
             TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
             return new LinkedHashMap<>(mapper.readValue(json, typeRef));
         } catch (IOException e) {
@@ -55,7 +63,6 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
 
         String json = "";
         try {
-            ObjectMapper mapper = new ObjectMapper();
             json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(elements);
         } catch (JsonProcessingException e) {
             new ParserException().outputException();

@@ -17,7 +17,7 @@ public class ShowCommand extends CommandAbstract {
     public void execute(CommandFields commandFields) {
         try{
             for (Map.Entry<Integer, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
-                commandFields.getConsoleManager().outpunln(entry.getValue().getName());
+                commandFields.getConsoleManager().outpunln(entry.getValue().getCreationDate().toString());
             }
         } catch (NullPointerException nullPointerException){
             commandFields.getConsoleManager().error("dfsfsdfsdfsdf");
