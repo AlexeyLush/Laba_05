@@ -12,6 +12,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Класс старта программы)
+ */
+
 public class App {
 
     private static boolean isRun = true;
