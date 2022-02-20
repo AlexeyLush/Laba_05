@@ -9,6 +9,10 @@ import models.LabWork;
 
 import java.util.Map;
 
+/**
+ * Команда вывода в стандарный поток всех элементов коллекции в строковом представлении
+ */
+
 public class ShowCommand extends CommandAbstract {
 
     public ShowCommand(){

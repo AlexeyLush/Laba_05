@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * Команда очистки коллекции
+ */
+
 public class ClearCommand extends CommandAbstract {
 
     public ClearCommand(){

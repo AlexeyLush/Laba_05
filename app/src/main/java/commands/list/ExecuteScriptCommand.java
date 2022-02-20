@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * Команда считывания и исполнения скрипта из указанного файла
+ */
+
 public class ExecuteScriptCommand extends CommandAbstract {
 
     public ExecuteScriptCommand(){

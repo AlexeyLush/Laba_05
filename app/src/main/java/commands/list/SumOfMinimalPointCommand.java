@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * Команда вывода суммы всех значений поля minimalPoint для всех элементов коллекции
+ */
+
 public class SumOfMinimalPointCommand extends CommandAbstract {
 
     public SumOfMinimalPointCommand(){
