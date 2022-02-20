@@ -1,7 +1,7 @@
 package exception;
 
 public class NotUniqueKeyException extends CustomException {
-    public NotUniqueKeyException(int key) {
-        setMessage(String.format("Ключ %d уже занят", key));
+    public NotUniqueKeyException(String  key) {
+        setMessage(String.format("Ключ %s уже занят", key));
     }
 }

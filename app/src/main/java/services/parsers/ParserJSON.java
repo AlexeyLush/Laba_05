@@ -25,6 +25,18 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
         mapper.registerModule(new JSR310Module());
         mapper.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
     }
+
+    public boolean isDeserializeElement(String json){
+        boolean isTrue = true;
+        try {
+            TypeReference<LabWork> typeRef = new TypeReference<LabWork>() {};
+            mapper.readValue(json, typeRef);
+        } catch (IOException e) {
+            isTrue = false;
+        }
+        return isTrue;
+    }
+
     @Override
     public LabWork deserializeElement(String json) {
         try {

@@ -1,6 +1,8 @@
 package dao;
 
+import commands.CommandAbstract;
 import models.LabWork;
+import models.service.GenerationID;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,6 +13,7 @@ public class LabWorkDAO implements DAO<String, LabWork>{
 
     @Override
     public int create(String key, LabWork labWork) {
+        labWork.setId(GenerationID.newId());
         labWorkList.put(key, labWork);
         return labWork.getId();
     }

@@ -2,36 +2,44 @@ package commands.services;
 
 import commands.services.interfaces.SplitCommand;
 import exception.NotNumberException;
+import io.ConsoleManager;
+import models.LabWork;
+import services.parsers.ParserJSON;
+
+import java.io.IOException;
 
 public class SplitCommandOnIdAndJSON implements SplitCommand{
 
     @Override
-    public String[] spitedCommand(String command) {
+    public String[] splitedCommand(String command) {
 
         String[] splitCommand = command.split(" ");
 
-        String id = null;
+        String key = null;
         String json = null;
 
-        if (splitCommand.length == 2 && splitCommand[1].length() <= 10){
-            try {
-                id = splitCommand[1];
-            } catch (NumberFormatException numberFormatException){
-                new NotNumberException().outputException();
-            }
-        } else if (splitCommand.length == 2){
-            splitCommand[0] = "";
+        splitCommand[0] = "";
+        if (splitCommand.length == 2){
             json = String.join(" ", splitCommand);
-        } else if (splitCommand.length > 2){
-            splitCommand[0] = "";
-            if (splitCommand[1].length() <= 10){
-                id = splitCommand[1];
+            if (!(new ParserJSON().isDeserializeElement(json))){
+                key = splitCommand[1];
+                json = null;
             }
-            splitCommand[1] = "";
+
+        } else if (splitCommand.length > 2) {
             json = String.join(" ", splitCommand);
+
+            if (!(new ParserJSON().isDeserializeElement(json))){
+                key = splitCommand[1];
+                splitCommand[1] = "";
+                json = String.join(" ", splitCommand);
+                if (!(new ParserJSON().isDeserializeElement(json))){
+                    json = null;
+                }
+            }
         }
 
-        return new String[] {id, json};
+        return new String[] {key, json};
     }
 
 }

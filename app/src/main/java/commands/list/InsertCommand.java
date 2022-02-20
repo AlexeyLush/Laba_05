@@ -24,149 +24,107 @@ public class InsertCommand extends CommandAbstract {
         setDescription("insert null {element}: добавить новый элемент с заданным ключом");
     }
 
-    private boolean checkerId(int id, LabWorkDAO labWorkDAO){
+    private boolean checkerKey(String key, LabWorkDAO labWorkDAO) {
         boolean isTrue = true;
         try {
-            LabWork labWork = new LabWork();
-
-            if (!labWork.setId(id)){
-                throw new NumberMinimalException(0);
+            if (labWorkDAO.getAll().containsKey(key)) {
+                throw new NotUniqueKeyException(key);
             }
-            if (labWorkDAO.getAll().containsKey(id)){
-                throw new NotUniqueKeyException(id);
-            }
-        }  catch (NoSuchElementException noSuchElementException) {
+        } catch (NoSuchElementException noSuchElementException) {
             new NotNumberException().outputException();
             isTrue = false;
         } catch (NotUniqueKeyException notUniqueKeyException) {
             notUniqueKeyException.outputException();
             isTrue = false;
-        } catch (NumberMinimalException numberMinimalException) {
-            numberMinimalException.outputException();
+        }
+        return isTrue;
+    }
+    private boolean checkUserKey(String json, String key, LabWorkDAO labWorkDAO, LabWork labWork, ConsoleManager consoleManager) {
+        boolean isTrue;
+        if (key == null) {
             isTrue = false;
-        }
-        return isTrue;
-    }
-    private boolean checkUserId(String json, String id, LabWorkDAO labWorkDAO, LabWork labWork, ConsoleManager consoleManager){
-        boolean isTrue = false;
-        int idTemp = 0;
-        try {
-
-            if (id != null){
-                if (id.isEmpty() || id.split(" ").length == 0 || id.split("\t").length == 0){
-                    idTemp = GenerationID.newId();
-                    while (labWorkDAO.getAll().containsKey(idTemp)){
-                        idTemp = GenerationID.newId();
-                    }
-                }
+        } else if (key.isEmpty() || key.split(" ").length == 0 || key.split("\t").length == 0) {
+            consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
+            isTrue = false;
+        } else if (json == null) {
+            if (key.contains(" ") || key.contains("\t")){
+                consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
+                isTrue = false;
+            } else{
+                isTrue = checkerKey(key, labWorkDAO);
             }
-
-            if (id == null && json == null){
-
-                idTemp = GenerationID.newId();
-                while (labWorkDAO.getAll().containsKey(idTemp)){
-                    idTemp = GenerationID.newId();
-                }
-                labWork.setId(idTemp);
-                isTrue = checkerId(idTemp, labWorkDAO);
-
-            } else if (id != null && json == null){
-
-                idTemp = Integer.parseInt(id);
-                isTrue = checkerId(idTemp, labWorkDAO);
-                if (isTrue){
-                    labWork.setId(idTemp);
-                }
-
-            } else if (id == null && json != null){
-                LabWork labWorkUser = new ParserJSON().deserializeElement(json);
-                isTrue = checkerId(labWorkUser.getId(), labWorkDAO);
-                if (isTrue){
-                    labWork.setId(labWorkUser.getId());
-                }
-            } else if (id != null && json != null){
-
-                if (idTemp == 0){
-                    idTemp = Integer.parseInt(id);
-                }
-                LabWork labWorkUser = new ParserJSON().deserializeElement(json);
-                isTrue = checkerId(idTemp, labWorkDAO);
-                if (isTrue){
-                    labWork.setId(idTemp);
-                } else{
-                    isTrue = checkerId(labWorkUser.getId(), labWorkDAO);
-                    if (isTrue){
-                        labWork.setId(labWorkUser.getId());
-                    }
-                }
+        } else {
+            isTrue = checkerKey(key, labWorkDAO);
+            if (!(new ParserJSON().isDeserializeElement(json))) {
+                isTrue = false;
             }
-
-        } catch (NumberFormatException numberFormatException){
-            new NotNumberException().outputException();
         }
-        if (isTrue){
-            consoleManager.successfully(String.format("Ключ %d был успешно установлен!", labWork.getId()));
+
+        if (isTrue) {
+            consoleManager.successfully(String.format("Ключ %s был успешно установлен!", key));
         }
         return isTrue;
     }
 
-    private void checkNameLab(Scanner scanner, LabWork labWork, ConsoleManager consoleManager){
-        while (labWork.getName() == null){
+    private void checkNameLab(Scanner scanner, LabWork labWork, ConsoleManager consoleManager) {
+        while (labWork.getName() == null) {
             scanner = new Scanner(System.in);
-            try{
+            try {
                 consoleManager.output("Введите название работы: ");
-                if (!labWork.setName(scanner.nextLine())){
+                if (!labWork.setName(scanner.nextLine())) {
                     throw new EmptyFieldException();
                 }
             } catch (EmptyFieldException emptyFieldException) {
                 emptyFieldException.outputException();
-            } catch (NoSuchElementException noSuchElementException){
+            } catch (NoSuchElementException noSuchElementException) {
                 new EmptyFieldException().outputException();
             }
         }
     }
-    private void checkCoordinates(Scanner scanner, LabWork labWork, ConsoleManager consoleManager){
-        while (labWork.getCoordinates() == null){
+
+    private void checkCoordinates(Scanner scanner, LabWork labWork, ConsoleManager consoleManager) {
+        while (labWork.getCoordinates() == null) {
             Coordinates coordinates = new Coordinates();
-            while (coordinates.getX() == null){
+            while (coordinates.getX() == null) {
                 scanner = new Scanner(System.in);
                 try {
                     consoleManager.output("Введите координату X: ");
                     long xCoord = Long.parseLong(scanner.nextLine());
-                    if (!coordinates.setX(xCoord)){
+                    if (!coordinates.setX(xCoord)) {
                         throw new NumberLongerException(coordinates.getMaxCoordinateX());
                     }
                     coordinates.setX(xCoord);
-                } catch (NumberFormatException | NoSuchElementException numberFormatException){
+                } catch (NumberFormatException | NoSuchElementException numberFormatException) {
                     new NotNumberException().outputException();
                 } catch (NumberLongerException numberLongerException) {
                     numberLongerException.outputException();
                 }
             }
 
-            while (true){
+            while (true) {
                 scanner = new Scanner(System.in);
                 try {
                     consoleManager.output("Введите координату Y: ");
                     int yCoord = Integer.parseInt(scanner.nextLine());
                     coordinates.setY(yCoord);
                     break;
-                } catch (NumberFormatException | NoSuchElementException numberFormatException){
+                } catch (NumberFormatException | NoSuchElementException numberFormatException) {
                     new NotNumberException().outputException();
                 }
             }
             labWork.setCoordinates(coordinates);
         }
     }
-    private void checkMinimalPoint(Scanner scanner, LabWork labWork, ConsoleManager consoleManager){
-        while (labWork.getMinimalPoint() == null){
+
+    private void checkMinimalPoint(Scanner scanner, LabWork labWork, ConsoleManager consoleManager) {
+        while (labWork.getMinimalPoint() == null) {
             scanner = new Scanner(System.in);
             try {
                 consoleManager.output("Введите минимальную точку: ");
-                if (!labWork.setMinimalPoint(Float.parseFloat(scanner.nextLine()))){
+                if (!labWork.setMinimalPoint(Float.parseFloat(scanner.nextLine()))) {
                     throw new NumberMinimalException(0);
                 }
-            } catch (NumberFormatException numberFormatException){
+            } catch (NumberFormatException numberFormatException) {
                 new NotNumberException().outputException();
             } catch (NumberMinimalException numberMinimalException) {
                 numberMinimalException.outputException();
@@ -174,80 +132,83 @@ public class InsertCommand extends CommandAbstract {
 
         }
     }
-    private void checkDescription(Scanner scanner, LabWork labWork, ConsoleManager consoleManager){
-        while (labWork.getDescription() == null){
+
+    private void checkDescription(Scanner scanner, LabWork labWork, ConsoleManager consoleManager) {
+        while (labWork.getDescription() == null) {
             scanner = new Scanner(System.in);
-            try{
+            try {
                 consoleManager.output("Введите описание: ");
-                if (!labWork.setDescription(scanner.nextLine())){
+                if (!labWork.setDescription(scanner.nextLine())) {
                     throw new EmptyFieldException();
                 }
             } catch (EmptyFieldException emptyFieldException) {
                 emptyFieldException.outputException();
-            } catch (NoSuchElementException noSuchElementException){
+            } catch (NoSuchElementException noSuchElementException) {
                 new EmptyFieldException().outputException();
             }
         }
     }
-    private void checkDifficulty(Scanner scanner, LabWork labWork, ConsoleManager consoleManager){
+
+    private void checkDifficulty(Scanner scanner, LabWork labWork, ConsoleManager consoleManager) {
         Difficulty[] difficulties = Difficulty.values();
-        for (int i = 0; i < difficulties.length; i++){
+        for (int i = 0; i < difficulties.length; i++) {
             consoleManager.warning(String.format("%d. %s", i + 1, difficulties[i]));
         }
-        while (labWork.getDifficulty() == null){
+        while (labWork.getDifficulty() == null) {
             scanner = new Scanner(System.in);
             consoleManager.output(String.format("Выберите пункт (введите число от 1 до %d): ", difficulties.length));
             try {
                 int index = Integer.parseInt(scanner.nextLine());
                 Difficulty difficulty = difficulties[index - 1];
                 labWork.setDifficulty(difficulty);
-            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | NoSuchElementException e){
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException | NoSuchElementException e) {
                 consoleManager.error(String.format("Введите число от 1 до %d", difficulties.length));
             }
         }
     }
-    private void checkAuthor(Scanner scanner, LabWork labWork, ConsoleManager consoleManager){
-        while (labWork.getAuthor() == null){
+
+    private void checkAuthor(Scanner scanner, LabWork labWork, ConsoleManager consoleManager) {
+        while (labWork.getAuthor() == null) {
             Person author = new Person();
-            while (author.getName() == null){
+            while (author.getName() == null) {
                 scanner = new Scanner(System.in);
-                try{
+                try {
                     consoleManager.output("Введите имя: ");
-                    if (!author.setName(scanner.nextLine())){
+                    if (!author.setName(scanner.nextLine())) {
                         throw new EmptyFieldException();
                     }
                 } catch (EmptyFieldException emptyFieldException) {
                     emptyFieldException.outputException();
-                } catch (NoSuchElementException noSuchElementException){
+                } catch (NoSuchElementException noSuchElementException) {
                     new EmptyFieldException().outputException();
                 }
             }
 
-            while (true){
+            while (true) {
                 scanner = new Scanner(System.in);
                 try {
                     consoleManager.output("Введите вес: ");
                     long weight = Long.parseLong(scanner.nextLine());
-                    if (!author.setWeight(weight)){
+                    if (!author.setWeight(weight)) {
                         throw new NumberMinimalException(0);
                     }
                     break;
-                } catch (NumberFormatException | NoSuchElementException numberFormatException){
+                } catch (NumberFormatException | NoSuchElementException numberFormatException) {
                     new NotNumberException().outputException();
                 } catch (NumberMinimalException numberMinimalException) {
                     numberMinimalException.outputException();
                 }
             }
 
-            while (author.getPassportID() == null){
-                try{
+            while (author.getPassportID() == null) {
+                try {
                     consoleManager.output("Введите id паспорта: ");
-                    if (!author.setPassportID(scanner.nextLine())){
+                    if (!author.setPassportID(scanner.nextLine())) {
                         throw new EmptyFieldException();
                     }
                 } catch (EmptyFieldException e) {
                     e.outputException();
-                } catch (NoSuchElementException noSuchElementException){
+                } catch (NoSuchElementException noSuchElementException) {
                     new EmptyFieldException().outputException();
                 }
             }
@@ -262,22 +223,15 @@ public class InsertCommand extends CommandAbstract {
         Scanner scanner = new Scanner(System.in);
         LabWork labWork = new LabWork();
 
-        String[] splitCommand = new SplitCommandOnIdAndJSON().spitedCommand(commandFields.getCommand());
+        String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand());
 
         String key = splitCommand[0];
         String json = splitCommand[1];
 
-        if (commandFields.isUserInput()){
-
-
-            while (!checkUserId(json, key, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())){
-                try{
-                    commandFields.getConsoleManager().output("Введите ключ или оставьте поле пустым, чтобы сгенерировать ключ: ");
-                    key = scanner.nextLine();
-                }
-                catch (NumberFormatException numberFormatException){
-                    new NotNumberException().outputException();
-                }
+        if (commandFields.isUserInput()) {
+            while (!checkUserKey(json, key, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())) {
+                commandFields.getConsoleManager().output("Введите ключ: ");
+                key = scanner.nextLine();
             }
         }
 
