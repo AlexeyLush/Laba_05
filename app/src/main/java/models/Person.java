@@ -2,6 +2,10 @@ package models;
 
 import java.util.Objects;
 
+/**
+ * Класс Person
+ */
+
 public class Person {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private long weight; //Значение поля должно быть больше 0
@@ -41,6 +45,8 @@ public class Person {
         this.passportID = passportID;
         return true;
     }
+
+    //Переопределение equals, toString, hashCode
 
     @Override
     public boolean equals(Object o) {

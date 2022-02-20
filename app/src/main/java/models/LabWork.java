@@ -8,6 +8,10 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Класс лабораторных работ
+ */
+
 public class LabWork{
 
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
@@ -22,6 +26,8 @@ public class LabWork{
     public LabWork(){
         this.creationDate = ZonedDateTime.now();
     }
+
+    // Геттеры и сеттеры
 
     public boolean setId(int id){
         if (id <= 0){
@@ -99,6 +105,8 @@ public class LabWork{
     public void setAuthor(Person author) {
         this.author = author;
     }
+
+    // Переопределение метода toString
 
     @Override
     public String toString() {
