@@ -11,6 +11,10 @@ import org.checkerframework.checker.units.qual.C;
 
 import java.util.*;
 
+/**
+ * Класс менеджер команд
+ */
+
 public final class CommandsManager {
 
     private final Map<String, CommandAbstract> commandsList = new LinkedHashMap<String, CommandAbstract>();
