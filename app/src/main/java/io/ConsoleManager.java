@@ -4,6 +4,10 @@ import io.enums.ColorConsole;
 import io.output.ConsoleOutput;
 import io.output.MessageOutput;
 
+/**
+ * Класс для работы с консолью
+ */
+
 public class ConsoleManager implements ConsoleOutput, MessageOutput {
 
     @Override

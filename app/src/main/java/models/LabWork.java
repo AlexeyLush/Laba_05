@@ -106,6 +106,7 @@ public class LabWork{
         this.author = author;
     }
 
+<<<<<<< HEAD
     // Переопределение метода toString
 
     @Override
@@ -120,5 +121,18 @@ public class LabWork{
                 ", difficulty=" + difficulty +
                 ", author=" + author +
                 '}';
+=======
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LabWork labWork = (LabWork) o;
+        return id == labWork.id && Objects.equals(name, labWork.name) && Objects.equals(coordinates, labWork.coordinates) && Objects.equals(creationDate, labWork.creationDate) && Objects.equals(minimalPoint, labWork.minimalPoint) && Objects.equals(description, labWork.description) && difficulty == labWork.difficulty && Objects.equals(author, labWork.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, coordinates, creationDate, minimalPoint, description, difficulty, author);
+>>>>>>> 30d96752c192af6c04cf70f02ab13d45d7f42e49
     }
 }

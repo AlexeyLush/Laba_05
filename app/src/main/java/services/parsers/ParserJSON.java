@@ -16,11 +16,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+<<<<<<< HEAD
 /**
  * Класс для парсинга JSON файлов
  */
 
 public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, LabWork> {
+=======
+public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, LabWork> {
+>>>>>>> 30d96752c192af6c04cf70f02ab13d45d7f42e49
 
     private final ObjectMapper mapper;
 
@@ -29,6 +33,18 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
         mapper.registerModule(new JSR310Module());
         mapper.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
     }
+
+    public boolean isDeserializeElement(String json){
+        boolean isTrue = true;
+        try {
+            TypeReference<LabWork> typeRef = new TypeReference<LabWork>() {};
+            mapper.readValue(json, typeRef);
+        } catch (IOException e) {
+            isTrue = false;
+        }
+        return isTrue;
+    }
+
     @Override
     public LabWork deserializeElement(String json) {
         try {
@@ -52,7 +68,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
     }
 
     @Override
-    public Map<Integer, LabWork> deserializeMap(String json) {
+    public Map<String, LabWork> deserializeMap(String json) {
         try {
             TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
             return new LinkedHashMap<>(mapper.readValue(json, typeRef));
@@ -63,7 +79,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
     }
 
     @Override
-    public String serializeMap(Map<Integer, LabWork> elements) {
+    public String serializeMap(Map<String, LabWork> elements) {
 
         String json = "";
         try {
