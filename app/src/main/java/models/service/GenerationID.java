@@ -5,7 +5,4 @@ public class GenerationID {
     public static int newId(){
         return id++;
     }
-    public static void reset(){
-        id = 1;
-    }
 }

@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, LabWork> {
+public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, LabWork> {
 
     private final ObjectMapper mapper;
 
@@ -25,6 +25,18 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
         mapper.registerModule(new JSR310Module());
         mapper.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
     }
+
+    public boolean isDeserializeElement(String json){
+        boolean isTrue = true;
+        try {
+            TypeReference<LabWork> typeRef = new TypeReference<LabWork>() {};
+            mapper.readValue(json, typeRef);
+        } catch (IOException e) {
+            isTrue = false;
+        }
+        return isTrue;
+    }
+
     @Override
     public LabWork deserializeElement(String json) {
         try {
@@ -48,18 +60,18 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, La
     }
 
     @Override
-    public Map<Integer, LabWork> deserializeMap(String json) {
+    public Map<String, LabWork> deserializeMap(String json) {
         try {
-            TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
+            TypeReference<LinkedHashMap<String, LabWork>> typeRef = new TypeReference<LinkedHashMap<String, LabWork>>() {};
             return new LinkedHashMap<>(mapper.readValue(json, typeRef));
         } catch (IOException e) {
             new ParserException().outputException();
+            return null;
         }
-        return new LinkedHashMap<>();
     }
 
     @Override
-    public String serializeMap(Map<Integer, LabWork> elements) {
+    public String serializeMap(Map<String, LabWork> elements) {
 
         String json = "";
         try {

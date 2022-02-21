@@ -20,7 +20,7 @@ public class Person {
 
     // Сеттеры
     public boolean setName(String name){
-        if (name == null || name.isEmpty() || name.split(" ").length == 0 || name.split("\t").length == 0){
+        if (name == null || name.isEmpty() || name.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
             return false;
         }
         this.name = name;
@@ -34,8 +34,7 @@ public class Person {
         return true;
     }
     public boolean setPassportID(String passportID){
-        if (passportID == null || passportID.isEmpty() || passportID.split(" ").length == 0
-                || passportID.split("\t").length == 0){
+        if (passportID == null || passportID.isEmpty() || passportID.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
             return false;
         }
         this.passportID = passportID;

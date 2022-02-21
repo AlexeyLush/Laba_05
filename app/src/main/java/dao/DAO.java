@@ -4,12 +4,13 @@ import models.LabWork;
 
 import java.util.Map;
 
-public interface DAO<K,V> {
-    int create(V labWork);
-    void update(V labWork);
-    void delete(int id);
+public interface DAO<K extends Comparable,V extends Comparable> {
+    int create(K key, V labWork);
+    void update(int id, V labWork);
+    void delete(K key);
     void initialMap(Map<K, V> elements);
     void clear();
-    V get(int id);
+    Map<K, V> sort(Map<K, V> map);
+    V get(K key);
     Map<K, V> getAll();
 }

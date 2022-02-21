@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DataFileManager extends FileManager implements FileWork<Integer, LabWork>, FileCreator {
+public class DataFileManager extends FileManager implements FileWork<String, LabWork>, FileCreator {
 
     public DataFileManager(String fileName, ConsoleManager consoleManager) {
         super(fileName, consoleManager);
@@ -35,10 +35,10 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
 
     @Override
-    public Map<Integer, LabWork> readFile() {
+    public Map<String, LabWork> readFile() {
 
 
-        Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
+        Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
 
 
         try (BufferedReader reader = new BufferedReader(new FileReader(getFileName()))) {
@@ -52,20 +52,43 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
             labWorkMap = new ParserJSON().deserializeMap(s);
 
-        } catch (IOException e) {
+
+
+            for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
+
+                String tempName = entry.getValue().getName();
+
+                Coordinates tempCoordinates = entry.getValue().getCoordinates();
+                Long tempX = tempCoordinates.getX();
+                Integer tempY = tempCoordinates.getY();
+
+
+                Float tempMinimalFloat = entry.getValue().getMinimalPoint();
+
+                String tempDescription = entry.getValue().getDescription();
+                Difficulty tempDifficulty = entry.getValue().getDifficulty();
+
+                Person tempAuthor = entry.getValue().getAuthor();
+                String tempAuthorName = tempAuthor.getName();
+                Long tempAuthorWeight = tempAuthor.getWeight();
+                String tempAuthorPassportId = tempAuthor.getPassportID();
+            }
+
+
+        } catch (IOException | NullPointerException e) {
             new ProblemWithFileException().outputException();
             getConsoleManager().warning("Идёт перезапись файла значениями по умолчанию...");
             createFile();
             getConsoleManager().successfully("Файл успешно перезаписан!");
             getConsoleManager().warning("Идёт повторное считывание данных...");
-            readFile();
+            labWorkMap = readFile();
             getConsoleManager().successfully("Данные успешно считаны!");
         }
         return labWorkMap;
     }
 
     @Override
-    public void save(Map<Integer, LabWork> labWorkMap) {
+    public void save(Map<String, LabWork> labWorkMap) {
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
             String json = new ParserJSON().serializeMap(labWorkMap);
@@ -81,7 +104,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
-            Map<Integer, LabWork> labWorkMap = new LinkedHashMap<>();
+            Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
 
 
             LabWork labWork = new LabWork();
@@ -106,7 +129,7 @@ public class DataFileManager extends FileManager implements FileWork<Integer, La
 
             labWork.setAuthor(author);
 
-            labWorkMap.put(labWork.getId(), labWork);
+            labWorkMap.put("1", labWork);
 
 
             String json = new ParserJSON().serializeMap(labWorkMap);
