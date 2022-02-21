@@ -62,12 +62,12 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
     @Override
     public Map<String, LabWork> deserializeMap(String json) {
         try {
-            TypeReference<LinkedHashMap<Integer, LabWork>> typeRef = new TypeReference<LinkedHashMap<Integer, LabWork>>() {};
+            TypeReference<LinkedHashMap<String, LabWork>> typeRef = new TypeReference<LinkedHashMap<String, LabWork>>() {};
             return new LinkedHashMap<>(mapper.readValue(json, typeRef));
         } catch (IOException e) {
             new ParserException().outputException();
+            return null;
         }
-        return new LinkedHashMap<>();
     }
 
     @Override

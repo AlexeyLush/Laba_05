@@ -52,6 +52,10 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
             labWorkMap = new ParserJSON().deserializeMap(s);
 
+            if (labWorkMap == null){
+                throw new IOException();
+            }
+
         } catch (IOException e) {
             new ProblemWithFileException().outputException();
             getConsoleManager().warning("Идёт перезапись файла значениями по умолчанию...");

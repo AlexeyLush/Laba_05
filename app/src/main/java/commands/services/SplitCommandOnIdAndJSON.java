@@ -35,6 +35,7 @@ public class SplitCommandOnIdAndJSON implements SplitCommand{
                 json = String.join(" ", splitCommand);
                 if (!(new ParserJSON().isDeserializeElement(json))){
                     json = null;
+                    key += String.join(" ", splitCommand);
                 }
             }
         }

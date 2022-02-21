@@ -57,7 +57,7 @@ public final class CommandsManager {
 
         try{
             String command = scanner.nextLine();
-            String commandName = command.split(" ")[0];
+            String commandName = command.split(" ")[0].toLowerCase();
             if (commandsList.containsKey(commandName)){
 
                 CommandFields commandFields = new CommandFields(command, labWorkDAO,
