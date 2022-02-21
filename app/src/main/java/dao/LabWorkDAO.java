@@ -5,6 +5,10 @@ import models.LabWork;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Класс для реализации работы с коллекцией LabWork
+ */
+
 public class LabWorkDAO implements DAO<Integer, LabWork>{
 
     private Map<Integer, LabWork> labWorkList = new LinkedHashMap<Integer, LabWork>();
