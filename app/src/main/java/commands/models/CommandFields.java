@@ -6,6 +6,10 @@ import files.DataFileManager;
 import files.ExecuteFileManager;
 import io.ConsoleManager;
 
+/**
+ * Класс для моделей
+ */
+
 public class CommandFields {
 
     private final String command;
