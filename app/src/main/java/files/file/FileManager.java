@@ -2,6 +2,10 @@ package files.file;
 
 import io.ConsoleManager;
 
+/**
+ * Абстрактный класс для менеджера файла
+ */
+
 public abstract class FileManager {
 
     private final ConsoleManager consoleManager;
