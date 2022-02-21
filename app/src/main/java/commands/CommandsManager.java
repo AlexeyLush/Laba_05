@@ -59,11 +59,13 @@ public final class CommandsManager {
             String command = scanner.nextLine();
             String commandName = command.split(" ")[0].toLowerCase();
             if (commandsList.containsKey(commandName)){
-
+                boolean isUser = true;
+                if (commandName.equals("execute_script")){
+                    isUser = false;
+                }
                 CommandFields commandFields = new CommandFields(command, labWorkDAO,
-                        this, consoleManager, dataFileManager, executeFileManager, true);
+                        this, consoleManager, dataFileManager, executeFileManager, isUser);
                 commandsList.get(commandName).execute(commandFields);
-                consoleManager.successfully(String.format("Команда %s успешно выполнена", commandName));
             }
             else{
                 throw new NotFoundCommandException();

@@ -52,17 +52,36 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
             labWorkMap = new ParserJSON().deserializeMap(s);
 
-            if (labWorkMap == null){
-                throw new IOException();
+
+
+            for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
+
+                String tempName = entry.getValue().getName();
+
+                Coordinates tempCoordinates = entry.getValue().getCoordinates();
+                Long tempX = tempCoordinates.getX();
+                Integer tempY = tempCoordinates.getY();
+
+
+                Float tempMinimalFloat = entry.getValue().getMinimalPoint();
+
+                String tempDescription = entry.getValue().getDescription();
+                Difficulty tempDifficulty = entry.getValue().getDifficulty();
+
+                Person tempAuthor = entry.getValue().getAuthor();
+                String tempAuthorName = tempAuthor.getName();
+                Long tempAuthorWeight = tempAuthor.getWeight();
+                String tempAuthorPassportId = tempAuthor.getPassportID();
             }
 
-        } catch (IOException e) {
+
+        } catch (IOException | NullPointerException e) {
             new ProblemWithFileException().outputException();
             getConsoleManager().warning("Идёт перезапись файла значениями по умолчанию...");
             createFile();
             getConsoleManager().successfully("Файл успешно перезаписан!");
             getConsoleManager().warning("Идёт повторное считывание данных...");
-            readFile();
+            labWorkMap = readFile();
             getConsoleManager().successfully("Данные успешно считаны!");
         }
         return labWorkMap;

@@ -29,11 +29,18 @@ public class LabWorkDAO implements DAO<String, LabWork>{
     }
 
     @Override
-    public void update(String key, LabWork labWork) {
+    public void update(int id, LabWork labWork) {
 
-        LabWork labWorkInList = get(key);
+        LabWork labFromMap = null;
+        String key = null;
+        for (Map.Entry<String, LabWork> entry : labWorkList.entrySet()) {
+            if (entry.getValue().getId().equals(id)){
+                labFromMap = entry.getValue();
+                key = entry.getKey();
+            }
+        }
 
-        if (labWorkInList != null){
+        if (labFromMap != null){
             labWorkList.replace(key, labWork);
         }
 
