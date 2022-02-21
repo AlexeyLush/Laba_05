@@ -2,6 +2,10 @@ package dao;
 
 import models.LabWork;
 
+/**
+ * Интерфейс для работы DAO
+ */
+
 import java.util.Map;
 
 public interface DAO<K extends Comparable,V extends Comparable> {

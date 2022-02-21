@@ -1,5 +1,9 @@
 package io.enums;
 
+/**
+ * Перечисляемый тип для цветов
+ */
+
 public enum ColorConsole {
     ANSI_RESET("\u001B[0m"),
     ANSI_BLACK("\u001B[30m"),

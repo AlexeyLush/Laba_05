@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * Команда вывова элементов, значение поля description которых больше заданного
+ */
+
 public class FilterGreaterThanDescriptionCommand extends CommandAbstract {
 
     public FilterGreaterThanDescriptionCommand(){

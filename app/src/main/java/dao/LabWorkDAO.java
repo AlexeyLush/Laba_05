@@ -7,7 +7,15 @@ import models.service.LabWorkComparator;
 
 import java.util.*;
 
+
+/**
+ * Класс для реализации работы с коллекцией LabWork
+ */
+
+
+
 public class LabWorkDAO implements DAO<String, LabWork>{
+
 
     private Map<String, LabWork> labWorkList = new LinkedHashMap<>();
 

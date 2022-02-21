@@ -4,6 +4,10 @@ import commands.CommandAbstract;
 import commands.models.CommandFields;
 import laba.App;
 
+/**
+ * Команда завершения программы (без сохранения в файл)
+ */
+
 public class ExitCommand extends CommandAbstract {
 
     public ExitCommand(){

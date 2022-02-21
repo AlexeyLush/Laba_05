@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * Команда сохранения коллекции в файл
+ */
+
 public class SaveCommand extends CommandAbstract {
 
     public SaveCommand(){

@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * команда удаления из коллекции всех элементов, меньших, чем заданный
+ */
+
 public class RemoveLowerCommand extends CommandAbstract {
 
     public RemoveLowerCommand(){

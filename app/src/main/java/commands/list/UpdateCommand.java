@@ -24,6 +24,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Команда обновления значений элемента коллекции, id которого равен заданному
+ */
+
 public class UpdateCommand extends CommandAbstract {
 
     public UpdateCommand() {

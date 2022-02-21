@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * Команда замещения значений по ключу, если новое значение меньше старого
+ */
+
 public class ReplaceIfLowerCommand extends CommandAbstract {
 
     public ReplaceIfLowerCommand(){

@@ -1,8 +1,10 @@
 package models;
 
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
+/**
+ * Перечисляемые уровни сложности
+ */
 
 public enum Difficulty {
     VERY_EASY("VERY_EASY"),

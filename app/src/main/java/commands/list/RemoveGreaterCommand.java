@@ -3,6 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 
+/**
+ * Команда удаления из коллекции всех элементы, превышающие заданный
+ */
+
 public class RemoveGreaterCommand extends CommandAbstract {
 
     public RemoveGreaterCommand(){

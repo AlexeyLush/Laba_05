@@ -17,8 +17,11 @@ import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DataFileManager extends FileManager implements FileWork<String, LabWork>, FileCreator {
+/**
+ * Класс для работы с данными файлов
+ */
 
+public class DataFileManager extends FileManager implements FileWork<String, LabWork>, FileCreator {
     public DataFileManager(String fileName, ConsoleManager consoleManager) {
         super(fileName, consoleManager);
         File data = new File(fileName);

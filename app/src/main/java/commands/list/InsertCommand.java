@@ -12,6 +12,10 @@ import services.parsers.ParserJSON;
 
 import java.util.Scanner;
 
+/**
+ * Команда добавления нового элемента с заданным ключом
+ */
+
 public class InsertCommand extends CommandAbstract {
 
 

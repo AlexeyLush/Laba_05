@@ -9,8 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 
-public class LabWork implements Comparable<LabWork>{
 
+/**
+ * Класс лабораторных работ
+ */
+public class LabWork implements Comparable<LabWork>{
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -23,6 +26,8 @@ public class LabWork implements Comparable<LabWork>{
     public LabWork(){
         this.creationDate = ZonedDateTime.now();
     }
+
+    // Геттеры и сеттеры
 
     public boolean setId(int id){
         if (id <= 0){
@@ -98,6 +103,23 @@ public class LabWork implements Comparable<LabWork>{
 
     public void setAuthor(Person author) {
         this.author = author;
+    }
+
+    // Переопределение метода toString
+
+
+    @Override
+    public String toString() {
+        return "LabWork{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", coordinates=" + coordinates +
+                ", creationDate=" + creationDate +
+                ", minimalPoint=" + minimalPoint +
+                ", description='" + description + '\'' +
+                ", difficulty=" + difficulty +
+                ", author=" + author +
+                '}';
     }
 
     @Override

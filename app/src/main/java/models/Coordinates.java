@@ -1,9 +1,14 @@
 package models;
 
+/**
+ * Класс координат
+ */
+
 public class Coordinates {
     private Long x; //Максимальное значение поля: 713, Поле не может быть null
     private int y;
     private Long maxCoordinateX = 713L;
+
 
     // Геттеры
     public Long getX(){

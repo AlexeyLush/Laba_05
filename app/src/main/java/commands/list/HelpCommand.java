@@ -5,6 +5,10 @@ import commands.models.CommandFields;
 
 import java.util.Map;
 
+/**
+ * Команда вывыда справки по доступным командам
+ */
+
 public class HelpCommand extends CommandAbstract {
 
 

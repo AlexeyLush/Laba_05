@@ -1,7 +1,10 @@
 package commands;
 
-
 import commands.models.CommandFields;
+
+/**
+ * Абстрактный класс команд
+ */
 
 public abstract class CommandAbstract {
 
@@ -14,6 +17,8 @@ public abstract class CommandAbstract {
     public String showInfoCommand(){
         return getDescription();
     }
+
+    // Геттеры и сеттеры
 
     public String getTitle() {
         return title;

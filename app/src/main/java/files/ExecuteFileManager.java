@@ -6,6 +6,10 @@ import io.ConsoleManager;
 
 import java.util.Map;
 
+/**
+ * Класс для запуска файла со скриптами
+ */
+
 public class ExecuteFileManager extends FileManager implements ReadCommand {
 
     public ExecuteFileManager(String fileName, ConsoleManager consoleManager) {
