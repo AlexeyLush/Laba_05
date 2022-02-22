@@ -45,6 +45,6 @@ run {
 
 jar {
     manifest {
-        attributes ('Main-Class': 'laba.App', 'Class-Path' : 'gson-2.9.0.jar')
+        attributes ('Main-Class': 'laba.App')
     }
 }
