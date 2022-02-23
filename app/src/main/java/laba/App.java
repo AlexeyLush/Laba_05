@@ -44,7 +44,7 @@ public class App {
         LabWorkDAO labWorkDAO = new LabWorkDAO();
 
         String dataFileName = System.getenv("LABWORKS_FILE_PATH");
-        if (dataFileName == null){
+        if (dataFileName == null || dataFileName.trim().isEmpty()){
             consoleManager.error("Ошибка настройки переменного окружения! Программа завершает работу...");
             App.exit();
         }

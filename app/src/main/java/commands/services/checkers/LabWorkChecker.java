@@ -80,7 +80,6 @@ public class LabWorkChecker {
         }
         return isTrue;
     }
-
     public Long checkX(String x){
         Long returnX = null;
         Coordinates tempCoordinates = new Coordinates();

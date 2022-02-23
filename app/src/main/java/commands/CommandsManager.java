@@ -55,7 +55,7 @@ public final class CommandsManager {
 
     public void inputCommand(LabWorkDAO labWorkDAO) {
 
-        consoleManager.output("Введите команду: ");
+        consoleManager.output("Введите команду (help - показать список команд): ");
         Scanner scanner = new Scanner(System.in);
 
         try{
