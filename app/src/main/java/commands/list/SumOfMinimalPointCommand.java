@@ -25,7 +25,7 @@ public class SumOfMinimalPointCommand extends CommandAbstract {
                 sum += entry.getValue().getMinimalPoint();
             }
         } catch (NullPointerException nullPointerException){
-            commandFields.getConsoleManager().error("dfsfsdfsdfsdf");
+            commandFields.getConsoleManager().error("Ошибка при исполнение команды");
         }
         commandFields.getConsoleManager().outpunln(String.format("Сумма всех minimalPoint: %f", sum));
     }

@@ -169,8 +169,6 @@ public class UpdateCommand extends CommandAbstract {
     public void execute(CommandFields commandFields) {
 
         LabWorkChecker checker = new LabWorkChecker();
-
-        Scanner scanner = new Scanner(System.in);
         LabWork labWork = null;
 
         String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand());
@@ -242,33 +240,33 @@ public class UpdateCommand extends CommandAbstract {
 
                     while (!checker.isUserNameLab(tempName, labWork)) {
                         commandFields.getConsoleManager().output("Введите название лабораторной работы: ");
-                        tempName = checker.checkUserNameLab(scanner.nextLine());
+                        tempName = checker.checkUserNameLab(commandFields.getScanner().nextLine());
                     }
 
                     while (!checker.isCoordinates(tempX, tempY, labWork)) {
                         commandFields.getConsoleManager().output("Введите координату X: ");
-                        tempX = checker.checkX(scanner.nextLine());
+                        tempX = checker.checkX(commandFields.getScanner().nextLine());
                         while (tempX == null) {
                             commandFields.getConsoleManager().output("Введите координату X: ");
-                            tempX = checker.checkX(scanner.nextLine());
+                            tempX = checker.checkX(commandFields.getScanner().nextLine());
                         }
 
                         commandFields.getConsoleManager().output("Введите координату Y: ");
-                        tempY = checker.checkY(scanner.nextLine());
+                        tempY = checker.checkY(commandFields.getScanner().nextLine());
                         while (tempY == null) {
                             commandFields.getConsoleManager().output("Введите координату Y: ");
-                            tempY = checker.checkY(scanner.nextLine());
+                            tempY = checker.checkY(commandFields.getScanner().nextLine());
                         }
                     }
 
                     while (!checker.isMinimalPoint(tempMinimalFloat, labWork)) {
                         commandFields.getConsoleManager().output("Введите минимальную точку: ");
-                        tempMinimalFloat = checker.checkMinimalPoint(scanner.nextLine());
+                        tempMinimalFloat = checker.checkMinimalPoint(commandFields.getScanner().nextLine());
                     }
 
                     while (!checker.isDescription(tempDescription, labWork)) {
                         commandFields.getConsoleManager().output("Введите описание лабораторной работы: ");
-                        tempDescription = checker.checkDescription(scanner.nextLine());
+                        tempDescription = checker.checkDescription(commandFields.getScanner().nextLine());
                     }
 
                     while (!checker.isDifficulty(tempDifficulty, labWork)) {
@@ -277,23 +275,23 @@ public class UpdateCommand extends CommandAbstract {
                             commandFields.getConsoleManager().warning(String.format("%s", difficulties[i]));
                         }
                         commandFields.getConsoleManager().output("Введите сложность работы: ");
-                        tempDifficulty = checker.checkDifficulty(scanner.nextLine());
+                        tempDifficulty = checker.checkDifficulty(commandFields.getScanner().nextLine());
                     }
 
                     while (!checker.isPerson(tempAuthorName, tempAuthorWeight, tempAuthorPassportId, labWork)) {
                         while (tempAuthorName == null) {
                             commandFields.getConsoleManager().output("Введите имя автора: ");
-                            tempAuthorName = checker.checkNamePerson(scanner.nextLine());
+                            tempAuthorName = checker.checkNamePerson(commandFields.getScanner().nextLine());
                         }
 
                         while (tempAuthorWeight == null) {
                             commandFields.getConsoleManager().output("Введите вес: ");
-                            tempAuthorWeight = checker.checkWeightPerson(scanner.nextLine());
+                            tempAuthorWeight = checker.checkWeightPerson(commandFields.getScanner().nextLine());
                         }
 
                         while (tempAuthorPassportId == null) {
                             commandFields.getConsoleManager().output("Введите ID паспорта: ");
-                            tempAuthorPassportId = checker.checkPassportIdPerson(scanner.nextLine());
+                            tempAuthorPassportId = checker.checkPassportIdPerson(commandFields.getScanner().nextLine());
                         }
                     }
 
@@ -307,7 +305,7 @@ public class UpdateCommand extends CommandAbstract {
             else if (commandFields.isUserInput()) {
                 showLabWorkFields(labWork, commandFields.getConsoleManager());
                 commandFields.getConsoleManager().output("Выберете пункт, который хотите изменить или введите 0, чтобы завершить обновление: ");
-                while (choosePunct(scanner.nextLine(), commandFields.getConsoleManager(), checker, scanner, labWork)){
+                while (choosePunct(commandFields.getScanner().nextLine(), commandFields.getConsoleManager(), checker, commandFields.getScanner(), labWork)){
                     showLabWorkFields(labWork, commandFields.getConsoleManager());
                     commandFields.getConsoleManager().output("Выберете пункт, который хотите изменить или введите 0, чтобы завершить обновление: ");
                 }
@@ -317,11 +315,11 @@ public class UpdateCommand extends CommandAbstract {
             }
 
         } catch (NullPointerException nullPointerException) {
-            new EmptyFieldException().outputException();
+            commandFields.getConsoleManager().error("Вы не ввели значение");
         } catch (EmptyFieldException emptyFieldException) {
             emptyFieldException.outputException();
         } catch (NumberFormatException numberFormatException) {
-            new NotNumberException().outputException();
+            commandFields.getConsoleManager().error("Введите число");
         } catch (NotFoundElementException notFoundElementException) {
             notFoundElementException.outputException();
         }

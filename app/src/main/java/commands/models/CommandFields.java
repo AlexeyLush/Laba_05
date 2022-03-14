@@ -6,12 +6,15 @@ import files.DataFileManager;
 import files.ExecuteFileManager;
 import io.ConsoleManager;
 
+import java.util.Scanner;
+
 /**
  * Класс для моделей
  */
 
 public class CommandFields {
 
+    private final Scanner scanner;
     private final String command;
     private final LabWorkDAO labWorkDAO;
     private final CommandsManager commandsManager;
@@ -20,8 +23,9 @@ public class CommandFields {
     private final ExecuteFileManager executeFileManager;
     private final boolean isUserInput;
 
-    public CommandFields(String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager,
+    public CommandFields(Scanner scanner, String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager,
                          ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager, boolean isUserInput) {
+        this.scanner = scanner;
         this.command = command;
         this.labWorkDAO = labWorkDAO;
         this.commandsManager = commandsManager;
@@ -29,6 +33,10 @@ public class CommandFields {
         this.dataFileManager = dataFileManager;
         this.executeFileManager = executeFileManager;
         this.isUserInput = isUserInput;
+    }
+
+    public Scanner getScanner(){
+        return scanner;
     }
 
     public String getCommand() {

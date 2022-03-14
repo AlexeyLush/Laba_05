@@ -29,7 +29,6 @@ public class InsertCommand extends CommandAbstract {
 
         LabWorkChecker checker = new LabWorkChecker();
 
-        Scanner scanner = new Scanner(System.in);
         LabWork labWork = new LabWork();
 
         String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand());
@@ -48,7 +47,7 @@ public class InsertCommand extends CommandAbstract {
         while (!checker.checkUserKey(json, key, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())) {
             if (commandFields.isUserInput()) {
                 commandFields.getConsoleManager().output("Введите ключ: ");
-                key = scanner.nextLine();
+                key = commandFields.getScanner().nextLine();
             } else {
                 isLabWork = false;
                 break;
@@ -60,7 +59,7 @@ public class InsertCommand extends CommandAbstract {
         while (!checker.isUserNameLab(tempName, labWork)){
             if (commandFields.isUserInput()) {
                 commandFields.getConsoleManager().output("Введите название лабораторной работы: ");
-                tempName = checker.checkUserNameLab(scanner.nextLine());
+                tempName = checker.checkUserNameLab(commandFields.getScanner().nextLine());
             } else {
                 isLabWork = false;
                 break;
@@ -80,17 +79,17 @@ public class InsertCommand extends CommandAbstract {
             if (commandFields.isUserInput()) {
 
                 commandFields.getConsoleManager().output("Введите координату X: ");
-                tempX = checker.checkX(scanner.nextLine());
+                tempX = checker.checkX(commandFields.getScanner().nextLine());
                 while (tempX == null){
                     commandFields.getConsoleManager().output("Введите координату X: ");
-                    tempX = checker.checkX(scanner.nextLine());
+                    tempX = checker.checkX(commandFields.getScanner().nextLine());
                 }
 
                 commandFields.getConsoleManager().output("Введите координату Y: ");
-                tempY = checker.checkY(scanner.nextLine());
+                tempY = checker.checkY(commandFields.getScanner().nextLine());
                 while (tempY == null){
                     commandFields.getConsoleManager().output("Введите координату Y: ");
-                    tempY = checker.checkY(scanner.nextLine());
+                    tempY = checker.checkY(commandFields.getScanner().nextLine());
                 }
 
 
@@ -106,7 +105,7 @@ public class InsertCommand extends CommandAbstract {
         while (!checker.isMinimalPoint(tempMinimalFloat, labWork)){
             if (commandFields.isUserInput()){
                 commandFields.getConsoleManager().output("Введите минимальную точку: ");
-                tempMinimalFloat = checker.checkMinimalPoint(scanner.nextLine());
+                tempMinimalFloat = checker.checkMinimalPoint(commandFields.getScanner().nextLine());
             } else {
                 isLabWork = false;
                 break;
@@ -118,7 +117,7 @@ public class InsertCommand extends CommandAbstract {
         while (!checker.isDescription(tempDescription, labWork)){
             if (commandFields.isUserInput()){
                 commandFields.getConsoleManager().output("Введите описание лабораторной работы: ");
-                tempDescription = checker.checkDescription(scanner.nextLine());
+                tempDescription = checker.checkDescription(commandFields.getScanner().nextLine());
             }  else {
                 isLabWork = false;
                 break;
@@ -133,7 +132,7 @@ public class InsertCommand extends CommandAbstract {
                     commandFields.getConsoleManager().warning(String.format("%s",difficulties[i]));
                 }
                 commandFields.getConsoleManager().output("Введите сложность работы: ");
-                tempDifficulty = checker.checkDifficulty(scanner.nextLine());
+                tempDifficulty = checker.checkDifficulty(commandFields.getScanner().nextLine());
             }  else {
                 isLabWork = false;
                 break;
@@ -158,17 +157,17 @@ public class InsertCommand extends CommandAbstract {
 
                 while (tempAuthorName == null){
                     commandFields.getConsoleManager().output("Введите имя автора: ");
-                    tempAuthorName = checker.checkNamePerson(scanner.nextLine());
+                    tempAuthorName = checker.checkNamePerson(commandFields.getScanner().nextLine());
                 }
 
                 while (tempAuthorWeight == null){
                     commandFields.getConsoleManager().output("Введите вес: ");
-                    tempAuthorWeight = checker.checkWeightPerson(scanner.nextLine());
+                    tempAuthorWeight = checker.checkWeightPerson(commandFields.getScanner().nextLine());
                 }
 
                 while (tempAuthorPassportId == null){
                     commandFields.getConsoleManager().output("Введите ID паспорта: ");
-                    tempAuthorPassportId = checker.checkPassportIdPerson(scanner.nextLine());
+                    tempAuthorPassportId = checker.checkPassportIdPerson(commandFields.getScanner().nextLine());
                 }
 
             } else {

@@ -17,12 +17,13 @@ import java.util.*;
 public final class CommandsManager {
 
     private final Map<String, CommandAbstract> commandsList = new LinkedHashMap<String, CommandAbstract>();
+    private final Scanner scanner;
     private final ConsoleManager consoleManager;
     private final DataFileManager dataFileManager;
     private final ExecuteFileManager executeFileManager;
 
-    public CommandsManager(ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager){
-
+    public CommandsManager(Scanner scanner, ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager){
+        this.scanner = scanner;
         this.dataFileManager = dataFileManager;
         this.executeFileManager = executeFileManager;
         this.consoleManager = consoleManager;
@@ -56,8 +57,6 @@ public final class CommandsManager {
     public void inputCommand(LabWorkDAO labWorkDAO) {
 
         consoleManager.output("Введите команду (help - показать список команд): ");
-        Scanner scanner = new Scanner(System.in);
-
         try{
             String command = scanner.nextLine();
             String commandName = command.split(" ")[0].toLowerCase();
@@ -66,7 +65,7 @@ public final class CommandsManager {
                 if (commandName.equals("execute_script")){
                     isUser = false;
                 }
-                CommandFields commandFields = new CommandFields(command, labWorkDAO,
+                CommandFields commandFields = new CommandFields(scanner, command, labWorkDAO,
                         this, consoleManager, dataFileManager, executeFileManager, isUser);
                 commandsList.get(commandName).execute(commandFields);
             }
@@ -76,7 +75,7 @@ public final class CommandsManager {
         } catch (NotFoundCommandException e){
             e.outputException();
         } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e){
-            new NotFoundCommandException().outputException();
+            consoleManager.error("Команда не найдена");
         }
     }
 
