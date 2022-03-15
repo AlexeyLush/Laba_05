@@ -62,7 +62,13 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
             labWorkMap = new ParserJSON().deserializeMap(s);
 
+            int maxId = 0;
+
             for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
+
+                if (maxId < entry.getValue().getId()){
+                    maxId = entry.getValue().getId();
+                }
 
                 String tempName = entry.getValue().getName();
 
@@ -81,6 +87,8 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
                 Long tempAuthorWeight = tempAuthor.getWeight();
                 String tempAuthorPassportId = tempAuthor.getPassportID();
             }
+
+            GenerationID.setId(maxId + 1);
 
 
         } catch (IOException | NullPointerException e) {

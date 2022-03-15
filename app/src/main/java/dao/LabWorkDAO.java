@@ -21,15 +21,7 @@ public class LabWorkDAO implements DAO<String, LabWork>{
 
     @Override
     public int create(String key, LabWork labWork) {
-
         labWork.setId(GenerationID.newId());
-
-        for (Map.Entry<String, LabWork> entry : labWorkList.entrySet()) {
-            if (entry.getValue().getId().equals(labWork.getId())){
-                labWork.setId(GenerationID.newId());
-            }
-        }
-
         labWorkList.put(key, labWork);
         return labWork.getId();
     }

@@ -12,8 +12,11 @@ import java.util.Map;
 
 public class ExecuteFileManager extends FileManager implements ReadCommand {
 
+    private ConsoleManager consoleManager;
+
     public ExecuteFileManager(String fileName, ConsoleManager consoleManager) {
-        super(fileName, consoleManager);
+        super(fileName);
+        this.consoleManager = consoleManager;
     }
 
     @Override
