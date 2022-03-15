@@ -14,7 +14,7 @@ import java.util.*;
 
 
 
-public class LabWorkDAO implements DAO<String, LabWork>{
+public class LabWorkDAO implements DAO<String, LabWork>, MapDAO<String, LabWork>{
 
 
     private Map<String, LabWork> labWorkList = new LinkedHashMap<>();
