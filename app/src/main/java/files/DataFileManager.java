@@ -22,20 +22,27 @@ import java.util.Map;
  */
 
 public class DataFileManager extends FileManager implements FileWork<String, LabWork>, FileCreator {
+
+    private ConsoleManager consoleManager;
+
     public DataFileManager(String fileName, ConsoleManager consoleManager) {
-        super(fileName, consoleManager);
+        super(fileName);
+        this.consoleManager = consoleManager;
+        initialFile(fileName);
+    }
+
+    public void initialFile(String fileName){
         File data = new File(fileName);
         try {
             if (data.createNewFile()){
-                getConsoleManager().warning("Идёт создание файла...");
+                consoleManager.warning("Идёт создание файла...");
                 createFile();
-                getConsoleManager().successfully("Файл успешно создан!");
+                consoleManager.successfully("Файл успешно создан!");
             }
         } catch (IOException ioException) {
-            new ProblemWithFileException().outputException();
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
     }
-
 
     @Override
     public Map<String, LabWork> readFile() {
@@ -54,8 +61,6 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             }
 
             labWorkMap = new ParserJSON().deserializeMap(s);
-
-
 
             for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
 
@@ -79,13 +84,13 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
 
         } catch (IOException | NullPointerException e) {
-            new ProblemWithFileException().outputException();
-            getConsoleManager().warning("Идёт перезапись файла значениями по умолчанию...");
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
+            consoleManager.warning("Идёт перезапись файла значениями по умолчанию...");
             createFile();
-            getConsoleManager().successfully("Файл успешно перезаписан!");
-            getConsoleManager().warning("Идёт повторное считывание данных...");
+            consoleManager.successfully("Файл успешно перезаписан!");
+            consoleManager.warning("Идёт повторное считывание данных...");
             labWorkMap = readFile();
-            getConsoleManager().successfully("Данные успешно считаны!");
+            consoleManager.successfully("Данные успешно считаны!");
         }
         return labWorkMap;
     }
@@ -98,7 +103,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             writer.write(json);
 
         } catch (IOException e) {
-            new ProblemWithFileException().outputException();
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
     }
 
@@ -140,7 +145,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
 
         } catch (IOException e) {
-            new ProblemWithFileException().outputException();
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
 
     }

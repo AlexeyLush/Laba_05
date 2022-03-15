@@ -19,8 +19,6 @@ public class LabWorkDAO implements DAO<String, LabWork>{
 
     private Map<String, LabWork> labWorkList = new LinkedHashMap<>();
 
-
-
     @Override
     public int create(String key, LabWork labWork) {
 
