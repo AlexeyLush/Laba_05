@@ -54,19 +54,16 @@ public final class CommandsManager {
         return new LinkedHashMap<>(this.commandsList);
     }
 
-    public void inputCommand(LabWorkDAO labWorkDAO) {
-
-        consoleManager.output("Введите команду (help - показать список команд): ");
+    public void executeCommand(String command, LabWorkDAO labWorkDAO){
+        String commandName = command.split(" ")[0].toLowerCase();
         try{
-            String command = scanner.nextLine();
-            String commandName = command.split(" ")[0].toLowerCase();
             if (commandsList.containsKey(commandName)){
                 boolean isUser = true;
                 if (commandName.equals("execute_script")){
                     isUser = false;
                 }
                 CommandFields commandFields = new CommandFields(scanner, command, labWorkDAO,
-                        this, consoleManager, dataFileManager, executeFileManager, isUser);
+                        this, dataFileManager, consoleManager, isUser);
                 commandsList.get(commandName).execute(commandFields);
             }
             else{
@@ -77,6 +74,15 @@ public final class CommandsManager {
         } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e){
             consoleManager.error("Команда не найдена");
         }
+
+
+    }
+
+    public void inputCommand(LabWorkDAO labWorkDAO) {
+
+        consoleManager.output("Введите команду (help - показать список команд): ");
+        String command = scanner.nextLine();
+        executeCommand(command, labWorkDAO);
     }
 
 }
