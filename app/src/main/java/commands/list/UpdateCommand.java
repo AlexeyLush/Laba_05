@@ -4,24 +4,20 @@ import commands.CommandAbstract;
 import commands.models.CommandFields;
 import commands.services.checkers.LabWorkChecker;
 import commands.services.spliters.SplitCommandOnIdAndJSON;
-import dao.LabWorkDAO;
 import exception.EmptyFieldException;
 import io.ConsoleManager;
-import exception.NotEnteredKeyException;
 import exception.NotFoundElementException;
 import exception.NotNumberException;
 import models.Coordinates;
 import models.Difficulty;
 import models.LabWork;
 import models.Person;
-import models.service.GenerationID;
 import services.parsers.ParserJSON;
 
 import java.lang.reflect.Method;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -140,10 +136,10 @@ public class UpdateCommand extends CommandAbstract {
     private void outputFiled(String field, ConsoleManager consoleManager, boolean isUpdateField) {
 
         if (isUpdateField) {
-            consoleManager.outpunln(String.format("%d. %s", counterFiled, field));
+            consoleManager.outputln(String.format("%d. %s", counterFiled, field));
             counterFiled++;
         } else {
-            consoleManager.outpunln(String.format("%s", field));
+            consoleManager.outputln(String.format("%s", field));
         }
     }
 
