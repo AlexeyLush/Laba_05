@@ -1,23 +1,18 @@
 package models;
 
-import models.service.GenerationID;
 
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Map;
 import java.util.Objects;
+
 
 /**
  * Класс лабораторных работ
  */
-
-public class LabWork{
-
+public class LabWork implements Comparable<LabWork>{
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
-    private final java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Float minimalPoint; //Поле может быть null, Значение поля должно быть больше 0
     private String description; //Строка не может быть пустой, Поле не может быть null
     private Difficulty difficulty; //Поле может быть null
@@ -37,7 +32,7 @@ public class LabWork{
         return true;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -46,7 +41,7 @@ public class LabWork{
     }
 
     public Boolean setName(String name) {
-        if (name == null || name.isEmpty() || name.split(" ").length == 0 || name.split("\t").length == 0){
+        if (name == null || name.isEmpty() || name.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
             return false;
         }
         this.name = name;
@@ -82,8 +77,7 @@ public class LabWork{
     }
 
     public boolean setDescription(String description) {
-        if (description == null || description.isEmpty() || description.split(" ").length == 0
-                || description.split("\t").length == 0){
+        if (description == null || description.isEmpty() || description.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
             return false;
         }
         this.description = description;
@@ -108,6 +102,7 @@ public class LabWork{
 
     // Переопределение метода toString
 
+
     @Override
     public String toString() {
         return "LabWork{" +
@@ -121,6 +116,7 @@ public class LabWork{
                 ", author=" + author +
                 '}';
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -132,5 +128,10 @@ public class LabWork{
     @Override
     public int hashCode() {
         return Objects.hash(id, name, coordinates, creationDate, minimalPoint, description, difficulty, author);
+    }
+
+    @Override
+    public int compareTo(LabWork labWork) {
+        return this.id - labWork.getId();
     }
 }

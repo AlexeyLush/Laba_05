@@ -1,12 +1,7 @@
-package commands.services;
+package commands.services.spliters;
 
-import commands.services.interfaces.SplitCommand;
-import exception.NotNumberException;
-import io.ConsoleManager;
-import models.LabWork;
+import commands.services.spliters.interfaces.SplitCommand;
 import services.parsers.ParserJSON;
-
-import java.io.IOException;
 
 public class SplitCommandOnIdAndJSON implements SplitCommand{
 
@@ -35,6 +30,7 @@ public class SplitCommandOnIdAndJSON implements SplitCommand{
                 json = String.join(" ", splitCommand);
                 if (!(new ParserJSON().isDeserializeElement(json))){
                     json = null;
+                    key += String.join(" ", splitCommand);
                 }
             }
         }

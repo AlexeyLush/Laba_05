@@ -20,7 +20,7 @@ public class HelpCommand extends CommandAbstract {
     @Override
     public void execute(CommandFields commandFields) {
         for (Map.Entry<String, CommandAbstract> entry : commandFields.getCommandsManager().getCommandsList().entrySet()) {
-            commandFields.getConsoleManager().outpunln(entry.getValue().getDescription());
+            commandFields.getConsoleManager().warning(entry.getValue().getDescription());
         }
     }
 }

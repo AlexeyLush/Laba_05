@@ -22,7 +22,7 @@ public class App {
     public static void exit(){
         isRun = false;
     }
-    public static void run(String dataFileName, ConsoleManager consoleManager, LabWorkDAO labWorkDAO){
+    public static void run(Scanner scanner, String dataFileName, ConsoleManager consoleManager, LabWorkDAO labWorkDAO){
 
         CommandsManager commandsManager = null;
 
@@ -31,7 +31,7 @@ public class App {
             labWorkDAO.initialMap(dataFileManager.readFile());
             ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
 
-            commandsManager = new CommandsManager(consoleManager, dataFileManager, executeFileManager);
+            commandsManager = new CommandsManager(scanner, consoleManager, dataFileManager, executeFileManager);
         }
         while (isRun){
             commandsManager.inputCommand(labWorkDAO);
@@ -42,13 +42,14 @@ public class App {
 
         ConsoleManager consoleManager = new ConsoleManager();
         LabWorkDAO labWorkDAO = new LabWorkDAO();
+        Scanner scanner = new Scanner(System.in);
 
         String dataFileName = System.getenv("LABWORKS_FILE_PATH");
-        if (dataFileName == null){
+        if (dataFileName == null || dataFileName.trim().isEmpty()){
             consoleManager.error("Ошибка настройки переменного окружения! Программа завершает работу...");
             App.exit();
         }
-        run(dataFileName, consoleManager, labWorkDAO);
+        run(scanner, dataFileName, consoleManager, labWorkDAO);
 
     }
 }

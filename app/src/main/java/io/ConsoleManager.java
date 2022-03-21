@@ -16,7 +16,7 @@ public class ConsoleManager implements ConsoleOutput, MessageOutput {
     }
 
     @Override
-    public void outpunln(String message) {
+    public void outputln(String message) {
         System.out.println(message);
     }
 

@@ -25,13 +25,10 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit test framework.
-    testImplementation 'junit:junit:4.13.2'
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1.1-jre'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
-
 }
 
 application {
@@ -45,6 +42,6 @@ run {
 
 jar {
     manifest {
-        attributes ('Main-Class': 'laba.App', 'Class-Path' : 'gson-2.9.0.jar')
+        attributes ('Main-Class': 'laba.App')
     }
 }

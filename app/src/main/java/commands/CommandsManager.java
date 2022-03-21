@@ -7,7 +7,6 @@ import exception.NotFoundCommandException;
 import files.DataFileManager;
 import files.ExecuteFileManager;
 import io.ConsoleManager;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.*;
 
@@ -18,12 +17,13 @@ import java.util.*;
 public final class CommandsManager {
 
     private final Map<String, CommandAbstract> commandsList = new LinkedHashMap<String, CommandAbstract>();
+    private final Scanner scanner;
     private final ConsoleManager consoleManager;
     private final DataFileManager dataFileManager;
     private final ExecuteFileManager executeFileManager;
 
-    public CommandsManager(ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager){
-
+    public CommandsManager(Scanner scanner, ConsoleManager consoleManager, DataFileManager dataFileManager, ExecuteFileManager executeFileManager){
+        this.scanner = scanner;
         this.dataFileManager = dataFileManager;
         this.executeFileManager = executeFileManager;
         this.consoleManager = consoleManager;
@@ -54,20 +54,17 @@ public final class CommandsManager {
         return new LinkedHashMap<>(this.commandsList);
     }
 
-    public void inputCommand(LabWorkDAO labWorkDAO) {
-
-        consoleManager.output("Введите команду: ");
-        Scanner scanner = new Scanner(System.in);
-
+    public void executeCommand(String command, LabWorkDAO labWorkDAO){
+        String commandName = command.split(" ")[0].toLowerCase();
         try{
-            String command = scanner.nextLine();
-            String commandName = command.split(" ")[0];
             if (commandsList.containsKey(commandName)){
-
-                CommandFields commandFields = new CommandFields(command, labWorkDAO,
-                        this, consoleManager, dataFileManager, executeFileManager, true);
+                boolean isUser = true;
+                if (commandName.equals("execute_script")){
+                    isUser = false;
+                }
+                CommandFields commandFields = new CommandFields(scanner, command, labWorkDAO,
+                        this, dataFileManager, consoleManager, isUser);
                 commandsList.get(commandName).execute(commandFields);
-                consoleManager.successfully(String.format("Команда %s успешно выполнена", commandName));
             }
             else{
                 throw new NotFoundCommandException();
@@ -75,8 +72,17 @@ public final class CommandsManager {
         } catch (NotFoundCommandException e){
             e.outputException();
         } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e){
-            new NotFoundCommandException().outputException();
+            consoleManager.error("Команда не найдена");
         }
+
+
+    }
+
+    public void inputCommand(LabWorkDAO labWorkDAO) {
+
+        consoleManager.output("Введите команду (help - показать список команд): ");
+        String command = scanner.nextLine();
+        executeCommand(command, labWorkDAO);
     }
 
 }

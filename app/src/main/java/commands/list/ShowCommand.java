@@ -2,9 +2,6 @@ package commands.list;
 
 import commands.CommandAbstract;
 import commands.models.CommandFields;
-import dao.DAO;
-import exception.NotFoundCommandException;
-import exception.NotNumberException;
 import models.LabWork;
 
 import java.util.Map;
@@ -23,6 +20,15 @@ public class ShowCommand extends CommandAbstract {
     @Override
     public void execute(CommandFields commandFields) {
 
+        try{
+
+            for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
+                commandFields.getConsoleManager().outputln(entry.getValue().toString());
+            }
+        }
+        catch (NullPointerException nullPointerException){
+            commandFields.getConsoleManager().error("Ошибка!");
+        }
     }
 
 }

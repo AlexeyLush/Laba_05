@@ -1,9 +1,6 @@
 package files;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import commands.CommandAbstract;
-import exception.ProblemWithFileException;
+
 import files.file.FileCreator;
 import files.file.FileManager;
 import files.file.FileWork;
@@ -13,10 +10,8 @@ import models.service.GenerationID;
 import services.parsers.ParserJSON;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 
 /**
  * Класс для работы с данными файлов
@@ -24,21 +19,26 @@ import java.util.Map;
 
 public class DataFileManager extends FileManager implements FileWork<String, LabWork>, FileCreator {
 
+    private ConsoleManager consoleManager;
 
     public DataFileManager(String fileName, ConsoleManager consoleManager) {
-        super(fileName, consoleManager);
+        super(fileName);
+        this.consoleManager = consoleManager;
+        initialFile(fileName);
+    }
+
+    public void initialFile(String fileName){
         File data = new File(fileName);
         try {
             if (data.createNewFile()){
-                getConsoleManager().warning("Идёт создание файла...");
+                consoleManager.warning("Идёт создание файла...");
                 createFile();
-                getConsoleManager().successfully("Файл успешно создан!");
+                consoleManager.successfully("Файл успешно создан!");
             }
         } catch (IOException ioException) {
-            new ProblemWithFileException().outputException();
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
     }
-
 
     @Override
     public Map<String, LabWork> readFile() {
@@ -58,14 +58,43 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
             labWorkMap = new ParserJSON().deserializeMap(s);
 
-        } catch (IOException e) {
-            new ProblemWithFileException().outputException();
-            getConsoleManager().warning("Идёт перезапись файла значениями по умолчанию...");
+            int maxId = 0;
+
+            for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
+
+                if (maxId < entry.getValue().getId()){
+                    maxId = entry.getValue().getId();
+                }
+
+                String tempName = entry.getValue().getName();
+
+                Coordinates tempCoordinates = entry.getValue().getCoordinates();
+                Long tempX = tempCoordinates.getX();
+                Integer tempY = tempCoordinates.getY();
+
+
+                Float tempMinimalFloat = entry.getValue().getMinimalPoint();
+
+                String tempDescription = entry.getValue().getDescription();
+                Difficulty tempDifficulty = entry.getValue().getDifficulty();
+
+                Person tempAuthor = entry.getValue().getAuthor();
+                String tempAuthorName = tempAuthor.getName();
+                Long tempAuthorWeight = tempAuthor.getWeight();
+                String tempAuthorPassportId = tempAuthor.getPassportID();
+            }
+
+            GenerationID.setId(maxId + 1);
+
+
+        } catch (IOException | NullPointerException e) {
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
+            consoleManager.warning("Идёт перезапись файла значениями по умолчанию...");
             createFile();
-            getConsoleManager().successfully("Файл успешно перезаписан!");
-            getConsoleManager().warning("Идёт повторное считывание данных...");
-            readFile();
-            getConsoleManager().successfully("Данные успешно считаны!");
+            consoleManager.successfully("Файл успешно перезаписан!");
+            consoleManager.warning("Идёт повторное считывание данных...");
+            labWorkMap = readFile();
+            consoleManager.successfully("Данные успешно считаны!");
         }
         return labWorkMap;
     }
@@ -78,7 +107,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             writer.write(json);
 
         } catch (IOException e) {
-            new ProblemWithFileException().outputException();
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
     }
 
@@ -120,7 +149,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
 
         } catch (IOException e) {
-            new ProblemWithFileException().outputException();
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
 
     }
