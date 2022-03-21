@@ -31,7 +31,6 @@ public class RemoveGreaterCommand extends CommandAbstract {
 
         String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand(), commandFields.getConsoleManager());
 
-        String key = splitCommand[0];
         String json = splitCommand[1];
 
         LabWork labWorkTemp = new LabWork();
@@ -41,17 +40,6 @@ public class RemoveGreaterCommand extends CommandAbstract {
         }
 
         boolean isLabWork = true;
-
-        while (!checker.checkUserKey(json, key, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())) {
-            if (commandFields.isUserInput()) {
-                commandFields.getConsoleManager().output("Введите ключ: ");
-                key = commandFields.getScanner().nextLine();
-            } else {
-                isLabWork = false;
-                break;
-            }
-        }
-
 
         String tempName = labWorkTemp.getName();
         while (!checker.isUserNameLab(tempName, labWork)){
@@ -178,7 +166,9 @@ public class RemoveGreaterCommand extends CommandAbstract {
             commandFields.getConsoleManager().error("Введны некорректные данные");
         } else{
             for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
-                commandFields.getConsoleManager().outputln(entry.getValue().toString());
+                if (labWork.getDescription().length() < entry.getValue().getDescription().length()){
+                    commandFields.getLabWorkDAO().delete(entry.getKey());
+                }
             }
             commandFields.getConsoleManager().successfully("Команда remove_greater успешно выполнена");
         }

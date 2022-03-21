@@ -151,6 +151,5 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
-
     }
 }
