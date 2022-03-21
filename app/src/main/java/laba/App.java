@@ -3,14 +3,8 @@ import commands.CommandsManager;
 import dao.LabWorkDAO;
 import files.DataFileManager;
 import files.ExecuteFileManager;
-import files.file.FileManager;
 import io.ConsoleManager;
-import models.LabWork;
-import services.parsers.ParserJSON;
 
-import java.io.Console;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -25,16 +19,12 @@ public class App {
     }
     public static void run(Scanner scanner, String dataFileName, ConsoleManager consoleManager, LabWorkDAO labWorkDAO){
 
-        CommandsManager commandsManager = null;
-
         DataFileManager dataFileManager = new DataFileManager(dataFileName, consoleManager);
-        labWorkDAO.initialMap(dataFileManager.readFile());
+        labWorkDAO.initialMap(dataFileManager.readMap());
         ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
+        CommandsManager commandsManager = new CommandsManager(scanner, consoleManager, dataFileManager, executeFileManager);
 
         while (isRun){
-            Scanner scannerT = new Scanner(System.in);
-            scannerT.reset();
-            commandsManager = new CommandsManager(scannerT, consoleManager, dataFileManager, executeFileManager);
             commandsManager.inputCommand(labWorkDAO);
         }
     }

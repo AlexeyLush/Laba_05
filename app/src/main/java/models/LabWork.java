@@ -106,19 +106,17 @@ public class LabWork implements Comparable<LabWork>{
 
     @Override
     public String toString() {
-
-//        outputFiled(String.format("Сложность: %s", labWork.getDifficulty().getValue()), consoleManager, true);
-//        outputFiled(String.format("Имя автора: %s", labWork.getAuthor().getName()), consoleManager, true);
-//        outputFiled(String.format("Вес: %s", labWork.getAuthor().getWeight()), consoleManager, true);
-//        outputFiled(String.format("ID паспорта: %s", labWork.getAuthor().getPassportID()), consoleManager, true);
         return "ID: " + id + System.getProperty("line.separator")
                 + "Дата создания: " + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) + System.getProperty("line.separator")
                 + "Название работы: " + name + System.getProperty("line.separator")
                 + "Координата X: " + coordinates.getX() + System.getProperty("line.separator")
                 + "Координата Y: " + coordinates.getY() + System.getProperty("line.separator")
                 + "Минимальная точка: " + minimalPoint + System.getProperty("line.separator")
-                + "Описание: " + coordinates.getY() + System.getProperty("line.separator")
-                + "Описание: " + coordinates.getY() + System.getProperty("line.separator");
+                + "Описание: " + description + System.getProperty("line.separator")
+                + "Сложность: " + difficulty + System.getProperty("line.separator")
+                + "Имя автора: " + author.getName() + System.getProperty("line.separator")
+                + "Вес: " + author.getWeight() + System.getProperty("line.separator")
+                + "ID паспорта: " + author.getPassportID() + System.getProperty("line.separator");
     }
 
     @Override

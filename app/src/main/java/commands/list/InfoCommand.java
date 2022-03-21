@@ -3,7 +3,10 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 import models.LabWork;
+import services.parsers.ParserJSON;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 /**
@@ -19,30 +22,12 @@ public class InfoCommand extends CommandAbstract {
 
     @Override
     public void execute(CommandFields commandFields) {
+        String date = new ParserJSON(commandFields.getConsoleManager()).getDataFromFile(commandFields.getDataFileManager().readFile());
 
-        String[] commandSplited = commandFields.getCommand().split(" ");
-        String description;
-        if (commandSplited.length == 1){
-            commandFields.getConsoleManager().output("Введите описание: ");
-            description = commandFields.getScanner().nextLine();
-            while ((description.isEmpty() || description.replaceAll(" ", "").replaceAll("\t", "").length() == 0)){
-                commandFields.getConsoleManager().error("Описание не может быть пустым");
-                commandFields.getConsoleManager().output("Введите описание: ");
-                description = commandFields.getScanner().nextLine();
-            }
-        } else{
-            commandSplited[0] = "";
-            description = String.join(" ", commandSplited);
-        }
-
-        try{
-            for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
-                if (entry.getValue().getDescription().length() > description.length()){
-                    commandFields.getConsoleManager().outputln(entry.getValue().toString());
-                }
-            }
-        } catch (NullPointerException nullPointerException){
-            commandFields.getConsoleManager().error("Ошибка!");
-        }
+        commandFields.getConsoleManager().warning("-------------------------------------------------------------");
+        commandFields.getConsoleManager().outputln(String.format("Время инициализации: %s", ZonedDateTime.parse(date).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))));
+        commandFields.getConsoleManager().outputln(String.format("Тип коллекции: %s", commandFields.getLabWorkDAO().getAll().getClass()));
+        commandFields.getConsoleManager().outputln(String.format("Кол-во элментов: %s", commandFields.getLabWorkDAO().getAll().size()));
+        commandFields.getConsoleManager().warning("-------------------------------------------------------------");
     }
 }

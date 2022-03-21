@@ -21,9 +21,10 @@ public class ShowCommand extends CommandAbstract {
     public void execute(CommandFields commandFields) {
 
         try{
-
+            commandFields.getConsoleManager().warning("----------------------------------------------");
             for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
                 commandFields.getConsoleManager().outputln(entry.getValue().toString());
+                commandFields.getConsoleManager().warning("----------------------------------------------");
             }
         }
         catch (NullPointerException nullPointerException){

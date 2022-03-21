@@ -4,12 +4,15 @@ package files;
 import files.file.FileCreator;
 import files.file.FileManager;
 import files.file.FileWork;
+import files.file.FileWorkMap;
 import io.ConsoleManager;
 import models.*;
 import models.service.GenerationID;
+import services.model.ModelParse;
 import services.parsers.ParserJSON;
 
 import java.io.*;
+import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,7 +20,7 @@ import java.util.Map;
  * Класс для работы с данными файлов
  */
 
-public class DataFileManager extends FileManager implements FileWork<String, LabWork>, FileCreator {
+public class DataFileManager extends FileManager implements FileWorkMap<String, LabWork>, FileCreator, FileWork {
 
     private ConsoleManager consoleManager;
 
@@ -41,7 +44,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
     }
 
     @Override
-    public Map<String, LabWork> readFile() {
+    public Map<String, LabWork> readMap() {
 
 
         Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
@@ -93,7 +96,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             createFile();
             consoleManager.successfully("Файл успешно перезаписан!");
             consoleManager.warning("Идёт повторное считывание данных...");
-            labWorkMap = readFile();
+            labWorkMap = readMap();
             consoleManager.successfully("Данные успешно считаны!");
         }
 
@@ -103,11 +106,9 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
     @Override
     public void save(Map<String, LabWork> labWorkMap) {
+        String jsonWithDate = new ParserJSON(consoleManager).jsonForWrite(readFile(), labWorkMap);
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
-
-            String json = new ParserJSON(consoleManager).serializeMap(labWorkMap);
-            writer.write(json);
-
+            writer.write(jsonWithDate);
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
@@ -116,7 +117,8 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
     @Override
     public void createFile() {
 
-
+        ModelParse modelParse = new ModelParse();
+        modelParse.setDate(ZonedDateTime.now().toString());
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
             Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
@@ -147,7 +149,8 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             labWorkMap.put("1", labWork);
 
 
-            String json = new ParserJSON(consoleManager).serializeMap(labWorkMap);
+            modelParse.setCollection(labWorkMap);
+            String json = new ParserJSON(consoleManager).serializeModelParse(modelParse);
             writer.write(json);
 
 
@@ -158,5 +161,25 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
                 createFile();
             }
         }
+    }
+
+    @Override
+    public String readFile() {
+
+        String s = "";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(getFileName()))) {
+
+            String temp = "";
+
+            while ((temp = reader.readLine()) != null) {
+                s += temp;
+            }
+
+        } catch (IOException | NullPointerException e) {
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
+        }
+
+        return s;
     }
 }
