@@ -167,7 +167,7 @@ public class UpdateCommand extends CommandAbstract {
         LabWorkChecker checker = new LabWorkChecker();
         LabWork labWork = null;
 
-        String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand());
+        String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand(), commandFields.getConsoleManager());
 
         try {
             String id = splitCommand[0];
@@ -190,7 +190,7 @@ public class UpdateCommand extends CommandAbstract {
 
             if (json != null) {
 
-                LabWork labWorkTemp = new ParserJSON().deserializeElement(json);
+                LabWork labWorkTemp = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
                 boolean isLabWork = true;
 
                 String tempName = labWorkTemp.getName();

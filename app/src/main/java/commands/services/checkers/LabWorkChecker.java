@@ -44,7 +44,7 @@ public class LabWorkChecker {
             }
         } else {
             isTrue = checkerKey(key, labWorkDAO);
-            if (!(new ParserJSON().isDeserializeElement(json))) {
+            if (!(new ParserJSON(consoleManager).isDeserializeElement(json))) {
                 isTrue = false;
             }
         }

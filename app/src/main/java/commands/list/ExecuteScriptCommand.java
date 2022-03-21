@@ -67,7 +67,5 @@ public class ExecuteScriptCommand extends CommandAbstract {
             e.outputException();
         }
 
-
-
     }
 }

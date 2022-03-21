@@ -60,7 +60,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
                 s += temp;
             }
 
-            labWorkMap = new ParserJSON().deserializeMap(s);
+            labWorkMap = new ParserJSON(consoleManager).deserializeMap(s);
 
             int maxId = 0;
 
@@ -107,7 +107,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
     public void save(Map<String, LabWork> labWorkMap) {
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
-            String json = new ParserJSON().serializeMap(labWorkMap);
+            String json = new ParserJSON(consoleManager).serializeMap(labWorkMap);
             writer.write(json);
 
         } catch (IOException e) {
@@ -148,7 +148,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             labWorkMap.put("1", labWork);
 
 
-            String json = new ParserJSON().serializeMap(labWorkMap);
+            String json = new ParserJSON(consoleManager).serializeMap(labWorkMap);
             writer.write(json);
 
 

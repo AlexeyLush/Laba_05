@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import exception.ParserException;
+import io.ConsoleManager;
 import models.LabWork;
 import services.parsers.interfaces.ParserElement;
 import services.parsers.interfaces.ParserMap;
@@ -21,10 +22,13 @@ import java.util.TimeZone;
  */
 
 public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, LabWork> {
-    private final ObjectMapper mapper;
 
-    public ParserJSON(){
+    private final ObjectMapper mapper;
+    private final ConsoleManager consoleManager;
+
+    public ParserJSON(ConsoleManager consoleManager){
         mapper = new ObjectMapper();
+        this.consoleManager = consoleManager;
         mapper.registerModule(new JSR310Module());
         mapper.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
     }
@@ -46,7 +50,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
             TypeReference<LabWork> typeRef = new TypeReference<LabWork>() {};
             return mapper.readValue(json, typeRef);
         } catch (IOException e) {
-            new ParserException().outputException();
+            consoleManager.error("Во время парсинга данных произошла ошибка");
         }
         return new LabWork();
     }
@@ -57,7 +61,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
         try {
             json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(elements);
         } catch (JsonProcessingException e) {
-            new ParserException().outputException();
+            consoleManager.error("Во время парсинга данных произошла ошибка");
         }
         return json;
     }
@@ -68,7 +72,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
             TypeReference<LinkedHashMap<String, LabWork>> typeRef = new TypeReference<LinkedHashMap<String, LabWork>>() {};
             return new LinkedHashMap<>(mapper.readValue(json, typeRef));
         } catch (IOException e) {
-            new ParserException().outputException();
+            consoleManager.error("Во время парсинга данных произошла ошибка");
             return null;
         }
     }
@@ -80,7 +84,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
         try {
             json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(elements);
         } catch (JsonProcessingException e) {
-            new ParserException().outputException();
+            consoleManager.error("Во время парсинга данных произошла ошибка");
         }
         return json;
     }

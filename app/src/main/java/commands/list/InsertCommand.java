@@ -31,7 +31,7 @@ public class InsertCommand extends CommandAbstract {
 
         LabWork labWork = new LabWork();
 
-        String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand());
+        String[] splitCommand = new SplitCommandOnIdAndJSON().splitedCommand(commandFields.getCommand(), commandFields.getConsoleManager());
 
         String key = splitCommand[0];
         String json = splitCommand[1];
@@ -39,7 +39,7 @@ public class InsertCommand extends CommandAbstract {
         LabWork labWorkTemp = new LabWork();
 
         if (json != null){
-            labWorkTemp = new ParserJSON().deserializeElement(json);
+            labWorkTemp = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
         }
 
         boolean isLabWork = true;
