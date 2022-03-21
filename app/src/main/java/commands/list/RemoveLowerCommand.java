@@ -170,7 +170,7 @@ public class RemoveLowerCommand extends CommandAbstract {
                     commandFields.getLabWorkDAO().delete(entry.getKey());
                 }
             }
-            commandFields.getConsoleManager().successfully("Команда remove_greater успешно выполнена");
+            commandFields.getConsoleManager().successfully("Команда remove_lower успешно выполнена");
         }
     }
 }
