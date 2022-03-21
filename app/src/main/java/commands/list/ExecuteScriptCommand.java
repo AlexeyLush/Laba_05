@@ -10,7 +10,9 @@ import files.ExecuteFileManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Команда считывания и исполнения скрипта из указанного файла
@@ -18,7 +20,7 @@ import java.util.List;
 
 public class ExecuteScriptCommand extends CommandAbstract {
 
-    private static List<String> scriptsCompleted = new ArrayList<>();
+    private static Map<String,Integer> scriptsCompleted = new LinkedHashMap<>();
 
     public ExecuteScriptCommand(){
         setTitle("execute_script");
@@ -46,24 +48,25 @@ public class ExecuteScriptCommand extends CommandAbstract {
                 throw new NotFoundScriptFileException();
             }
 
-            ExecuteScriptCommand.scriptsCompleted.add(fileName);
+            if (ExecuteScriptCommand.scriptsCompleted.containsKey(fileName)){
+                Integer oldVal = ExecuteScriptCommand.scriptsCompleted.get(fileName);
+                ExecuteScriptCommand.scriptsCompleted.put(fileName, oldVal + 1);
+            } else{
+                ExecuteScriptCommand.scriptsCompleted.put(fileName, 0);
+            }
 
             ExecuteFileManager executeFileManager = new ExecuteFileManager(executeFile.getAbsolutePath(), commandFields.getConsoleManager());
             List<String> scripts = executeFileManager.readFile();
 
-            if (!ExecuteScriptCommand.scriptsCompleted.contains(fileName)){
+            if (ExecuteScriptCommand.scriptsCompleted.get(fileName) == 0){
                 for (String command: scripts){
                     commandFields.getCommandsManager().executeCommand(command, commandFields.getLabWorkDAO());
                 }
-
-                commandFields.getConsoleManager().successfully("Команда execute_script успешно выполнена");
             } else{
                 commandFields.getConsoleManager().warning(String.format("Файл %s уже был исполнен", fileName));
             }
 
             ExecuteScriptCommand.scriptsCompleted.remove(fileName);
-
-
 
         } catch (NotFoundScriptFileException e) {
             e.outputException();
