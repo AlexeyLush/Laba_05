@@ -16,16 +16,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-<<<<<<< HEAD
 /**
  * Класс для парсинга JSON файлов
  */
 
-public class ParserJSON implements ParserElement<LabWork>, ParserMap<Integer, LabWork> {
-=======
 public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, LabWork> {
->>>>>>> 30d96752c192af6c04cf70f02ab13d45d7f42e49
-
     private final ObjectMapper mapper;
 
     public ParserJSON(){

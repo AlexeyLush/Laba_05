@@ -2,6 +2,11 @@ package commands.list;
 
 import commands.CommandAbstract;
 import commands.models.CommandFields;
+import models.LabWork;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
 
 /**
  * Команда вывода суммы всех значений поля minimalPoint для всех элементов коллекции

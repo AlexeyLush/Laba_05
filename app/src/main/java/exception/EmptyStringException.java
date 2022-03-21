@@ -1,6 +1,5 @@
 package exception;
 
-import com.sun.media.sound.InvalidDataException;
 
 /**
  * Исключение срабатывает, когда строка оказывается пустой

@@ -22,19 +22,7 @@ public class ShowCommand extends CommandAbstract {
 
     @Override
     public void execute(CommandFields commandFields) {
-        try{
-<<<<<<< HEAD
-            for (Map.Entry<Integer, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
-                commandFields.getConsoleManager().outpunln(entry.getValue().toString());
-=======
-            for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
-                commandFields.getConsoleManager().outpunln(entry.getValue().getCreationDate().toString());
->>>>>>> 30d96752c192af6c04cf70f02ab13d45d7f42e49
-            }
-        }
-        catch (NullPointerException nullPointerException){
-            commandFields.getConsoleManager().error("Ошибка!");
-        }
+
     }
 
 }

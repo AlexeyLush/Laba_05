@@ -1,7 +1,12 @@
 package commands.list;
 
 import commands.CommandAbstract;
+import commands.CommandsManager;
 import commands.models.CommandFields;
+import io.ConsoleManager;
+
+import java.io.IOException;
+import java.util.LinkedHashMap;
 
 /**
  * Команда считывания и исполнения скрипта из указанного файла
