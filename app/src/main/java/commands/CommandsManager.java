@@ -7,6 +7,7 @@ import exception.NotFoundCommandException;
 import files.DataFileManager;
 import files.ExecuteFileManager;
 import io.ConsoleManager;
+import laba.App;
 import services.parsers.ParserJSON;
 
 import java.util.*;
@@ -18,7 +19,7 @@ import java.util.*;
 public final class CommandsManager {
 
     private final Map<String, CommandAbstract> commandsList = new LinkedHashMap<String, CommandAbstract>();
-    private final Scanner scanner;
+    private Scanner scanner;
     private final ConsoleManager consoleManager;
     private final DataFileManager dataFileManager;
     private final ExecuteFileManager executeFileManager;
@@ -74,16 +75,21 @@ public final class CommandsManager {
             e.outputException();
         } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e){
             consoleManager.error("Команда не найдена");
+            scanner = new Scanner(System.in);
         }
 
 
     }
 
     public void inputCommand(LabWorkDAO labWorkDAO) {
-
-        consoleManager.output("Введите команду (help - показать список команд): ");
-        String command = scanner.nextLine();
-        executeCommand(command, labWorkDAO);
+        try{
+            consoleManager.output("Введите команду (help - показать список команд): ");
+            String command = scanner.nextLine();
+            executeCommand(command, labWorkDAO);
+        } catch (NoSuchElementException e){
+            consoleManager.warning("Принудительный выход...");
+            App.exit();
+        }
     }
 
 }

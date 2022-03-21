@@ -27,14 +27,14 @@ public class App {
 
         CommandsManager commandsManager = null;
 
-        if (isRun){
-            DataFileManager dataFileManager = new DataFileManager(dataFileName, consoleManager);
-            labWorkDAO.initialMap(dataFileManager.readFile());
-            ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
+        DataFileManager dataFileManager = new DataFileManager(dataFileName, consoleManager);
+        labWorkDAO.initialMap(dataFileManager.readFile());
+        ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
 
-            commandsManager = new CommandsManager(scanner, consoleManager, dataFileManager, executeFileManager);
-        }
         while (isRun){
+            Scanner scannerT = new Scanner(System.in);
+            scannerT.reset();
+            commandsManager = new CommandsManager(scannerT, consoleManager, dataFileManager, executeFileManager);
             commandsManager.inputCommand(labWorkDAO);
         }
     }

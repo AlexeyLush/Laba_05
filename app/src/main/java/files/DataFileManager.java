@@ -27,10 +27,10 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
         initialFile(fileName);
     }
 
-    public void initialFile(String fileName){
+    public void initialFile(String fileName) {
         File data = new File(fileName);
         try {
-            if (data.createNewFile()){
+            if (data.createNewFile()) {
                 consoleManager.warning("Идёт создание файла...");
                 createFile();
                 consoleManager.successfully("Файл успешно создан!");
@@ -52,7 +52,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             String s = "";
             String temp = "";
 
-            while((temp=reader.readLine())!=null) {
+            while ((temp = reader.readLine()) != null) {
                 s += temp;
             }
 
@@ -62,7 +62,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
             for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
 
-                if (maxId < entry.getValue().getId()){
+                if (maxId < entry.getValue().getId()) {
                     maxId = entry.getValue().getId();
                 }
 
@@ -96,6 +96,8 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
             labWorkMap = readFile();
             consoleManager.successfully("Данные успешно считаны!");
         }
+
+
         return labWorkMap;
     }
 
@@ -113,6 +115,7 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
     @Override
     public void createFile() {
+
 
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
 
@@ -150,6 +153,10 @@ public class DataFileManager extends FileManager implements FileWork<String, Lab
 
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
+            File file = new File(getFileName());
+            if (file.delete()){
+                createFile();
+            }
         }
     }
 }
