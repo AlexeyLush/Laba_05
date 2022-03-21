@@ -19,6 +19,7 @@ public class ShowCommand extends CommandAbstract {
 
     @Override
     public void execute(CommandFields commandFields) {
+
         try{
 
             for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {

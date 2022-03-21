@@ -6,6 +6,7 @@ import models.LabWork;
 
 import java.util.Map;
 
+
 /**
  * Команда вывода суммы всех значений поля minimalPoint для всех элементов коллекции
  */

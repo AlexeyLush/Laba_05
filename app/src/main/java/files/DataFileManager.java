@@ -1,9 +1,6 @@
 package files;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import commands.CommandAbstract;
-import exception.ProblemWithFileException;
+
 import files.file.FileCreator;
 import files.file.FileManager;
 import files.file.FileWork;
@@ -13,7 +10,6 @@ import models.service.GenerationID;
 import services.parsers.ParserJSON;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
