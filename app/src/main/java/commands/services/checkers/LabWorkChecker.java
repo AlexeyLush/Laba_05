@@ -28,8 +28,8 @@ public class LabWorkChecker {
         }
         return isTrue;
     }
-    public boolean checkUserKey(String json, String key, LabWorkDAO labWorkDAO, LabWork labWork, ConsoleManager consoleManager) {
-        boolean isTrue;
+    public boolean checkUserKey(String json, String key, LabWorkDAO labWorkDAO, LabWork labWork, ConsoleManager consoleManager, boolean isUnique) {
+        boolean isTrue = true;
         if (key == null) {
             isTrue = false;
         } else if (key.isEmpty() || key.replaceAll(" ", "").replaceAll("\t", "").length() == 0) {
@@ -40,10 +40,14 @@ public class LabWorkChecker {
                 consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
                 isTrue = false;
             } else {
-                isTrue = checkerKey(key, labWorkDAO);
+                if (isUnique){
+                    isTrue = checkerKey(key, labWorkDAO);
+                }
             }
         } else {
-            isTrue = checkerKey(key, labWorkDAO);
+            if (isUnique){
+                isTrue = checkerKey(key, labWorkDAO);
+            }
             if (!(new ParserJSON(consoleManager).isDeserializeElement(json))) {
                 isTrue = false;
             }

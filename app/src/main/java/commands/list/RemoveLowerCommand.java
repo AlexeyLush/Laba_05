@@ -163,7 +163,7 @@ public class RemoveLowerCommand extends CommandAbstract {
         }
 
         if (!isLabWork){
-            commandFields.getConsoleManager().error("Введны некорректные данные");
+            commandFields.getConsoleManager().error("Введены некорректные данные");
         } else{
             for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
                 if (labWork.getDescription().length() > entry.getValue().getDescription().length()){

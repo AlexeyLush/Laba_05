@@ -44,7 +44,7 @@ public class InsertCommand extends CommandAbstract {
 
         boolean isLabWork = true;
 
-        while (!checker.checkUserKey(json, key, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager())) {
+        while (!checker.checkUserKey(json, key, commandFields.getLabWorkDAO(), labWork, commandFields.getConsoleManager(), true)) {
             if (commandFields.isUserInput()) {
                 commandFields.getConsoleManager().output("Введите ключ: ");
                 key = commandFields.getScanner().nextLine();
