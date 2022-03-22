@@ -111,12 +111,9 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
             writer.write(jsonWithDate);
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
-            File file = new File(getFileName());
-            if (file.delete()){
-                createFile();
-            }
-            consoleManager.warning("Попробуйте ещё раз...");
-
+            setFileName("C:/Users/Alex/Desktop/lab_works_temp.json");
+            consoleManager.warning("Повторная попытка сохранения...");
+            save(labWorkMap);
         }
     }
 
@@ -162,10 +159,9 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
 
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
-            File file = new File(getFileName());
-            if (file.delete()){
-                createFile();
-            }
+
+            setFileName("C:/Users/Alex/Desktop/lab_works_temp.json");
+            createFile();
         }
     }
 
