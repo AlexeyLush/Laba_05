@@ -111,6 +111,12 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
             writer.write(jsonWithDate);
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
+            File file = new File(getFileName());
+            if (file.delete()){
+                createFile();
+            }
+            consoleManager.warning("Попробуйте ещё раз...");
+
         }
     }
 
