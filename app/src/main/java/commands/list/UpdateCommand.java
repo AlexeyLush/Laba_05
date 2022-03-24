@@ -33,11 +33,11 @@ public class UpdateCommand extends CommandAbstract {
 
     private LinkedHashMap<Integer, Method> updateFields = new LinkedHashMap<>();
 
-    private boolean choosePunct(String punct, ConsoleManager consoleManager, LabWorkChecker checker, Scanner scanner, LabWork labWork){
+    private boolean choosePunct(String punct, ConsoleManager consoleManager, LabWorkChecker checker, Scanner scanner, LabWork labWork) {
         boolean isUpdate = true;
         try {
             int punctInt = Integer.parseInt(punct);
-            switch (punctInt){
+            switch (punctInt) {
                 case 0: {
                     isUpdate = false;
                     break;
@@ -68,7 +68,7 @@ public class UpdateCommand extends CommandAbstract {
                 }
                 case 4: {
                     Float tempMinimalFloat = null;
-                    while (!checker.isMinimalPoint(tempMinimalFloat, labWork)){
+                    while (!checker.isMinimalPoint(tempMinimalFloat, labWork)) {
                         consoleManager.output("Введите минимальную точку: ");
                         tempMinimalFloat = checker.checkMinimalPoint(scanner.nextLine());
                     }
@@ -85,10 +85,10 @@ public class UpdateCommand extends CommandAbstract {
                 case 6: {
 
                     Difficulty tempDifficulty = null;
-                    while (!checker.isDifficulty(tempDifficulty, labWork)){
+                    while (!checker.isDifficulty(tempDifficulty, labWork)) {
                         Difficulty[] difficulties = Difficulty.values();
-                        for (int i = 0; i < difficulties.length; i++){
-                            consoleManager.warning(String.format("%s",difficulties[i]));
+                        for (int i = 0; i < difficulties.length; i++) {
+                            consoleManager.warning(String.format("%s", difficulties[i]));
                         }
                         consoleManager.output("Введите сложность работы: ");
                         tempDifficulty = checker.checkDifficulty(scanner.nextLine());
@@ -99,7 +99,7 @@ public class UpdateCommand extends CommandAbstract {
                 case 7: {
                     String tempAuthorName = null;
 
-                    while (tempAuthorName == null){
+                    while (tempAuthorName == null) {
                         consoleManager.output("Введите имя автора: ");
                         tempAuthorName = checker.checkNamePerson(scanner.nextLine());
                     }
@@ -108,7 +108,7 @@ public class UpdateCommand extends CommandAbstract {
                 }
                 case 8: {
                     Long tempAuthorWeight = null;
-                    while (tempAuthorWeight == null){
+                    while (tempAuthorWeight == null) {
                         consoleManager.output("Введите вес: ");
                         tempAuthorWeight = checker.checkWeightPerson(scanner.nextLine());
                     }
@@ -116,23 +116,24 @@ public class UpdateCommand extends CommandAbstract {
                 }
                 case 9: {
                     String tempAuthorPassportId = null;
-                    while (tempAuthorPassportId == null){
+                    while (tempAuthorPassportId == null) {
                         consoleManager.output("Введите ID паспорта: ");
                         tempAuthorPassportId = checker.checkPassportIdPerson(scanner.nextLine());
                     }
                     break;
                 }
-                default:{
+                default: {
                     consoleManager.error("Введите число от 1 до 9");
                 }
             }
-        } catch (NumberFormatException numberFormatException){
+        } catch (NumberFormatException numberFormatException) {
             new NotNumberException().outputException();
         }
         return isUpdate;
     }
 
     private int counterFiled = 1;
+
     private void outputFiled(String field, ConsoleManager consoleManager, boolean isUpdateField) {
 
         if (isUpdateField) {
@@ -146,7 +147,6 @@ public class UpdateCommand extends CommandAbstract {
     private void showLabWorkFields(LabWork labWork, ConsoleManager consoleManager) {
         outputFiled(String.format("ID: %s", labWork.getId()), consoleManager, false);
         outputFiled(String.format("Дата создания: %s", labWork.getCreationDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))), consoleManager, false);
-
         outputFiled(String.format("Название работы: %s", labWork.getName()), consoleManager, true);
         outputFiled(String.format("Координата X: %d", labWork.getCoordinates().getX()), consoleManager, true);
         outputFiled(String.format("Координата Y: %d", labWork.getCoordinates().getY()), consoleManager, true);
@@ -222,14 +222,11 @@ public class UpdateCommand extends CommandAbstract {
 
                 if ((!checker.isUserNameLab(tempName, labWork) || !checker.isCoordinates(tempX, tempY, labWork)
                         || !checker.isMinimalPoint(tempMinimalFloat, labWork) || !checker.isDescription(tempDescription, labWork)
-                        || !checker.isDifficulty(tempDifficulty, labWork) || !checker.isPerson(tempAuthorName, tempAuthorWeight, tempAuthorPassportId, labWork)) && commandFields.isUserInput()) {
+                        || !checker.isDifficulty(tempDifficulty, labWork) || !checker.isPerson(tempAuthorName, tempAuthorWeight, tempAuthorPassportId, labWork))) {
 
-                    commandFields.getConsoleManager().warning("Некоторые элементы пустые или введены неправильно. Пожалуйста, введите корректные данные для полей");
-
-                } else if ((!checker.isUserNameLab(tempName, labWork) || !checker.isCoordinates(tempX, tempY, labWork)
-                        || !checker.isMinimalPoint(tempMinimalFloat, labWork) || !checker.isDescription(tempDescription, labWork)
-                        || !checker.isDifficulty(tempDifficulty, labWork) || !checker.isPerson(tempAuthorName, tempAuthorWeight, tempAuthorPassportId, labWork)) && !commandFields.isUserInput()) {
+                    commandFields.getConsoleManager().warning("Некоторые поля пустые или введены неправильно. Пожалуйста, введите корректные данные для полей");
                     isLabWork = false;
+
                 }
 
                 if (isLabWork) {
@@ -298,17 +295,15 @@ public class UpdateCommand extends CommandAbstract {
 
 
             }
-            else if (commandFields.isUserInput()) {
+            else {
                 showLabWorkFields(labWork, commandFields.getConsoleManager());
                 commandFields.getConsoleManager().output("Выберете пункт, который хотите изменить или введите 0, чтобы завершить обновление: ");
-                while (choosePunct(commandFields.getScanner().nextLine(), commandFields.getConsoleManager(), checker, commandFields.getScanner(), labWork)){
+                while (choosePunct(commandFields.getScanner().nextLine(), commandFields.getConsoleManager(), checker, commandFields.getScanner(), labWork)) {
                     showLabWorkFields(labWork, commandFields.getConsoleManager());
                     commandFields.getConsoleManager().output("Выберете пункт, который хотите изменить или введите 0, чтобы завершить обновление: ");
                 }
-
-            } else{
-                commandFields.getConsoleManager().error("Команда update была не выполнена из-за некорректных полей");
             }
+
 
         } catch (NullPointerException nullPointerException) {
             commandFields.getConsoleManager().error("Вы не ввели значение");

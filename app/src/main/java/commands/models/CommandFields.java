@@ -22,18 +22,16 @@ public class CommandFields {
     private final LabWorkDAO labWorkDAO;
     private final CommandsManager commandsManager;
     private final ConsoleManager consoleManager;
-    private final boolean isUserInput;
     private final DataFileManager dataFileManager;
 
     public CommandFields(Scanner scanner, String command, LabWorkDAO labWorkDAO, CommandsManager commandsManager, DataFileManager dataFileManager,
-                         ConsoleManager consoleManager, boolean isUserInput) {
+                         ConsoleManager consoleManager) {
         this.scanner = scanner;
         this.command = command;
         this.labWorkDAO = labWorkDAO;
         this.commandsManager = commandsManager;
         this.dataFileManager = dataFileManager;
         this.consoleManager = consoleManager;
-        this.isUserInput = isUserInput;
     }
 
     public Scanner getScanner(){
@@ -60,7 +58,4 @@ public class CommandFields {
         return consoleManager;
     }
 
-    public boolean isUserInput() {
-        return isUserInput;
-    }
 }

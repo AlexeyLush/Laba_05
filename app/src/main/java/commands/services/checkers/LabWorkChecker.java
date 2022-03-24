@@ -54,6 +54,7 @@ public class LabWorkChecker {
         }
         return isTrue;
     }
+
     public String checkUserNameLab(String name){
         String returnName = null;
 
@@ -84,6 +85,7 @@ public class LabWorkChecker {
         }
         return isTrue;
     }
+
     public Long checkX(String x){
         Long returnX = null;
         Coordinates tempCoordinates = new Coordinates();
@@ -125,6 +127,7 @@ public class LabWorkChecker {
         }
         return isTrue;
     }
+
     public Float checkMinimalPoint(String minimalPoint){
         Float returnMinimalPoint = null;
         LabWork tempLabWork = new LabWork();
