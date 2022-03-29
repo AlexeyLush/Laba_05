@@ -10,8 +10,11 @@ import java.io.File;
 
 public abstract class FileManager {
 
-    private final String fileName;
+    private String fileName;
 
+    public void setFileName(String fileName){
+        this.fileName = fileName;
+    }
     public String getFileName(){
         return this.fileName;
     }

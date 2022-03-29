@@ -50,8 +50,9 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
         Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
 
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(getFileName()))) {
-
+        try {
+            FileReader fileReader = new FileReader(getFileName());
+            BufferedReader reader = new BufferedReader(fileReader);
             String s = "";
             String temp = "";
 
@@ -162,10 +163,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
 
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
-            File file = new File(getFileName());
-            if (file.delete()){
-                createFile();
-            }
+            setFileName("C:\\Users\\Alex\\Desktop\\lab_works_temp.json");
         }
     }
 

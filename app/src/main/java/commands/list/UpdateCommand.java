@@ -2,17 +2,18 @@ package commands.list;
 
 import commands.CommandAbstract;
 import commands.models.CommandFields;
-import commands.services.checkers.LabWorkChecker;
-import commands.services.json.LabWorkJsonProcess;
-import commands.services.spliters.SplitCommandOnIdAndJSON;
+import models.Coordinates;
+import models.Person;
+import org.checkerframework.checker.units.qual.C;
+import services.checkers.LabWorkChecker;
+import services.elementProcces.LabWorkProcess;
+import services.spliters.SplitCommandOnIdAndJSON;
 import exception.EmptyFieldException;
 import io.ConsoleManager;
 import exception.NotFoundElementException;
 import exception.NotNumberException;
-import models.Coordinates;
 import models.Difficulty;
 import models.LabWork;
-import models.Person;
 import services.parsers.ParserJSON;
 
 import java.lang.reflect.Method;
@@ -36,6 +37,7 @@ public class UpdateCommand extends CommandAbstract {
 
     private boolean choosePunct(String punct, ConsoleManager consoleManager, LabWorkChecker checker, Scanner scanner, LabWork labWork) {
         boolean isUpdate = true;
+        LabWorkProcess labWorkProcess = new LabWorkProcess(consoleManager, scanner);
         try {
             int punctInt = Integer.parseInt(punct);
             switch (punctInt) {
@@ -44,83 +46,58 @@ public class UpdateCommand extends CommandAbstract {
                     break;
                 }
                 case 1: {
-                    String tempName = null;
-                    while (!checker.isUserNameLab(tempName, labWork)) {
-                        consoleManager.output("Введите название лабораторной работы: ");
-                        tempName = checker.checkUserNameLab(scanner.nextLine());
-                    }
+                    labWork.setName(null);
+                    labWorkProcess.nameProcess(labWork, checker, false);
                     break;
                 }
                 case 2: {
-                    Long tempX = null;
-                    while (!checker.isCoordinates(tempX, labWork.getCoordinates().getY(), labWork)) {
-                        consoleManager.output("Введите координату X: ");
-                        tempX = checker.checkX(scanner.nextLine());
-                    }
+                    Coordinates coordinates = labWork.getCoordinates();
+                    coordinates.setX(null);
+                    labWork.setCoordinates(coordinates);
+                    labWorkProcess.coordinateXProcess(labWork, checker, false);
                     break;
                 }
                 case 3: {
-                    Integer tempY = null;
-                    while (!checker.isCoordinates(labWork.getCoordinates().getX(), tempY, labWork)) {
-                        consoleManager.output("Введите координату Y: ");
-                        tempY = checker.checkY(scanner.nextLine());
-                    }
+                    Coordinates coordinates = labWork.getCoordinates();
+                    coordinates.setY(null);
+                    labWork.setCoordinates(coordinates);
+                    labWorkProcess.coordinateYProcess(labWork, checker, false);
                     break;
                 }
                 case 4: {
-                    Float tempMinimalFloat = null;
-                    while (!checker.isMinimalPoint(tempMinimalFloat, labWork)) {
-                        consoleManager.output("Введите минимальную точку: ");
-                        tempMinimalFloat = checker.checkMinimalPoint(scanner.nextLine());
-                    }
+                    labWork.setMinimalPoint(null);
+                    labWorkProcess.minimalPointProcess(labWork, checker, false);
                     break;
                 }
                 case 5: {
-                    String tempDescription = null;
-                    while (!checker.isDescription(tempDescription, labWork)) {
-                        consoleManager.output("Введите описание лабораторной работы: ");
-                        tempDescription = checker.checkDescription(scanner.nextLine());
-                    }
+                    labWork.setDescription(null);
+                    labWorkProcess.descriptionProcess(labWork, checker, false);
                     break;
                 }
                 case 6: {
-
-                    Difficulty tempDifficulty = null;
-                    while (!checker.isDifficulty(tempDifficulty, labWork)) {
-                        Difficulty[] difficulties = Difficulty.values();
-                        for (int i = 0; i < difficulties.length; i++) {
-                            consoleManager.warning(String.format("%s", difficulties[i]));
-                        }
-                        consoleManager.output("Введите сложность работы: ");
-                        tempDifficulty = checker.checkDifficulty(scanner.nextLine());
-                    }
-
+                    labWork.setDifficulty(null);
+                    labWorkProcess.difficultyProcess(labWork, checker, false);
                     break;
                 }
                 case 7: {
-                    String tempAuthorName = null;
-
-                    while (tempAuthorName == null) {
-                        consoleManager.output("Введите имя автора: ");
-                        tempAuthorName = checker.checkNamePerson(scanner.nextLine());
-                    }
-
+                    Person person = labWork.getAuthor();
+                    person.setName(null);
+                    labWork.setAuthor(person);
+                    labWorkProcess.personNameProcess(labWork, checker, false);
                     break;
                 }
                 case 8: {
-                    Long tempAuthorWeight = null;
-                    while (tempAuthorWeight == null) {
-                        consoleManager.output("Введите вес: ");
-                        tempAuthorWeight = checker.checkWeightPerson(scanner.nextLine());
-                    }
+                    Person person = labWork.getAuthor();
+                    person.setWeight(null);
+                    labWork.setAuthor(person);
+                    labWorkProcess.personWeightProcess(labWork, checker, false);
                     break;
                 }
                 case 9: {
-                    String tempAuthorPassportId = null;
-                    while (tempAuthorPassportId == null) {
-                        consoleManager.output("Введите ID паспорта: ");
-                        tempAuthorPassportId = checker.checkPassportIdPerson(scanner.nextLine());
-                    }
+                    Person person = labWork.getAuthor();
+                    person.setPassportID(null);
+                    labWork.setAuthor(person);
+                    labWorkProcess.personPassportIdProcess(labWork, checker, false);
                     break;
                 }
                 default: {
@@ -172,6 +149,7 @@ public class UpdateCommand extends CommandAbstract {
         try {
             String id = splitCommand[0];
             String json = splitCommand[1];
+
             if (id == null) {
                 throw new EmptyFieldException();
             }
@@ -191,8 +169,8 @@ public class UpdateCommand extends CommandAbstract {
             if (json != null) {
 
                 LabWork labWorkTemp = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
-                LabWorkJsonProcess labWorkJsonProcess = new LabWorkJsonProcess(commandFields.getConsoleManager(), commandFields.getScanner());
-                LabWork labWorkProcessed = labWorkJsonProcess.getProcessedElement(labWorkTemp, checker);
+                LabWorkProcess labWorkJsonProcess = new LabWorkProcess(commandFields.getConsoleManager(), commandFields.getScanner());
+                LabWork labWorkProcessed = labWorkJsonProcess.getProcessedElementWithError(labWorkTemp, checker);
                 commandFields.getLabWorkDAO().update(idInt, labWorkProcessed);
                 commandFields.getConsoleManager().successfully("Команда update успешно выполнена");
 

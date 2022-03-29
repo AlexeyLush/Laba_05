@@ -25,12 +25,8 @@ public class LabWork implements Comparable<LabWork>{
 
     // Геттеры и сеттеры
 
-    public boolean setId(int id){
-        if (id <= 0){
-            return false;
-        }
+    public void setId(int id){
         this.id = id;
-        return true;
     }
 
     public Integer getId() {
@@ -41,12 +37,8 @@ public class LabWork implements Comparable<LabWork>{
         return name;
     }
 
-    public Boolean setName(String name) {
-        if (name == null || name.isEmpty() || name.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-            return false;
-        }
+    public void setName(String name) {
         this.name = name;
-        return true;
     }
 
     public Coordinates getCoordinates() {
@@ -65,24 +57,16 @@ public class LabWork implements Comparable<LabWork>{
         return minimalPoint;
     }
 
-    public boolean setMinimalPoint(Float minimalPoint) {
-        if (minimalPoint <= 0){
-            return false;
-        }
+    public void setMinimalPoint(Float minimalPoint) {
         this.minimalPoint = minimalPoint;
-        return true;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public boolean setDescription(String description) {
-        if (description == null || description.isEmpty() || description.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-            return false;
-        }
+    public void setDescription(String description) {
         this.description = description;
-        return true;
     }
 
     public Difficulty getDifficulty() {
