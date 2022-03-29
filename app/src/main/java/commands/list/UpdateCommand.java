@@ -3,6 +3,7 @@ package commands.list;
 import commands.CommandAbstract;
 import commands.models.CommandFields;
 import commands.services.checkers.LabWorkChecker;
+import commands.services.json.LabWorkJsonProcess;
 import commands.services.spliters.SplitCommandOnIdAndJSON;
 import exception.EmptyFieldException;
 import io.ConsoleManager;
@@ -160,7 +161,6 @@ public class UpdateCommand extends CommandAbstract {
         counterFiled = 1;
     }
 
-
     @Override
     public void execute(CommandFields commandFields) {
 
@@ -191,108 +191,10 @@ public class UpdateCommand extends CommandAbstract {
             if (json != null) {
 
                 LabWork labWorkTemp = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
-                boolean isLabWork = true;
-
-                String tempName = labWorkTemp.getName();
-
-                Coordinates tempCoordinates = labWorkTemp.getCoordinates();
-                Long tempX = null;
-                Integer tempY = null;
-
-                if (tempCoordinates != null) {
-                    tempX = labWorkTemp.getCoordinates().getX();
-                    tempY = labWorkTemp.getCoordinates().getY();
-                }
-
-                Float tempMinimalFloat = labWorkTemp.getMinimalPoint();
-
-                String tempDescription = labWorkTemp.getDescription();
-                Difficulty tempDifficulty = labWorkTemp.getDifficulty();
-
-                Person tempAuthor = labWorkTemp.getAuthor();
-                String tempAuthorName = null;
-                Long tempAuthorWeight = null;
-                String tempAuthorPassportId = null;
-
-                if (tempAuthor != null) {
-                    tempAuthorName = tempAuthor.getName();
-                    tempAuthorWeight = tempAuthor.getWeight();
-                    tempAuthorPassportId = tempAuthor.getPassportID();
-                }
-
-                if ((!checker.isUserNameLab(tempName, labWork) || !checker.isCoordinates(tempX, tempY, labWork)
-                        || !checker.isMinimalPoint(tempMinimalFloat, labWork) || !checker.isDescription(tempDescription, labWork)
-                        || !checker.isDifficulty(tempDifficulty, labWork) || !checker.isPerson(tempAuthorName, tempAuthorWeight, tempAuthorPassportId, labWork))) {
-
-                    commandFields.getConsoleManager().warning("Некоторые поля пустые или введены неправильно. Пожалуйста, введите корректные данные для полей");
-                    isLabWork = false;
-
-                }
-
-                if (isLabWork) {
-
-                    while (!checker.isUserNameLab(tempName, labWork)) {
-                        commandFields.getConsoleManager().output("Введите название лабораторной работы: ");
-                        tempName = checker.checkUserNameLab(commandFields.getScanner().nextLine());
-                    }
-
-                    while (!checker.isCoordinates(tempX, tempY, labWork)) {
-                        commandFields.getConsoleManager().output("Введите координату X: ");
-                        tempX = checker.checkX(commandFields.getScanner().nextLine());
-                        while (tempX == null) {
-                            commandFields.getConsoleManager().output("Введите координату X: ");
-                            tempX = checker.checkX(commandFields.getScanner().nextLine());
-                        }
-
-                        commandFields.getConsoleManager().output("Введите координату Y: ");
-                        tempY = checker.checkY(commandFields.getScanner().nextLine());
-                        while (tempY == null) {
-                            commandFields.getConsoleManager().output("Введите координату Y: ");
-                            tempY = checker.checkY(commandFields.getScanner().nextLine());
-                        }
-                    }
-
-                    while (!checker.isMinimalPoint(tempMinimalFloat, labWork)) {
-                        commandFields.getConsoleManager().output("Введите минимальную точку: ");
-                        tempMinimalFloat = checker.checkMinimalPoint(commandFields.getScanner().nextLine());
-                    }
-
-                    while (!checker.isDescription(tempDescription, labWork)) {
-                        commandFields.getConsoleManager().output("Введите описание лабораторной работы: ");
-                        tempDescription = checker.checkDescription(commandFields.getScanner().nextLine());
-                    }
-
-                    while (!checker.isDifficulty(tempDifficulty, labWork)) {
-                        Difficulty[] difficulties = Difficulty.values();
-                        for (int i = 0; i < difficulties.length; i++) {
-                            commandFields.getConsoleManager().warning(String.format("%s", difficulties[i]));
-                        }
-                        commandFields.getConsoleManager().output("Введите сложность работы: ");
-                        tempDifficulty = checker.checkDifficulty(commandFields.getScanner().nextLine());
-                    }
-
-                    while (!checker.isPerson(tempAuthorName, tempAuthorWeight, tempAuthorPassportId, labWork)) {
-                        while (tempAuthorName == null) {
-                            commandFields.getConsoleManager().output("Введите имя автора: ");
-                            tempAuthorName = checker.checkNamePerson(commandFields.getScanner().nextLine());
-                        }
-
-                        while (tempAuthorWeight == null) {
-                            commandFields.getConsoleManager().output("Введите вес: ");
-                            tempAuthorWeight = checker.checkWeightPerson(commandFields.getScanner().nextLine());
-                        }
-
-                        while (tempAuthorPassportId == null) {
-                            commandFields.getConsoleManager().output("Введите ID паспорта: ");
-                            tempAuthorPassportId = checker.checkPassportIdPerson(commandFields.getScanner().nextLine());
-                        }
-                    }
-
-                } else {
-                    commandFields.getLabWorkDAO().update(idInt, labWorkTemp);
-                    commandFields.getConsoleManager().successfully("Команда update успешно выполнена");
-                }
-
+                LabWorkJsonProcess labWorkJsonProcess = new LabWorkJsonProcess(commandFields.getConsoleManager(), commandFields.getScanner());
+                LabWork labWorkProcessed = labWorkJsonProcess.getProcessedElement(labWorkTemp, checker);
+                commandFields.getLabWorkDAO().update(idInt, labWorkProcessed);
+                commandFields.getConsoleManager().successfully("Команда update успешно выполнена");
 
             }
             else {
