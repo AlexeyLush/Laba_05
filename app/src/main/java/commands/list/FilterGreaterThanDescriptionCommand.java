@@ -41,6 +41,7 @@ public class FilterGreaterThanDescriptionCommand extends CommandAbstract {
                     commandFields.getConsoleManager().outputln(entry.getValue().toString());
                 }
             }
+            commandFields.getConsoleManager().successfully("Команда filter_greater_than успешно выполнена");
         } catch (NullPointerException nullPointerException) {
             commandFields.getConsoleManager().error("Ошибка!");
         }

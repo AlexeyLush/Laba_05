@@ -21,7 +21,9 @@ public class ShowCommand extends CommandAbstract {
     public void execute(CommandFields commandFields) {
 
         try{
-            commandFields.getConsoleManager().warning("----------------------------------------------");
+            if (commandFields.getLabWorkDAO().getAll().size() > 0){
+                commandFields.getConsoleManager().warning("----------------------------------------------");
+            }
             for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
                 commandFields.getConsoleManager().outputln(String.format("Ключ: %s", entry.getKey()));
                 commandFields.getConsoleManager().outputln(entry.getValue().toString());

@@ -45,6 +45,7 @@ public class RemoveKeyCommand extends CommandAbstract {
                 commandFields.getConsoleManager().error("Элемент с ключом не найден!");
             } else{
                 commandFields.getLabWorkDAO().delete(key);
+                commandFields.getConsoleManager().successfully("Команда remove_key успешно выполнена");
             }
         }
 
