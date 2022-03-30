@@ -33,8 +33,6 @@ public class UpdateCommand extends CommandAbstract {
         setDescription("update id {element} : обновить значение элемента коллекции, id которого равен заданному");
     }
 
-    private LinkedHashMap<Integer, Method> updateFields = new LinkedHashMap<>();
-
     private boolean choosePunct(String punct, ConsoleManager consoleManager, LabWorkChecker checker, Scanner scanner, LabWork labWork) {
         boolean isUpdate = true;
         LabWorkProcess labWorkProcess = new LabWorkProcess(consoleManager, scanner);

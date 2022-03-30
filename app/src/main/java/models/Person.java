@@ -15,7 +15,7 @@ public class Person {
     public String getName(){
         return name;
     }
-    public long getWeight(){
+    public Long getWeight(){
         return weight;
     }
     public String getPassportID(){

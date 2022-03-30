@@ -90,7 +90,7 @@ public class LabWork implements Comparable<LabWork>{
 
     @Override
     public String toString() {
-        return "ID: " + id + System.getProperty("line.separator")
+        return  "ID: " + id + System.getProperty("line.separator")
                 + "Дата создания: " + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) + System.getProperty("line.separator")
                 + "Название работы: " + name + System.getProperty("line.separator")
                 + "Координата X: " + coordinates.getX() + System.getProperty("line.separator")

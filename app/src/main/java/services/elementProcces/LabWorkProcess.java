@@ -31,7 +31,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
             }
             while (tempName == null) {
                 consoleManager.output("Введите название лабораторной работы: ");
-                tempName = checker.checkUserNameLab(scanner.nextLine());
+                tempName = checker.checkUserNameLab(scanner.nextLine(), consoleManager, withError);
             }
         }
         labWork.setName(tempName);
@@ -56,7 +56,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
 
             while (tempX == null) {
                 consoleManager.output("Введите координату X: ");
-                tempX = checker.checkX(scanner.nextLine());
+                tempX = checker.checkX(scanner.nextLine(), consoleManager, withError);
             }
         }
         Coordinates coordinates = labWork.getCoordinates();
@@ -72,7 +72,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
 
             while (tempY == null) {
                 consoleManager.output("Введите координату Y: ");
-                tempY = checker.checkY(scanner.nextLine());
+                tempY = checker.checkY(scanner.nextLine(), consoleManager, withError);
             }
         }
 
@@ -91,7 +91,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
 
             while (tempMinimalFloat == null) {
                 consoleManager.output("Введите минимальную точку: ");
-                tempMinimalFloat = checker.checkMinimalPoint(scanner.nextLine());
+                tempMinimalFloat = checker.checkMinimalPoint(scanner.nextLine(), consoleManager, withError);
             }
         }
         labWork.setMinimalPoint(tempMinimalFloat);
@@ -106,7 +106,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
 
             while (tempDescription == null) {
                 consoleManager.output("Введите описание лабораторной работы: ");
-                tempDescription = checker.checkDescription(scanner.nextLine());
+                tempDescription = checker.checkDescription(scanner.nextLine(), consoleManager, withError);
             }
         }
         labWork.setDescription(tempDescription);
@@ -125,7 +125,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
                     consoleManager.warning(String.format("%s", difficulties[i]));
                 }
                 consoleManager.output("Введите сложность работы: ");
-                tempDifficulty = checker.checkDifficulty(scanner.nextLine());
+                tempDifficulty = checker.checkDifficulty(scanner.nextLine(), consoleManager, withError);
             }
         }
         labWork.setDifficulty(tempDifficulty);
@@ -151,7 +151,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
 
             while (tempAuthorName == null) {
                 consoleManager.output("Введите имя автора: ");
-                tempAuthorName = checker.checkNamePerson(scanner.nextLine());
+                tempAuthorName = checker.checkNamePerson(scanner.nextLine(), consoleManager, withError);
             }
         }
 
@@ -170,7 +170,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
 
             while (tempAuthorWeight == null) {
                 consoleManager.output("Введите вес: ");
-                tempAuthorWeight = checker.checkWeightPerson(scanner.nextLine());
+                tempAuthorWeight = checker.checkWeightPerson(scanner.nextLine(), consoleManager, withError);
             }
         }
 
@@ -189,7 +189,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
 
             while (tempAuthorPassportId == null) {
                 consoleManager.output("Введите id паспорта: ");
-                tempAuthorPassportId = checker.checkPassportIdPerson(scanner.nextLine());
+                tempAuthorPassportId = checker.checkPassportIdPerson(scanner.nextLine(), consoleManager, withError);
             }
         }
 

@@ -8,13 +8,15 @@ import files.file.FileWorkMap;
 import io.ConsoleManager;
 import models.*;
 import models.service.GenerationID;
+import services.checkers.LabWorkChecker;
+import services.elementProcces.LabWorkProcess;
 import services.model.ModelParse;
 import services.parsers.ParserJSON;
 
 import java.io.*;
+import java.time.DateTimeException;
 import java.time.ZonedDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс для работы с данными файлов
@@ -47,10 +49,11 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
     public Map<String, LabWork> readMap() {
 
 
-        Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
-
+        Map<String, LabWork> labWorkMap;
+        LabWorkChecker labWorkChecker = new LabWorkChecker();
 
         try {
+            ParserJSON parserJSON = new ParserJSON(consoleManager);
             FileReader fileReader = new FileReader(getFileName());
             BufferedReader reader = new BufferedReader(fileReader);
             String s = "";
@@ -60,42 +63,57 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
                 s += temp;
             }
 
-            labWorkMap = new ParserJSON(consoleManager).deserializeMap(s);
+            if (ZonedDateTime.parse(parserJSON.getDataFromFile(s)) == null){
+                throw new IOException();
+            }
+
+            labWorkMap = parserJSON.deserializeMap(s);
 
             int maxId = 0;
 
+            List<Integer> listId = new ArrayList<>();
             for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
-
                 if (maxId < entry.getValue().getId()) {
                     maxId = entry.getValue().getId();
                 }
+                Integer id = labWorkChecker.checkId(entry.getValue().getId().toString(), consoleManager, false);
+                String name = labWorkChecker.checkNamePerson(entry.getValue().getName(), consoleManager, false);
+                Long coordX = labWorkChecker.checkX(entry.getValue().getCoordinates().getX().toString(), consoleManager, false);
+                Integer coordY = labWorkChecker.checkY(entry.getValue().getCoordinates().getY().toString(), consoleManager, false);
+                Float minimalPoint = labWorkChecker.checkMinimalPoint(entry.getValue().getMinimalPoint().toString(), consoleManager, false);
+                String description = labWorkChecker.checkDescription(entry.getValue().getDescription(), consoleManager, false);
+                Difficulty difficulty = labWorkChecker.checkDifficulty(entry.getValue().getDifficulty().toString(), consoleManager, false);
+                String authorName = labWorkChecker.checkNamePerson(entry.getValue().getAuthor().getName(), consoleManager, false);
+                Long authorWeight = labWorkChecker.checkWeightPerson(entry.getValue().getAuthor().getWeight().toString(), consoleManager, false);
+                String authorPassportId = labWorkChecker.checkPassportIdPerson(entry.getValue().getAuthor().getPassportID(), consoleManager, false);
 
-                String tempName = entry.getValue().getName();
+                if (listId.contains(id)){
+                    throw new IOException();
+                }
 
-                Coordinates tempCoordinates = entry.getValue().getCoordinates();
-                Long tempX = tempCoordinates.getX();
-                Integer tempY = tempCoordinates.getY();
+                if (id == null || name == null || coordX == null || coordY == null
+                        || minimalPoint == null || description == null || difficulty == null
+                        || authorName == null || authorWeight == null || authorPassportId == null){
+                    throw new IOException();
+                }
+                listId.add(id);
 
-
-                Float tempMinimalFloat = entry.getValue().getMinimalPoint();
-
-                String tempDescription = entry.getValue().getDescription();
-                Difficulty tempDifficulty = entry.getValue().getDifficulty();
-
-                Person tempAuthor = entry.getValue().getAuthor();
-                String tempAuthorName = tempAuthor.getName();
-                Long tempAuthorWeight = tempAuthor.getWeight();
-                String tempAuthorPassportId = tempAuthor.getPassportID();
             }
 
             GenerationID.setId(maxId + 1);
 
+            fileReader.close();
+
 
         } catch (IOException | NullPointerException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
-            consoleManager.warning("Идёт перезапись файла значениями по умолчанию...");
             createFile();
-            consoleManager.successfully("Файл успешно перезаписан!");
+            consoleManager.warning("Идёт повторное считывание данных...");
+            labWorkMap = readMap();
+            consoleManager.successfully("Данные успешно считаны!");
+        } catch (DateTimeException dateTimeException){
+            consoleManager.error("Во время парсинга даты инициализации произошла ошибка");
+            createFile();
             consoleManager.warning("Идёт повторное считывание данных...");
             labWorkMap = readMap();
             consoleManager.successfully("Данные успешно считаны!");
@@ -127,7 +145,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
         ModelParse modelParse = new ModelParse();
         modelParse.setDate(ZonedDateTime.now().toString());
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
-
+            consoleManager.warning("Идёт запись значениями по умолчанию...");
             Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
 
 
@@ -160,7 +178,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
             String json = new ParserJSON(consoleManager).serializeModelParse(modelParse);
             writer.write(json);
 
-
+            consoleManager.successfully("Файл успешно создан!");
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
             setFileName("C:\\Users\\Alex\\Desktop\\lab_works_temp.json");

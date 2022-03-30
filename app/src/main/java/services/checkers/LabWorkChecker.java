@@ -13,40 +13,48 @@ import java.util.NoSuchElementException;
 
 public class LabWorkChecker extends Checker {
 
-    public boolean checkerKey(String key, LabWorkDAO labWorkDAO) {
+    public boolean checkerKey(String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean withError) {
         boolean isTrue = true;
         try {
             if (labWorkDAO.getAll().containsKey(key)) {
+                isTrue = false;
                 throw new NotUniqueKeyException(key);
             }
         } catch (NoSuchElementException noSuchElementException) {
-            new NotNumberException().outputException();
+            if (withError){
+                consoleManager.error("Введите число");
+            }
             isTrue = false;
         } catch (NotUniqueKeyException notUniqueKeyException) {
-            notUniqueKeyException.outputException();
-            isTrue = false;
+            if (withError){
+                notUniqueKeyException.outputException();
+            }
         }
         return isTrue;
     }
-    public boolean checkUserKey(String json, String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean isUnique) {
+    public boolean checkUserKey(String json, String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean isUnique, boolean withError) {
         boolean isTrue = true;
         if (key == null) {
             isTrue = false;
         } else if (key.isEmpty() || key.replaceAll(" ", "").replaceAll("\t", "").length() == 0) {
-            consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
+            if (withError){
+                consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
+            }
             isTrue = false;
         } else if (json == null) {
             if (key.contains(" ") || key.contains("\t")) {
-                consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
+                if (withError){
+                    consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
+                }
                 isTrue = false;
             } else {
                 if (isUnique){
-                    isTrue = checkerKey(key, labWorkDAO);
+                    isTrue = checkerKey(key, labWorkDAO, consoleManager, withError);
                 }
             }
         } else {
             if (isUnique){
-                isTrue = checkerKey(key, labWorkDAO);
+                isTrue = checkerKey(key, labWorkDAO, consoleManager, withError);
             }
             if (!(new ParserJSON(consoleManager).isDeserializeElement(json))) {
                 isTrue = false;
@@ -54,22 +62,48 @@ public class LabWorkChecker extends Checker {
         }
         return isTrue;
     }
-    public String checkUserNameLab(String name){
+    public Integer checkId(String id, ConsoleManager consoleManager, boolean withError){
+        Integer returnId = null;
+
+        try{
+            if (id == null || id.isEmpty() || id.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
+                throw new EmptyFieldException();
+            }
+            returnId = Integer.parseInt(id);
+            if (returnId < 0){
+                returnId = null;
+                throw new NotPositiveNumberException();
+            }
+        } catch (EmptyFieldException e){
+            if (withError){
+                e.outputException();
+            }
+        } catch (NotPositiveNumberException e) {
+            if (withError){
+                e.outputException();
+            }
+        }
+
+        return returnId;
+
+    }
+    public String checkUserNameLab(String name, ConsoleManager consoleManager, boolean withError){
 
         String returnName = null;
         try {
-
+            returnName = name;
             if (name == null || name.isEmpty() || name.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
+                returnName = null;
                 throw new EmptyFieldException();
             }
-            returnName = name;
         } catch (EmptyFieldException emptyFieldException){
-            emptyFieldException.outputException();
+            if (withError){
+                emptyFieldException.outputException();
+            }
         }
-
         return returnName;
     }
-    public Long checkX(String x){
+    public Long checkX(String x, ConsoleManager consoleManager, boolean withError){
         Long returnX = null;
         Coordinates tempCoordinates = new Coordinates();
         try {
@@ -79,22 +113,28 @@ public class LabWorkChecker extends Checker {
                 throw new NumberLongerException(tempCoordinates.getMaxCoordinateX());
             }
         } catch (NumberFormatException numberFormatException){
-            new NotNumberException().outputException();
+            if (withError){
+                consoleManager.error("Введите число");
+            }
         } catch (NumberLongerException numberLongerException) {
-            numberLongerException.outputException();
+            if (withError){
+                numberLongerException.outputException();
+            }
         }
         return returnX;
     }
-    public Integer checkY(String y){
+    public Integer checkY(String y, ConsoleManager consoleManager, boolean withError){
         Integer returnY = null;
         try {
             returnY = Integer.parseInt(y);
         } catch (NumberFormatException numberFormatException){
-            new NotNumberException().outputException();
+            if (withError){
+                consoleManager.error("Введите число");
+            }
         }
         return returnY;
     }
-    public Float checkMinimalPoint(String minimalPoint){
+    public Float checkMinimalPoint(String minimalPoint, ConsoleManager consoleManager, boolean withError){
         Float returnMinimalPoint = null;
         try {
             if (minimalPoint == null){
@@ -106,29 +146,38 @@ public class LabWorkChecker extends Checker {
                 throw new NumberMinimalException(0);
             }
         } catch (NotNumberException notNumberException){
-            notNumberException.outputException();
+            if (withError){
+                notNumberException.outputException();
+            }
         } catch (NumberFormatException numberFormatException){
-            new NotNumberException().outputException();
+            if (withError){
+                consoleManager.error("Введите число");
+            }
         } catch (NumberMinimalException numberMinimalException) {
-            numberMinimalException.outputException();
+            if (withError){
+                numberMinimalException.outputException();
+            }
         }
         return returnMinimalPoint;
     }
-    public String checkDescription(String description){
+    public String checkDescription(String description, ConsoleManager consoleManager, boolean withError){
         String returnDescription;
         try {
             returnDescription = description;
             if (description == null || description.isEmpty() || description.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
+                returnDescription = null;
                 throw new EmptyFieldException();
             }
 
         } catch (EmptyFieldException emptyFieldException){
-            emptyFieldException.outputException();
+            if (withError){
+                emptyFieldException.outputException();
+            }
             returnDescription = null;
         }
         return returnDescription;
     }
-    public Difficulty checkDifficulty(String difficultyString){
+    public Difficulty checkDifficulty(String difficultyString, ConsoleManager consoleManager, boolean withError){
         Difficulty difficulty = Difficulty.isDifficulty(difficultyString);
 
         try{
@@ -136,12 +185,14 @@ public class LabWorkChecker extends Checker {
                 throw new NotFoundEnumException();
             }
         } catch (NotFoundEnumException notFoundEnumException) {
-            notFoundEnumException.outputException();
+            if (withError){
+                notFoundEnumException.outputException();
+            }
         }
 
         return difficulty;
     }
-    public String checkNamePerson(String name){
+    public String checkNamePerson(String name, ConsoleManager consoleManager, boolean withError){
         String returnName = null;
         try {
             returnName = name;
@@ -150,11 +201,14 @@ public class LabWorkChecker extends Checker {
                 throw new EmptyFieldException();
             }
         } catch (EmptyFieldException emptyFieldException) {
-            emptyFieldException.outputException();
+            if (withError){
+
+                emptyFieldException.outputException();
+            }
         }
         return returnName;
     }
-    public Long checkWeightPerson(String weight){
+    public Long checkWeightPerson(String weight, ConsoleManager consoleManager, boolean withError){
 
         Long returnWeight = null;
         try{
@@ -163,18 +217,25 @@ public class LabWorkChecker extends Checker {
             }
             returnWeight = Long.parseLong(weight);
             if (returnWeight <= 0){
+                returnWeight = null;
                 throw new NumberMinimalException(0);
             }
         } catch (EmptyFieldException emptyFieldException){
-            emptyFieldException.outputException();
+            if (withError){
+                emptyFieldException.outputException();
+            }
         } catch (NumberFormatException numberFormatException){
-            new NotNumberException().outputException();
+            if (withError){
+                consoleManager.error("Введите число");
+            }
         } catch (NumberMinimalException numberMinimalException) {
-            numberMinimalException.outputException();
+            if (withError){
+                numberMinimalException.outputException();
+            }
         }
         return returnWeight;
     }
-    public String checkPassportIdPerson(String passport){
+    public String checkPassportIdPerson(String passport, ConsoleManager consoleManager, boolean withError){
         String returnPassportId = null;
         try {
             returnPassportId = passport;
@@ -183,7 +244,9 @@ public class LabWorkChecker extends Checker {
                 throw new EmptyFieldException();
             }
         } catch (EmptyFieldException emptyFieldException) {
-            emptyFieldException.outputException();
+            if (withError){
+                emptyFieldException.outputException();
+            }
         }
         return returnPassportId;
     }
