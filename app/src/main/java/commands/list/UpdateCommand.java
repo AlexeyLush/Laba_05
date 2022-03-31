@@ -39,66 +39,66 @@ public class UpdateCommand extends CommandAbstract {
         try {
             int punctInt = Integer.parseInt(punct);
             switch (punctInt) {
-                case 0: {
+                case 0 : {
                     isUpdate = false;
                     break;
                 }
-                case 1: {
+                case 1 : {
                     labWork.setName(null);
                     labWorkProcess.nameProcess(labWork, checker, false);
                     break;
                 }
-                case 2: {
+                case 2 : {
                     Coordinates coordinates = labWork.getCoordinates();
                     coordinates.setX(null);
                     labWork.setCoordinates(coordinates);
                     labWorkProcess.coordinateXProcess(labWork, checker, false);
                     break;
                 }
-                case 3: {
+                case 3 : {
                     Coordinates coordinates = labWork.getCoordinates();
                     coordinates.setY(null);
                     labWork.setCoordinates(coordinates);
                     labWorkProcess.coordinateYProcess(labWork, checker, false);
                     break;
                 }
-                case 4: {
+                case 4 : {
                     labWork.setMinimalPoint(null);
                     labWorkProcess.minimalPointProcess(labWork, checker, false);
                     break;
                 }
-                case 5: {
+                case 5 : {
                     labWork.setDescription(null);
                     labWorkProcess.descriptionProcess(labWork, checker, false);
                     break;
                 }
-                case 6: {
+                case 6 : {
                     labWork.setDifficulty(null);
                     labWorkProcess.difficultyProcess(labWork, checker, false);
                     break;
                 }
-                case 7: {
+                case 7 : {
                     Person person = labWork.getAuthor();
                     person.setName(null);
                     labWork.setAuthor(person);
                     labWorkProcess.personNameProcess(labWork, checker, false);
                     break;
                 }
-                case 8: {
+                case 8 : {
                     Person person = labWork.getAuthor();
                     person.setWeight(null);
                     labWork.setAuthor(person);
                     labWorkProcess.personWeightProcess(labWork, checker, false);
                     break;
                 }
-                case 9: {
+                case 9 : {
                     Person person = labWork.getAuthor();
                     person.setPassportID(null);
                     labWork.setAuthor(person);
                     labWorkProcess.personPassportIdProcess(labWork, checker, false);
                     break;
                 }
-                default: {
+                default : {
                     consoleManager.error("Введите число от 1 до 9");
                 }
             }

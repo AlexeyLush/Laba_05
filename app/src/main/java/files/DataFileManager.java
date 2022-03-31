@@ -77,6 +77,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
                     maxId = entry.getValue().getId();
                 }
                 Integer id = labWorkChecker.checkId(entry.getValue().getId().toString(), consoleManager, false);
+                ZonedDateTime dateTime = labWorkChecker.checkDate(entry.getValue().getCreationDate().toString(), consoleManager, false);
                 String name = labWorkChecker.checkNamePerson(entry.getValue().getName(), consoleManager, false);
                 Long coordX = labWorkChecker.checkX(entry.getValue().getCoordinates().getX().toString(), consoleManager, false);
                 Integer coordY = labWorkChecker.checkY(entry.getValue().getCoordinates().getY().toString(), consoleManager, false);
@@ -91,7 +92,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
                     throw new IOException();
                 }
 
-                if (id == null || name == null || coordX == null || coordY == null
+                if (id == null || dateTime == null || name == null || coordX == null || coordY == null
                         || minimalPoint == null || description == null || difficulty == null
                         || authorName == null || authorWeight == null || authorPassportId == null){
                     throw new IOException();
@@ -143,13 +144,11 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
     public void createFile() {
 
         ModelParse modelParse = new ModelParse();
-        modelParse.setDate(ZonedDateTime.now().toString());
         try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
             consoleManager.warning("Идёт запись значениями по умолчанию...");
             Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
-
-
             LabWork labWork = new LabWork();
+            modelParse.setDate(labWork.getCreationDate());
             labWork.setId(GenerationID.newId());
 
             labWork.setName("Лабораторная работа №1");

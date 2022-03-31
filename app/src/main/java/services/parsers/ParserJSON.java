@@ -21,11 +21,9 @@ import services.parsers.interfaces.ParserMap;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Класс для парсинга JSON файлов
@@ -38,9 +36,11 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
 
     public ParserJSON(ConsoleManager consoleManager){
         mapper = new ObjectMapper();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm");
         this.consoleManager = consoleManager;
         mapper.registerModule(new JSR310Module());
         mapper.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        mapper.setDateFormat(df);
     }
 
     public boolean isDeserializeElement(String json){
@@ -83,7 +83,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
             JsonNode collection = root.get("collection");
             Map<String, LabWork> res = mapper.convertValue(collection, new TypeReference<LinkedHashMap<String, LabWork>>() {});
             return res;
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException exception) {
             consoleManager.error("Во время парсинга данных произошла ошибка");
             return null;
         }
@@ -106,7 +106,7 @@ public class ParserJSON implements ParserElement<LabWork>, ParserMap<String, Lab
         String res = "";
         try {
             JsonNode root = mapper.readTree(file);
-            String date = root.get("date").asText();
+            ZonedDateTime date = ZonedDateTime.parse(root.get("date").asText());
             modelParse.setDate(date);
             modelParse.setCollection(map);
             res = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(modelParse);

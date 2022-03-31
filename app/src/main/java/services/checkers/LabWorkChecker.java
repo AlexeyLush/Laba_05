@@ -9,6 +9,9 @@ import models.LabWork;
 import models.Person;
 import services.parsers.ParserJSON;
 
+import java.time.DateTimeException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.NoSuchElementException;
 
 public class LabWorkChecker extends Checker {
@@ -86,6 +89,18 @@ public class LabWorkChecker extends Checker {
 
         return returnId;
 
+    }
+    public ZonedDateTime checkDate(String date, ConsoleManager consoleManager, boolean withError){
+        ZonedDateTime returnDate;
+        try {
+            returnDate = ZonedDateTime.parse(date);
+        }  catch (DateTimeException dateTimeException){
+            returnDate = null;
+            if (withError){
+                consoleManager.error("Некоректная дата");
+            }
+        }
+        return returnDate;
     }
     public String checkUserNameLab(String name, ConsoleManager consoleManager, boolean withError){
 
