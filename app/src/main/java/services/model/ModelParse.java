@@ -6,14 +6,14 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 
 public class ModelParse {
-    private String date;
+    private ZonedDateTime date;
     private Map<String, LabWork> collection;
 
-    public String getDate() {
-        return date;
+    public String  getDate() {
+        return date.toString();
     }
 
-    public void setDate(String date) {
+    public void setDate(ZonedDateTime date) {
         this.date = date;
     }
 

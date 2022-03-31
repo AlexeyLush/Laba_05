@@ -8,14 +8,14 @@ import java.util.Objects;
 
 public class Person {
     private String name; //Поле не может быть null, Строка не может быть пустой
-    private long weight; //Значение поля должно быть больше 0
+    private Long weight; //Значение поля должно быть больше 0
     private String passportID; //Поле не может быть null
 
     // Геттеры
     public String getName(){
         return name;
     }
-    public long getWeight(){
+    public Long getWeight(){
         return weight;
     }
     public String getPassportID(){
@@ -23,26 +23,14 @@ public class Person {
     }
 
     // Сеттеры
-    public boolean setName(String name){
-        if (name == null || name.isEmpty() || name.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-            return false;
-        }
+    public void setName(String name){
         this.name = name;
-        return true;
     }
-    public boolean setWeight(long weight){
-        if (weight <= 0){
-            return false;
-        }
+    public void setWeight(Long weight){
         this.weight = weight;
-        return true;
     }
-    public boolean setPassportID(String passportID){
-        if (passportID == null || passportID.isEmpty() || passportID.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-            return false;
-        }
+    public void setPassportID(String passportID){
         this.passportID = passportID;
-        return true;
     }
 
     //Переопределение equals, toString, hashCode

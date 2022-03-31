@@ -6,29 +6,25 @@ package models;
 
 public class Coordinates {
     private Long x; //Максимальное значение поля: 713, Поле не может быть null
-    private int y;
-    private Long maxCoordinateX = 713L;
+    private Integer y;
+    private final Long maxCoordinateX = 713L;
 
 
     // Геттеры
     public Long getX(){
         return x;
     }
-    public int getY(){
+    public Integer getY(){
         return y;
     }
     public Long getMaxCoordinateX(){
-        return this.maxCoordinateX;
+        return maxCoordinateX;
     }
     // Сеттеры
-    public boolean setX(Long x){
-        if (x > maxCoordinateX){
-            return false;
-        }
+    public void setX(Long x){
         this.x = x;
-        return true;
     }
-    public void setY(int y){
+    public void setY(Integer y){
         this.y = y;
     }
     // toString

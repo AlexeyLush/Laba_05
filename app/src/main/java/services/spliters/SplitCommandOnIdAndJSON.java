@@ -1,6 +1,6 @@
-package commands.services.spliters;
+package services.spliters;
 
-import commands.services.spliters.interfaces.SplitCommand;
+import services.spliters.interfaces.SplitCommand;
 import io.ConsoleManager;
 import services.parsers.ParserJSON;
 

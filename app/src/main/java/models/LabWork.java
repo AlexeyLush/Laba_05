@@ -13,7 +13,7 @@ public class LabWork implements Comparable<LabWork>{
     private int id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
-    private java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Float minimalPoint; //Поле может быть null, Значение поля должно быть больше 0
     private String description; //Строка не может быть пустой, Поле не может быть null
     private Difficulty difficulty; //Поле может быть null
@@ -25,12 +25,8 @@ public class LabWork implements Comparable<LabWork>{
 
     // Геттеры и сеттеры
 
-    public boolean setId(int id){
-        if (id <= 0){
-            return false;
-        }
+    public void setId(int id){
         this.id = id;
-        return true;
     }
 
     public Integer getId() {
@@ -41,12 +37,8 @@ public class LabWork implements Comparable<LabWork>{
         return name;
     }
 
-    public Boolean setName(String name) {
-        if (name == null || name.isEmpty() || name.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-            return false;
-        }
+    public void setName(String name) {
         this.name = name;
-        return true;
     }
 
     public Coordinates getCoordinates() {
@@ -65,24 +57,16 @@ public class LabWork implements Comparable<LabWork>{
         return minimalPoint;
     }
 
-    public boolean setMinimalPoint(Float minimalPoint) {
-        if (minimalPoint <= 0){
-            return false;
-        }
+    public void setMinimalPoint(Float minimalPoint) {
         this.minimalPoint = minimalPoint;
-        return true;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public boolean setDescription(String description) {
-        if (description == null || description.isEmpty() || description.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-            return false;
-        }
+    public void setDescription(String description) {
         this.description = description;
-        return true;
     }
 
     public Difficulty getDifficulty() {
@@ -106,7 +90,7 @@ public class LabWork implements Comparable<LabWork>{
 
     @Override
     public String toString() {
-        return "ID: " + id + System.getProperty("line.separator")
+        return  "ID: " + id + System.getProperty("line.separator")
                 + "Дата создания: " + creationDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) + System.getProperty("line.separator")
                 + "Название работы: " + name + System.getProperty("line.separator")
                 + "Координата X: " + coordinates.getX() + System.getProperty("line.separator")

@@ -1,4 +1,4 @@
-package commands.services.spliters.interfaces;
+package services.spliters.interfaces;
 
 import io.ConsoleManager;
 

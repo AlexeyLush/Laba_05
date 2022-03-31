@@ -44,4 +44,5 @@ public class ConsoleManager implements ConsoleOutput, MessageOutput {
     public void successfully(String message) {
         outputWithColor(message, ColorConsole.ANSI_GREEN);
     }
+
 }

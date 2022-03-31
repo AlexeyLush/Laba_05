@@ -17,5 +17,6 @@ public class SaveCommand extends CommandAbstract {
     @Override
     public void execute(CommandFields commandFields) {
         commandFields.getDataFileManager().save(commandFields.getLabWorkDAO().getAll());
+        commandFields.getConsoleManager().successfully("Команда save успешно выполнена");
     }
 }

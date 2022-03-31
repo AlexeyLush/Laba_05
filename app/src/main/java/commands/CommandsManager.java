@@ -60,12 +60,8 @@ public final class CommandsManager {
         String commandName = command.split(" ")[0].toLowerCase();
         try{
             if (commandsList.containsKey(commandName)){
-                boolean isUser = true;
-                if (commandName.equals("execute_script")){
-                    isUser = false;
-                }
                 CommandFields commandFields = new CommandFields(scanner, command, labWorkDAO,
-                        this, dataFileManager, consoleManager, isUser);
+                        this, dataFileManager, consoleManager);
                 commandsList.get(commandName).execute(commandFields);
             }
             else{
