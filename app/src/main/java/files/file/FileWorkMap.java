@@ -1,5 +1,6 @@
 package files.file;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Map;
 
 public interface FileWorkMap<K, V> {
 
-    Map<K, V> readMap();
+    Map<K, V> readMap(String fileName, boolean isCreateFile, boolean withMessage) throws IOException;
     void save(Map<K, V> elements);
 
 }

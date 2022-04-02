@@ -26,59 +26,89 @@ import java.util.*;
 
 public class DataFileManager extends FileManager implements FileWorkMap<String, LabWork>, FileCreator, FileWork {
 
-    private ConsoleManager consoleManager;
+    private final ConsoleManager consoleManager;
+    private final Scanner scanner;
     private final String tempFileName;
     private boolean isMainFile;
 
-    public DataFileManager(String fileName, String tempFileName, ConsoleManager consoleManager, boolean isMainFile) {
+    public DataFileManager(String fileName, String tempFileName, ConsoleManager consoleManager, Scanner scanner, boolean isMainFile) {
         super(fileName);
         this.consoleManager = consoleManager;
+        this.scanner = scanner;
         this.isMainFile = isMainFile;
         this.tempFileName = tempFileName;
         initialFile(fileName);
     }
+
     public void initialFile(String fileName) {
-        File data = new File(fileName);
+
+        File file = new File(fileName);
+        File tempFile = new File(tempFileName);
         try {
-            if (data.createNewFile()) {
+            if (tempFile.canRead()) {
+                if (isMainFile) {
+                    consoleManager.warning("Внимание! На вашем компьютере был обнаружен временный файл с данными");
+                    if (file.createNewFile()) {
+                        String tempData = readFile(tempFileName);
+                        writeFile(fileName, tempData);
+                        consoleManager.successfully("Данные из временного фалйа были перенесены в основной фалй!");
+                        tempFile.delete();
+                    }
+                    else {
+                        consoleManager.output("Хотите ли вы перенести данные коллекции с временного файла в основной? (yes/no): ");
+                        String response = scanner.nextLine();
+                        boolean isTrueResponse = response.equalsIgnoreCase("yes") || response.equalsIgnoreCase("y")
+                                || response.equalsIgnoreCase("no") || response.equalsIgnoreCase("n");
+
+                        while (!isTrueResponse){
+                            consoleManager.output("Хотите ли вы перенести данные коллекции с временного файла в основной? (yes/no): ");
+                            response = scanner.nextLine();
+                            isTrueResponse = response.equalsIgnoreCase("yes") || response.equalsIgnoreCase("y")
+                                    || response.equalsIgnoreCase("no") || response.equalsIgnoreCase("n");
+                        }
+
+                        if (response.equalsIgnoreCase("yes") || response.equalsIgnoreCase("y")) {
+                            Map<String, LabWork> tempCollection = readMap(tempFileName,false, false);
+                            Map<String, LabWork> mainCollection = readMap(getFileName(), true, false);
+                            if (tempCollection != null && mainCollection != null) {
+                                mainCollection.putAll(tempCollection);
+                                if (isCollection(mainCollection)) {
+                                    save(mainCollection);
+                                    consoleManager.successfully("Данные из временного фалйа были перенесены в основной фалй!");
+                                } else {
+                                    consoleManager.error("Данные во времнном файле были повреждены, перенос данных невозможен");
+                                }
+                            } else {
+                                consoleManager.error("Данные во времнном или главном файлах были повреждены, перенос данных невозможен");
+                            }
+                        }
+                    }
+                    tempFile.delete();
+                }
+            }
+            if (file.createNewFile()) {
                 createFile();
             }
+
         } catch (IOException ioException) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
+
     }
 
-    @Override
-    public Map<String, LabWork> readMap() {
-
-        Map<String, LabWork> labWorkMap = null;
-        LabWorkChecker labWorkChecker = new LabWorkChecker();
-
+    public boolean isCollection(Map<String, LabWork> map) {
+        boolean isCollection = true;
         try {
-            ParserJSON parserJSON = new ParserJSON(consoleManager);
-            BufferedReader reader = new BufferedReader(new FileReader(getFileName()));
-            String s = "";
-            String temp = "";
-
-            while ((temp = reader.readLine()) != null) {
-                s += temp;
-            }
-
-            if (ZonedDateTime.parse(parserJSON.getDataFromFile(s)) == null){
-                throw new IOException();
-            }
-
-            labWorkMap = parserJSON.deserializeMap(s);
+            LabWorkChecker labWorkChecker = new LabWorkChecker();
+            int maxId = 0;
             LabWorkDAO labWorkDAO = new LabWorkDAO();
 
-            int maxId = 0;
-
             List<Integer> listId = new ArrayList<>();
-            for (Map.Entry<String, LabWork> entry : labWorkMap.entrySet()) {
+            for (Map.Entry<String, LabWork> entry : map.entrySet()) {
                 if (maxId < entry.getValue().getId()) {
                     maxId = entry.getValue().getId();
                 }
-                String key = labWorkChecker.checkUserKey(entry.getKey(), labWorkDAO, consoleManager, true, false );
+                String key = labWorkChecker.checkUserKey(entry.getKey(), labWorkDAO, consoleManager, true, false);
                 Integer id = labWorkChecker.checkId(entry.getValue().getId().toString(), consoleManager, false);
                 ZonedDateTime dateTime = labWorkChecker.checkDate(entry.getValue().getCreationDate().toString(), consoleManager, false);
                 String name = labWorkChecker.checkNamePerson(entry.getValue().getName(), consoleManager, false);
@@ -91,13 +121,13 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
                 Long authorWeight = labWorkChecker.checkWeightPerson(entry.getValue().getAuthor().getWeight().toString(), consoleManager, false);
                 String authorPassportId = labWorkChecker.checkPassportIdPerson(entry.getValue().getAuthor().getPassportID(), consoleManager, false);
 
-                if (listId.contains(id)){
+                if (listId.contains(id)) {
                     throw new IOException();
                 }
 
                 if (key == null || id == null || dateTime == null || name == null || coordX == null || coordY == null
                         || minimalPoint == null || description == null || difficulty == null
-                        || authorName == null || authorWeight == null || authorPassportId == null){
+                        || authorName == null || authorWeight == null || authorPassportId == null) {
                     throw new IOException();
                 }
                 listId.add(id);
@@ -108,19 +138,63 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
 
             GenerationID.setId(maxId + 1);
 
-            reader.close();
+        } catch (IOException e) {
+            isCollection = false;
+        }
 
-            if (isMainFile){
-                consoleManager.successfully("Данные успешно считаны!");
-            } else {
-                consoleManager.successfully("Данные с временного файла успешно считаны!");
+        return isCollection;
+    }
+
+    @Override
+    public Map<String, LabWork> readMap(String fileName, boolean isCreateFile, boolean withMessage) {
+
+        Map<String, LabWork> labWorkMap = null;
+
+        BufferedReader reader = null;
+        try {
+            ParserJSON parserJSON = new ParserJSON(consoleManager);
+            reader = new BufferedReader(new FileReader(fileName));
+            String s = "";
+            String temp = "";
+
+            while ((temp = reader.readLine()) != null) {
+                s += temp;
+            }
+
+            if (ZonedDateTime.parse(parserJSON.getDataFromFile(s)) == null) {
+                throw new IOException();
+            }
+
+            labWorkMap = parserJSON.deserializeMap(s);
+
+            if (!isCollection(labWorkMap)) {
+                throw new IOException();
             }
 
 
+            if (withMessage){
+                if (isMainFile) {
+                    consoleManager.successfully("Данные с основного файла успешно считаны!");
+                } else {
+                    consoleManager.successfully("Данные с временного файла успешно считаны!");
+                }
+            }
+
         } catch (IOException | NullPointerException | DateTimeException e) {
             consoleManager.error("Во время работы произошла ошибка");
-            createFile();
-            labWorkMap = readMap();
+            if (isCreateFile) {
+                createFile();
+                labWorkMap = readMap(fileName, isCreateFile, withMessage);
+            }
+        }
+
+        if (reader != null){
+            try {
+                reader.close();
+            } catch (IOException e) {
+                consoleManager.error("Во время работы произошла ошибка");
+            }
+
         }
 
         return labWorkMap;
@@ -129,7 +203,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
     @Override
     public void save(Map<String, LabWork> labWorkMap) {
         String jsonWithDate = new ParserJSON(consoleManager).jsonForWrite(readFile(), labWorkMap);
-        if (jsonWithDate != null){
+        if (jsonWithDate != null) {
             try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
                 writer.write(jsonWithDate);
             } catch (IOException e) {
@@ -145,14 +219,14 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
     public void createFile() {
 
         ModelParse modelParse = new ModelParse();
+        Writer writer = null;
         try {
-            if (isMainFile){
+            if (isMainFile) {
                 consoleManager.warning("Идёт создание файла...");
-            }
-            else{
+            } else {
                 consoleManager.warning("Идёт создание временного файла...");
             }
-            Writer writer = new BufferedWriter(new FileWriter(getFileName()));
+            writer = new BufferedWriter(new FileWriter(getFileName()));
             consoleManager.warning("Идёт запись значениями по умолчанию...");
             Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
             LabWork labWork = new LabWork();
@@ -187,17 +261,24 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
 
             writer.close();
 
-            if (isMainFile){
+            if (isMainFile) {
                 consoleManager.successfully("Файл успешно создан!");
-            }
-
-            else{
+            } else {
                 consoleManager.successfully("Временный файл успешно создан!");
             }
 
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
+        try {
+            if (writer != null){
+                writer.close();
+            }
+
+        } catch (IOException e){
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
+        }
+
     }
 
     @Override
@@ -218,5 +299,34 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
         }
 
         return s;
+    }
+
+    @Override
+    public String readFile(String fileName) {
+        String s = "";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+
+            String temp = "";
+
+            while ((temp = reader.readLine()) != null) {
+                s += temp;
+            }
+
+        } catch (IOException | NullPointerException e) {
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
+        }
+
+        return s;
+    }
+
+    @Override
+    public void writeFile(String fileName, String data) {
+
+        try (Writer writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write(data);
+        } catch (IOException e) {
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
+        }
     }
 }

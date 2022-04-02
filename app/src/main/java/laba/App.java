@@ -23,8 +23,15 @@ public class App {
         if (!isMainFile){
             consoleManager.warning("Внимание! Программа не смогла получить доступ к основному файлу из-за ограничений. Программа будет работать с временным файлом");
         }
-        DataFileManager dataFileManager = new DataFileManager(dataFileName, tempFileName, consoleManager, isMainFile);
-        labWorkDAO.initialMap(dataFileManager.readMap());
+        DataFileManager dataFileManager = new DataFileManager(dataFileName, tempFileName, consoleManager, scanner, isMainFile);
+        if (isMainFile){
+            labWorkDAO.initialMap(dataFileManager.readMap(dataFileName, true, true));
+        } else{
+            labWorkDAO.initialMap(dataFileManager.readMap(tempFileName, true,true));
+            dataFileManager = new DataFileManager(tempFileName, dataFileName, consoleManager, scanner, isMainFile);
+        }
+
+
         ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
         CommandsManager commandsManager = new CommandsManager(scanner, consoleManager, dataFileManager, executeFileManager);
 
