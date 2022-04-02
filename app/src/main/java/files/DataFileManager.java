@@ -27,15 +27,16 @@ import java.util.*;
 public class DataFileManager extends FileManager implements FileWorkMap<String, LabWork>, FileCreator, FileWork {
 
     private ConsoleManager consoleManager;
+    private final String tempFileName;
     private boolean isMainFile;
 
-    public DataFileManager(String fileName, ConsoleManager consoleManager, boolean isMainFile) {
+    public DataFileManager(String fileName, String tempFileName, ConsoleManager consoleManager, boolean isMainFile) {
         super(fileName);
         this.consoleManager = consoleManager;
         this.isMainFile = isMainFile;
+        this.tempFileName = tempFileName;
         initialFile(fileName);
     }
-
     public void initialFile(String fileName) {
         File data = new File(fileName);
         try {

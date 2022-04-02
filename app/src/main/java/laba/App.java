@@ -18,12 +18,12 @@ public class App {
     public static void exit(){
         isRun = false;
     }
-    public static void run(Scanner scanner, String dataFileName, ConsoleManager consoleManager, LabWorkDAO labWorkDAO, boolean isMainFile){
+    public static void run(Scanner scanner, String dataFileName, String tempFileName, ConsoleManager consoleManager, LabWorkDAO labWorkDAO, boolean isMainFile){
 
         if (!isMainFile){
             consoleManager.warning("Внимание! Программа не смогла получить доступ к основному файлу из-за ограничений. Программа будет работать с временным файлом");
         }
-        DataFileManager dataFileManager = new DataFileManager(dataFileName, consoleManager, isMainFile);
+        DataFileManager dataFileManager = new DataFileManager(dataFileName, tempFileName, consoleManager, isMainFile);
         labWorkDAO.initialMap(dataFileManager.readMap());
         ExecuteFileManager executeFileManager = new ExecuteFileManager(dataFileName, consoleManager);
         CommandsManager commandsManager = new CommandsManager(scanner, consoleManager, dataFileManager, executeFileManager);
@@ -41,20 +41,20 @@ public class App {
         Scanner scanner = new Scanner(System.in);
 
         String dataFileName = System.getenv("LABWORKS_FILE_PATH");
+        String tempFileName = String.format("%s/lab_works_temp.json", System.getenv("TEMP"));
         boolean isMainFile = true;
 
         File file = new File(dataFileName);
 
         if (!file.canRead()){
-            dataFileName = String.format("%s/lab_works_temp.json", System.getenv("TEMP"));
             isMainFile = false;
         }
 
-        if (dataFileName == null || dataFileName.trim().isEmpty()){
+        if (dataFileName.trim().isEmpty() || tempFileName.trim().isEmpty()){
             consoleManager.error("Ошибка настройки переменного окружения! Программа завершает работу...");
             App.exit();
         }
-        run(scanner, dataFileName, consoleManager, labWorkDAO, isMainFile);
+        run(scanner, dataFileName, tempFileName, consoleManager, labWorkDAO, isMainFile);
 
     }
 }
