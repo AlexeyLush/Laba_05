@@ -1,6 +1,7 @@
 package files;
 
 
+import dao.LabWorkDAO;
 import files.file.FileCreator;
 import files.file.FileManager;
 import files.file.FileWork;
@@ -8,6 +9,7 @@ import files.file.FileWorkMap;
 import io.ConsoleManager;
 import models.*;
 import models.service.GenerationID;
+import org.checkerframework.checker.units.qual.C;
 import services.checkers.LabWorkChecker;
 import services.elementProcces.LabWorkProcess;
 import services.model.ModelParse;
@@ -25,10 +27,12 @@ import java.util.*;
 public class DataFileManager extends FileManager implements FileWorkMap<String, LabWork>, FileCreator, FileWork {
 
     private ConsoleManager consoleManager;
+    private boolean isMainFile;
 
-    public DataFileManager(String fileName, ConsoleManager consoleManager) {
+    public DataFileManager(String fileName, ConsoleManager consoleManager, boolean isMainFile) {
         super(fileName);
         this.consoleManager = consoleManager;
+        this.isMainFile = isMainFile;
         initialFile(fileName);
     }
 
@@ -36,9 +40,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
         File data = new File(fileName);
         try {
             if (data.createNewFile()) {
-                consoleManager.warning("Идёт создание файла...");
                 createFile();
-                consoleManager.successfully("Файл успешно создан!");
             }
         } catch (IOException ioException) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
@@ -48,14 +50,12 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
     @Override
     public Map<String, LabWork> readMap() {
 
-
-        Map<String, LabWork> labWorkMap;
+        Map<String, LabWork> labWorkMap = null;
         LabWorkChecker labWorkChecker = new LabWorkChecker();
 
         try {
             ParserJSON parserJSON = new ParserJSON(consoleManager);
-            FileReader fileReader = new FileReader(getFileName());
-            BufferedReader reader = new BufferedReader(fileReader);
+            BufferedReader reader = new BufferedReader(new FileReader(getFileName()));
             String s = "";
             String temp = "";
 
@@ -68,6 +68,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
             }
 
             labWorkMap = parserJSON.deserializeMap(s);
+            LabWorkDAO labWorkDAO = new LabWorkDAO();
 
             int maxId = 0;
 
@@ -76,6 +77,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
                 if (maxId < entry.getValue().getId()) {
                     maxId = entry.getValue().getId();
                 }
+                String key = labWorkChecker.checkUserKey(null, entry.getKey(), labWorkDAO, consoleManager, true, false );
                 Integer id = labWorkChecker.checkId(entry.getValue().getId().toString(), consoleManager, false);
                 ZonedDateTime dateTime = labWorkChecker.checkDate(entry.getValue().getCreationDate().toString(), consoleManager, false);
                 String name = labWorkChecker.checkNamePerson(entry.getValue().getName(), consoleManager, false);
@@ -92,34 +94,33 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
                     throw new IOException();
                 }
 
-                if (id == null || dateTime == null || name == null || coordX == null || coordY == null
+                if (key == null || id == null || dateTime == null || name == null || coordX == null || coordY == null
                         || minimalPoint == null || description == null || difficulty == null
                         || authorName == null || authorWeight == null || authorPassportId == null){
                     throw new IOException();
                 }
                 listId.add(id);
-
+                LabWork labWork = new LabWork(id, name, new Coordinates(coordX, coordY), dateTime, minimalPoint, description, difficulty,
+                        new Person(authorName, authorWeight, authorPassportId));
+                labWorkDAO.create(key, labWork);
             }
 
             GenerationID.setId(maxId + 1);
 
-            fileReader.close();
+            reader.close();
+
+            if (isMainFile){
+                consoleManager.successfully("Данные успешно считаны!");
+            } else {
+                consoleManager.successfully("Данные с временного файла успешно считаны!");
+            }
 
 
-        } catch (IOException | NullPointerException e) {
-            consoleManager.error("Во время работы программы возникла проблема с файлом");
+        } catch (IOException | NullPointerException | DateTimeException e) {
+            consoleManager.error("Во время работы произошла ошибка");
             createFile();
-            consoleManager.warning("Идёт повторное считывание данных...");
             labWorkMap = readMap();
-            consoleManager.successfully("Данные успешно считаны!");
-        } catch (DateTimeException dateTimeException){
-            consoleManager.error("Во время парсинга даты инициализации произошла ошибка");
-            createFile();
-            consoleManager.warning("Идёт повторное считывание данных...");
-            labWorkMap = readMap();
-            consoleManager.successfully("Данные успешно считаны!");
         }
-
 
         return labWorkMap;
     }
@@ -127,24 +128,30 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
     @Override
     public void save(Map<String, LabWork> labWorkMap) {
         String jsonWithDate = new ParserJSON(consoleManager).jsonForWrite(readFile(), labWorkMap);
-        try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
-            writer.write(jsonWithDate);
-        } catch (IOException e) {
-            consoleManager.error("Во время работы программы возникла проблема с файлом");
-            File file = new File(getFileName());
-            if (file.delete()){
-                createFile();
+        if (jsonWithDate != null){
+            try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
+                writer.write(jsonWithDate);
+            } catch (IOException e) {
+                consoleManager.error("Во время работы программы возникла проблема с файлом");
             }
-            consoleManager.warning("Попробуйте ещё раз...");
-
+        } else {
+            consoleManager.error("Во время работы программы возникла проблема с файлом");
         }
+
     }
 
     @Override
     public void createFile() {
 
         ModelParse modelParse = new ModelParse();
-        try (Writer writer = new BufferedWriter(new FileWriter(getFileName()))) {
+        try {
+            if (isMainFile){
+                consoleManager.warning("Идёт создание файла...");
+            }
+            else{
+                consoleManager.warning("Идёт создание временного файла...");
+            }
+            Writer writer = new BufferedWriter(new FileWriter(getFileName()));
             consoleManager.warning("Идёт запись значениями по умолчанию...");
             Map<String, LabWork> labWorkMap = new LinkedHashMap<>();
             LabWork labWork = new LabWork();
@@ -177,10 +184,18 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
             String json = new ParserJSON(consoleManager).serializeModelParse(modelParse);
             writer.write(json);
 
-            consoleManager.successfully("Файл успешно создан!");
+            writer.close();
+
+            if (isMainFile){
+                consoleManager.successfully("Файл успешно создан!");
+            }
+
+            else{
+                consoleManager.successfully("Временный файл успешно создан!");
+            }
+
         } catch (IOException e) {
             consoleManager.error("Во время работы программы возникла проблема с файлом");
-            setFileName("C:\\Users\\Alex\\Desktop\\lab_works_temp.json");
         }
     }
 

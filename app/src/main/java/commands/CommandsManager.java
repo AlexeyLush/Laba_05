@@ -74,7 +74,26 @@ public final class CommandsManager {
             scanner = new Scanner(System.in);
         }
 
+    }
 
+    public void executeCommand(String command, LabWorkDAO labWorkDAO, List<String> listExecutedFiles){
+        String commandName = command.split(" ")[0].toLowerCase();
+        try{
+            if (commandsList.containsKey(commandName)){
+                CommandFields commandFields = new CommandFields(scanner, command, labWorkDAO,
+                        this, dataFileManager, consoleManager);
+                commandFields.setListExecuteFiles(listExecutedFiles);
+                commandsList.get(commandName).execute(commandFields);
+            }
+            else{
+                throw new NotFoundCommandException();
+            }
+        } catch (NotFoundCommandException e){
+            e.outputException();
+        } catch (ArrayIndexOutOfBoundsException | NoSuchElementException e){
+            consoleManager.error("Команда не найдена");
+            scanner = new Scanner(System.in);
+        }
     }
 
     public void inputCommand(LabWorkDAO labWorkDAO) {

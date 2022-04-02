@@ -23,6 +23,18 @@ public class LabWork implements Comparable<LabWork>{
         this.creationDate = ZonedDateTime.now();
     }
 
+    public LabWork(int id, String name, Coordinates coordinates, ZonedDateTime creationDate, Float minimalPoint, String description, Difficulty difficulty, Person author) {
+        this.id = id;
+        this.name = name;
+        this.coordinates = coordinates;
+        this.creationDate = creationDate;
+        this.minimalPoint = minimalPoint;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.author = author;
+    }
+
+
     // Геттеры и сеттеры
 
     public void setId(int id){

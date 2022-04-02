@@ -1,5 +1,7 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Класс координат
  */
@@ -7,7 +9,17 @@ package models;
 public class Coordinates {
     private Long x; //Максимальное значение поля: 713, Поле не может быть null
     private Integer y;
+    @JsonIgnore
     private final Long maxCoordinateX = 713L;
+
+    public Coordinates(){
+
+    }
+
+    public Coordinates(Long x, Integer y) {
+        this.x = x;
+        this.y = y;
+    }
 
 
     // Геттеры

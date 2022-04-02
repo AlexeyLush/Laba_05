@@ -21,11 +21,17 @@ import java.util.Map;
 
 public class ExecuteScriptCommand extends CommandAbstract {
 
-    private static Map<String,Integer> scriptsCompleted = new LinkedHashMap<>();
-
     public ExecuteScriptCommand(){
         setTitle("execute_script");
         setDescription("execute_script file_name : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
+    }
+
+
+    public void executeScriptsInFile(List<String> scripts, List<String> listExecuteFiles, CommandFields commandFields) throws CloneNotSupportedException {
+        for (String command: scripts){
+            CommandFields newCommandField = commandFields.clone(command, listExecuteFiles);
+            commandFields.getCommandsManager().executeCommand(command, newCommandField.getLabWorkDAO(), listExecuteFiles);
+        }
     }
 
     @Override
@@ -42,35 +48,28 @@ public class ExecuteScriptCommand extends CommandAbstract {
         }
 
         File executeFile = new File(String.format("scripts/%s.txt", fileName));
-
         try {
 
             if (!executeFile.isFile()){
                 throw new NotFoundScriptFileException();
             }
 
-            if (ExecuteScriptCommand.scriptsCompleted.containsKey(fileName)){
-                Integer oldVal = ExecuteScriptCommand.scriptsCompleted.get(fileName);
-                ExecuteScriptCommand.scriptsCompleted.put(fileName, oldVal + 1);
-            } else{
-                ExecuteScriptCommand.scriptsCompleted.put(fileName, 0);
-            }
+            if (!commandFields.getListExecuteFiles().contains(fileName)){
+                commandFields.addExecutedFile(fileName);
+                ExecuteFileManager executeFileManager = new ExecuteFileManager(executeFile.getAbsolutePath(), commandFields.getConsoleManager());
+                List<String> scripts = executeFileManager.readFile();
+                executeScriptsInFile(scripts, commandFields.getListExecuteFiles(), commandFields);
+                commandFields.removeExecutedFile(fileName);
 
-            ExecuteFileManager executeFileManager = new ExecuteFileManager(executeFile.getAbsolutePath(), commandFields.getConsoleManager());
-            List<String> scripts = executeFileManager.readFile();
-
-            if (ExecuteScriptCommand.scriptsCompleted.get(fileName) == 0){
-                for (String command: scripts){
-                    commandFields.getCommandsManager().executeCommand(command, commandFields.getLabWorkDAO());
-                }
             } else{
                 commandFields.getConsoleManager().warning(String.format("Файл %s уже был исполнен", fileName));
             }
 
-            ExecuteScriptCommand.scriptsCompleted.remove(fileName);
 
         } catch (NotFoundScriptFileException e) {
             e.outputException();
+        } catch (CloneNotSupportedException e) {
+            commandFields.getConsoleManager().error("Во время выполнения программы произошла ошибка");
         }
     }
 }

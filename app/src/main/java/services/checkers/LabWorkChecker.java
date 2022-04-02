@@ -16,54 +16,51 @@ import java.util.NoSuchElementException;
 
 public class LabWorkChecker extends Checker {
 
-    public boolean checkerKey(String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean withError) {
-        boolean isTrue = true;
+    public String checkerKey(String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean withError) {
+        String returnKey = null;
         try {
             if (labWorkDAO.getAll().containsKey(key)) {
-                isTrue = false;
                 throw new NotUniqueKeyException(key);
             }
+            returnKey = key;
         } catch (NoSuchElementException noSuchElementException) {
             if (withError){
                 consoleManager.error("Введите число");
             }
-            isTrue = false;
         } catch (NotUniqueKeyException notUniqueKeyException) {
             if (withError){
                 notUniqueKeyException.outputException();
             }
         }
-        return isTrue;
+        return returnKey;
     }
-    public boolean checkUserKey(String json, String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean isUnique, boolean withError) {
-        boolean isTrue = true;
+    public String checkUserKey(String json, String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean isUnique, boolean withError) {
+        String returnKey = null;
         if (key == null) {
-            isTrue = false;
+            return null;
         } else if (key.isEmpty() || key.replaceAll(" ", "").replaceAll("\t", "").length() == 0) {
             if (withError){
                 consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
             }
-            isTrue = false;
         } else if (json == null) {
             if (key.contains(" ") || key.contains("\t")) {
                 if (withError){
                     consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
                 }
-                isTrue = false;
             } else {
                 if (isUnique){
-                    isTrue = checkerKey(key, labWorkDAO, consoleManager, withError);
+                    returnKey = checkerKey(key, labWorkDAO, consoleManager, withError);
                 }
             }
         } else {
             if (isUnique){
-                isTrue = checkerKey(key, labWorkDAO, consoleManager, withError);
+                returnKey = checkerKey(key, labWorkDAO, consoleManager, withError);
             }
             if (!(new ParserJSON(consoleManager).isDeserializeElement(json))) {
-                isTrue = false;
+                returnKey = null;
             }
         }
-        return isTrue;
+        return returnKey;
     }
     public Integer checkId(String id, ConsoleManager consoleManager, boolean withError){
         Integer returnId = null;
@@ -73,7 +70,7 @@ public class LabWorkChecker extends Checker {
                 throw new EmptyFieldException();
             }
             returnId = Integer.parseInt(id);
-            if (returnId < 0){
+            if (returnId <= 0){
                 returnId = null;
                 throw new NotPositiveNumberException();
             }
@@ -180,7 +177,6 @@ public class LabWorkChecker extends Checker {
         try {
             returnDescription = description;
             if (description == null || description.isEmpty() || description.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-                returnDescription = null;
                 throw new EmptyFieldException();
             }
 
@@ -208,16 +204,15 @@ public class LabWorkChecker extends Checker {
         return difficulty;
     }
     public String checkNamePerson(String name, ConsoleManager consoleManager, boolean withError){
-        String returnName = null;
+        String returnName;
         try {
             returnName = name;
             if (name == null || name.isEmpty() || name.replaceAll(" ", "").replaceAll("\t", "").length() == 0){
-                returnName = null;
                 throw new EmptyFieldException();
             }
         } catch (EmptyFieldException emptyFieldException) {
+            returnName = null;
             if (withError){
-
                 emptyFieldException.outputException();
             }
         }

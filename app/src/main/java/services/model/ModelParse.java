@@ -9,7 +9,7 @@ public class ModelParse {
     private ZonedDateTime date;
     private Map<String, LabWork> collection;
 
-    public String  getDate() {
+    public String getDate() {
         return date.toString();
     }
 
