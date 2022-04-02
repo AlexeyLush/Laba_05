@@ -139,7 +139,7 @@ public class LabWorkChecker extends Checker {
             if (minimalPoint == null){
                 throw new NotNumberException();
             }
-            returnMinimalPoint = Float.parseFloat(minimalPoint);
+            returnMinimalPoint = Float.parseFloat(minimalPoint.replace(",", "."));
             if (returnMinimalPoint <= 0){
                 returnMinimalPoint = null;
                 throw new NumberMinimalException(0);
