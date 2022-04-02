@@ -21,6 +21,7 @@ public class LabWorkProcess implements ElementProcess<LabWork, LabWorkChecker> {
         this.scanner = scanner;
     }
 
+
     public void nameProcess(LabWork labWork, LabWorkChecker checker, boolean withError) {
 
         String tempName = labWork.getName();

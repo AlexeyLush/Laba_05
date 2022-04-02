@@ -148,32 +148,40 @@ public class UpdateCommand extends CommandAbstract {
             String id = splitCommand[0];
             String json = splitCommand[1];
 
-            if (id == null) {
-                throw new EmptyFieldException();
-            }
-
-            int idInt = Integer.parseInt(id);
-
-            for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
-                if (entry.getValue().getId().equals(idInt)) {
-                    labWork = entry.getValue();
-                }
-            }
-
-            if (labWork == null) {
-                throw new NotFoundElementException();
-            }
 
             if (json != null) {
 
                 LabWork labWorkTemp = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
                 LabWorkProcess labWorkJsonProcess = new LabWorkProcess(commandFields.getConsoleManager(), commandFields.getScanner());
                 LabWork labWorkProcessed = labWorkJsonProcess.getProcessedElementWithError(labWorkTemp, checker);
-                commandFields.getLabWorkDAO().update(idInt, labWorkProcessed);
+                commandFields.getLabWorkDAO().update(Integer.parseInt(id), labWorkProcessed);
                 commandFields.getConsoleManager().successfully("Команда update успешно выполнена");
 
             }
             else {
+                while (labWork == null){
+                    Integer idInt = null;
+                    if (id == null) {
+                        while (idInt == null){
+                            commandFields.getConsoleManager().output("Введите id: ");
+                            idInt = checker.checkId(commandFields.getScanner().nextLine(), commandFields.getConsoleManager(), true);
+                        }
+                    } else{
+                        idInt = Integer.parseInt(id);
+                    }
+
+                    for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
+                        if (entry.getValue().getId().equals(idInt)) {
+                            labWork = entry.getValue();
+                        }
+                    }
+
+                    if (labWork == null) {
+                        commandFields.getConsoleManager().error("Элемент с таким id не найден");
+                    }
+                }
+
+
                 showLabWorkFields(labWork, commandFields.getConsoleManager());
                 commandFields.getConsoleManager().output("Выберете пункт, который хотите изменить или введите 0, чтобы завершить обновление: ");
                 while (choosePunct(commandFields.getScanner().nextLine(), commandFields.getConsoleManager(), checker, commandFields.getScanner(), labWork)) {
@@ -185,12 +193,8 @@ public class UpdateCommand extends CommandAbstract {
 
         } catch (NullPointerException nullPointerException) {
             commandFields.getConsoleManager().error("Вы не ввели значение");
-        } catch (EmptyFieldException emptyFieldException) {
-            emptyFieldException.outputException();
         } catch (NumberFormatException numberFormatException) {
             commandFields.getConsoleManager().error("Введите число");
-        } catch (NotFoundElementException notFoundElementException) {
-            notFoundElementException.outputException();
         }
 
 

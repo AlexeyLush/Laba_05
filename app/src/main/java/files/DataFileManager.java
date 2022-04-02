@@ -77,7 +77,7 @@ public class DataFileManager extends FileManager implements FileWorkMap<String, 
                 if (maxId < entry.getValue().getId()) {
                     maxId = entry.getValue().getId();
                 }
-                String key = labWorkChecker.checkUserKey(null, entry.getKey(), labWorkDAO, consoleManager, true, false );
+                String key = labWorkChecker.checkUserKey(entry.getKey(), labWorkDAO, consoleManager, true, false );
                 Integer id = labWorkChecker.checkId(entry.getValue().getId().toString(), consoleManager, false);
                 ZonedDateTime dateTime = labWorkChecker.checkDate(entry.getValue().getCreationDate().toString(), consoleManager, false);
                 String name = labWorkChecker.checkNamePerson(entry.getValue().getName(), consoleManager, false);

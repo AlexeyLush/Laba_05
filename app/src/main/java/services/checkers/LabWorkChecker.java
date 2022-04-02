@@ -34,30 +34,17 @@ public class LabWorkChecker extends Checker {
         }
         return returnKey;
     }
-    public String checkUserKey(String json, String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean isUnique, boolean withError) {
+    public String checkUserKey(String key, LabWorkDAO labWorkDAO, ConsoleManager consoleManager, boolean isUnique, boolean withError) {
         String returnKey = null;
         if (key == null) {
             return null;
-        } else if (key.isEmpty() || key.replaceAll(" ", "").replaceAll("\t", "").length() == 0) {
+        } else if (key.isEmpty() || key.replaceAll(" ", "").replaceAll("\t", "").length() == 0 || key.contains(" ") || key.contains("\t")) {
             if (withError){
                 consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
-            }
-        } else if (json == null) {
-            if (key.contains(" ") || key.contains("\t")) {
-                if (withError){
-                    consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
-                }
-            } else {
-                if (isUnique){
-                    returnKey = checkerKey(key, labWorkDAO, consoleManager, withError);
-                }
             }
         } else {
             if (isUnique){
                 returnKey = checkerKey(key, labWorkDAO, consoleManager, withError);
-            }
-            if (!(new ParserJSON(consoleManager).isDeserializeElement(json))) {
-                returnKey = null;
             }
         }
         return returnKey;
@@ -74,13 +61,13 @@ public class LabWorkChecker extends Checker {
                 returnId = null;
                 throw new NotPositiveNumberException();
             }
-        } catch (EmptyFieldException e){
+        } catch (EmptyFieldException | NotPositiveNumberException e){
             if (withError){
                 e.outputException();
             }
-        } catch (NotPositiveNumberException e) {
+        } catch (NumberFormatException numberFormatException){
             if (withError){
-                e.outputException();
+                consoleManager.error("Введите число");
             }
         }
 
