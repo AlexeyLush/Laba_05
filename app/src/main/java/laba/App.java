@@ -6,6 +6,7 @@ import files.ExecuteFileManager;
 import io.ConsoleManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -53,8 +54,17 @@ public class App {
 
         File file = new File(dataFileName);
 
-        if (!file.canRead()){
-            isMainFile = false;
+        try {
+            if (!file.canRead()){
+                if (!file.createNewFile()){
+                    isMainFile = false;
+                } else {
+                    file.delete();
+                }
+            }
+
+        } catch (IOException e){
+            consoleManager.error("Ошбика при работе с файлами");
         }
 
         if (dataFileName.trim().isEmpty() || tempFileName.trim().isEmpty()){
