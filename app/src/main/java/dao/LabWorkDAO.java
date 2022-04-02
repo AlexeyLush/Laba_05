@@ -31,7 +31,8 @@ public class LabWorkDAO implements DAO<String, LabWork>, MapWork<String, LabWork
         for (Map.Entry<String, LabWork> entry : labWorkList.entrySet()) {
             if (entry.getValue().getId().equals(id)){
                 labFromMap = entry.getValue();
-                labFromMap.setId(id);
+                labWork.setId(labFromMap.getId());
+                labWork.setCreationDate(labFromMap.getCreationDate());
                 key = entry.getKey();
             }
         }

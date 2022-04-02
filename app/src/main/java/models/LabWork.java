@@ -97,6 +97,10 @@ public class LabWork implements Comparable<LabWork>{
         this.author = author;
     }
 
+    public void setCreationDate(ZonedDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
     // Переопределение метода toString
 
 
