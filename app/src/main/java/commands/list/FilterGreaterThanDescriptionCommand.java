@@ -36,10 +36,13 @@ public class FilterGreaterThanDescriptionCommand extends CommandAbstract {
         }
 
         try {
+            if (commandFields.getLabWorkDAO().getAll().size() > 0){
+                commandFields.getConsoleManager().warning("----------------------------------------------");
+            }
             for (Map.Entry<String, LabWork> entry : commandFields.getLabWorkDAO().getAll().entrySet()) {
-                if (entry.getValue().getDescription().length() > description.length()) {
-                    commandFields.getConsoleManager().outputln(entry.getValue().toString());
-                }
+                commandFields.getConsoleManager().outputln(String.format("Ключ: %s", entry.getKey()));
+                commandFields.getConsoleManager().outputln(entry.getValue().toString());
+                commandFields.getConsoleManager().warning("----------------------------------------------");
             }
             commandFields.getConsoleManager().successfully("Команда filter_greater_than успешно выполнена");
         } catch (NullPointerException nullPointerException) {
