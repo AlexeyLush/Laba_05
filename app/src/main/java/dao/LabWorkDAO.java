@@ -12,9 +12,6 @@ import java.util.*;
  * Класс для реализации работы с коллекцией LabWork
  */
 
-
-
-
 public class LabWorkDAO implements DAO<String, LabWork>, MapWork<String, LabWork> {
 
     private Map<String, LabWork> labWorkList = new LinkedHashMap<>();
@@ -34,6 +31,7 @@ public class LabWorkDAO implements DAO<String, LabWork>, MapWork<String, LabWork
         for (Map.Entry<String, LabWork> entry : labWorkList.entrySet()) {
             if (entry.getValue().getId().equals(id)){
                 labFromMap = entry.getValue();
+                labFromMap.setId(id);
                 key = entry.getKey();
             }
         }

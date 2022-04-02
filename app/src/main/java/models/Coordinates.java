@@ -13,7 +13,8 @@ public class Coordinates {
     private final Long maxCoordinateX = 713L;
 
     public Coordinates(){
-
+        x = null;
+        y = null;
     }
 
     public Coordinates(Long x, Integer y) {

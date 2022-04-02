@@ -37,7 +37,6 @@ public class ExecuteFileManager extends FileManager implements ReadCommand, Scri
         return null;
     }
 
-
     @Override
     public List<String> readFile() {
 
