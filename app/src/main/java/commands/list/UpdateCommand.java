@@ -45,57 +45,57 @@ public class UpdateCommand extends CommandAbstract {
                 }
                 case 1 : {
                     labWork.setName(null);
-                    labWorkProcess.nameProcess(labWork, checker, false);
+                    labWorkProcess.nameProcess(labWork, checker, false, true);
                     break;
                 }
                 case 2 : {
                     Coordinates coordinates = labWork.getCoordinates();
                     coordinates.setX(null);
                     labWork.setCoordinates(coordinates);
-                    labWorkProcess.coordinateXProcess(labWork, checker, false);
+                    labWorkProcess.coordinateXProcess(labWork, checker, false, true);
                     break;
                 }
                 case 3 : {
                     Coordinates coordinates = labWork.getCoordinates();
                     coordinates.setY(null);
                     labWork.setCoordinates(coordinates);
-                    labWorkProcess.coordinateYProcess(labWork, checker, false);
+                    labWorkProcess.coordinateYProcess(labWork, checker, false, true);
                     break;
                 }
                 case 4 : {
                     labWork.setMinimalPoint(null);
-                    labWorkProcess.minimalPointProcess(labWork, checker, false);
+                    labWorkProcess.minimalPointProcess(labWork, checker, false, true);
                     break;
                 }
                 case 5 : {
                     labWork.setDescription(null);
-                    labWorkProcess.descriptionProcess(labWork, checker, false);
+                    labWorkProcess.descriptionProcess(labWork, checker, false, true);
                     break;
                 }
                 case 6 : {
                     labWork.setDifficulty(null);
-                    labWorkProcess.difficultyProcess(labWork, checker, false);
+                    labWorkProcess.difficultyProcess(labWork, checker, false, true);
                     break;
                 }
                 case 7 : {
                     Person person = labWork.getAuthor();
                     person.setName(null);
                     labWork.setAuthor(person);
-                    labWorkProcess.personNameProcess(labWork, checker, false);
+                    labWorkProcess.personNameProcess(labWork, checker, false, true);
                     break;
                 }
                 case 8 : {
                     Person person = labWork.getAuthor();
                     person.setWeight(null);
                     labWork.setAuthor(person);
-                    labWorkProcess.personWeightProcess(labWork, checker, false);
+                    labWorkProcess.personWeightProcess(labWork, checker, false, true);
                     break;
                 }
                 case 9 : {
                     Person person = labWork.getAuthor();
                     person.setPassportID(null);
                     labWork.setAuthor(person);
-                    labWorkProcess.personPassportIdProcess(labWork, checker, false);
+                    labWorkProcess.personPassportIdProcess(labWork, checker, false, true);
                     break;
                 }
                 default : {
