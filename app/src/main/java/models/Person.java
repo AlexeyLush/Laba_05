@@ -7,6 +7,17 @@ import java.util.Objects;
  */
 
 public class Person {
+
+    public Person() {
+
+    }
+
+    public Person(String name, Long weight, String passportID) {
+        this.name = name;
+        this.weight = weight;
+        this.passportID = passportID;
+    }
+
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Long weight; //Значение поля должно быть больше 0
     private String passportID; //Поле не может быть null

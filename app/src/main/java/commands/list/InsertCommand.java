@@ -39,7 +39,7 @@ public class InsertCommand extends CommandAbstract {
             labWork = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
         }
 
-        while (!checker.checkUserKey(json, key, commandFields.getLabWorkDAO(), commandFields.getConsoleManager(), true, true)) {
+        while (checker.checkUserKey(key, commandFields.getLabWorkDAO(), commandFields.getConsoleManager(), true, true) == null) {
             commandFields.getConsoleManager().output("Введите ключ: ");
             key = commandFields.getScanner().nextLine();
         }

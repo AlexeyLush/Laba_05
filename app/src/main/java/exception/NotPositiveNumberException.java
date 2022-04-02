@@ -5,8 +5,7 @@ package exception;
  */
 
 public class NotPositiveNumberException extends CustomException{
-    @Override
-    public String toString() {
-        return "Значение поля должно быть больше 0";
+    public NotPositiveNumberException(){
+        setMessage("Значение поля должно быть больше 0");
     }
 }
