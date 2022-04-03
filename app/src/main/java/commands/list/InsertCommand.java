@@ -11,6 +11,8 @@ import models.LabWork;
 import models.Person;
 import services.parsers.ParserJSON;
 
+import java.time.ZonedDateTime;
+
 /**
  * Команда добавления нового элемента с заданным ключом
  */
@@ -37,6 +39,7 @@ public class InsertCommand extends CommandAbstract {
 
         if (json != null) {
             labWork = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
+            labWork.setCreationDate(ZonedDateTime.now());
         }
 
         while (checker.checkUserKey(key, commandFields.getLabWorkDAO(), commandFields.getConsoleManager(), true, true) == null) {
@@ -44,7 +47,12 @@ public class InsertCommand extends CommandAbstract {
             key = commandFields.getScanner().nextLine();
         }
 
-        labWork = labWorkProcess.getProcessedElement(labWork, checker);
+        if (json != null){
+            labWork = labWorkProcess.getProcessedElementWithError(labWork, checker);
+        } else {
+            labWork = labWorkProcess.getProcessedElement(labWork, checker);
+        }
+
 
         commandFields.getLabWorkDAO().create(key, labWork);
         commandFields.getConsoleManager().successfully("Команда insert успешно выполнена");

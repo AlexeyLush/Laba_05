@@ -11,6 +11,8 @@ import models.LabWork;
 import models.Person;
 import services.parsers.ParserJSON;
 
+import java.time.ZonedDateTime;
+
 /**
  * Команда замещения значений по ключу, если новое значение меньше старого
  */
@@ -37,9 +39,11 @@ public class ReplaceIfLowerCommand extends CommandAbstract {
 
         if (json != null) {
             labWork = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
+            labWork.setCreationDate(ZonedDateTime.now());
+            labWork = labWorkProcess.getProcessedElementWithError(labWork, checker);
+        } else {
+            labWork = labWorkProcess.getProcessedElement(labWork, checker);
         }
-
-        labWork = labWorkProcess.getProcessedElement(labWork, checker);
 
         if (labWork.getDescription().length() < commandFields.getLabWorkDAO().get(key).getDescription().length()) {
             commandFields.getLabWorkDAO().create(key, labWork);
