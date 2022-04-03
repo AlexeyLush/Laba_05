@@ -37,6 +37,21 @@ public class ReplaceIfLowerCommand extends CommandAbstract {
         String key = splitCommand[0];
         String json = splitCommand[1];
 
+        key = checker.checkUserKey(key, commandFields.getLabWorkDAO(), commandFields.getConsoleManager(), false, true);
+
+        while (key == null){
+            commandFields.getConsoleManager().output("Введите ключ: ");
+            key = checker.checkUserKey(commandFields.getScanner().nextLine(), commandFields.getLabWorkDAO(), commandFields.getConsoleManager(), false, true);
+
+            if (key != null){
+                if (commandFields.getLabWorkDAO().get(key) == null){
+                    commandFields.getConsoleManager().error("Элмент с таким ключом не найден");
+                    key = null;
+                }
+            }
+
+        }
+
         if (json != null) {
             labWork = new ParserJSON(commandFields.getConsoleManager()).deserializeElement(json);
             labWork.setCreationDate(ZonedDateTime.now());

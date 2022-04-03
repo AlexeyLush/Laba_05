@@ -43,8 +43,11 @@ public class LabWorkChecker extends Checker {
                 consoleManager.error("Ключ не должен содеражть пустые символы (пробелы, табуляцию)!");
             }
         } else {
+
             if (isUnique){
                 returnKey = checkerKey(key, labWorkDAO, consoleManager, withError);
+            } else {
+                returnKey = key;
             }
         }
         return returnKey;
