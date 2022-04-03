@@ -33,9 +33,9 @@ public class GroupCountingByNameCommand extends CommandAbstract {
 
             for (Map.Entry<Character, Integer> entry : groupByName.entrySet()) {
                 commandFields.getConsoleManager().outputln(String.format("Кол-во названий, начинающихся с '%c': %d",entry.getKey(), entry.getValue()));
-                commandFields.getConsoleManager().successfully("Команда group_counting_by_name успешно выполнена");
             }
 
+            commandFields.getConsoleManager().successfully("Команда group_counting_by_name успешно выполнена");
         } catch (NullPointerException nullPointerException){
             commandFields.getConsoleManager().error("Ошибка!");
         }
