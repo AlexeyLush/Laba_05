@@ -48,13 +48,14 @@ public class App {
         LabWorkDAO labWorkDAO = new LabWorkDAO();
         Scanner scanner = new Scanner(System.in);
 
-        String dataFileName = System.getenv("LABWORKS_FILE_PATH");
-        String tempFileName = String.format("%s/lab_works_temp.json", System.getenv("TEMP"));
-        boolean isMainFile = true;
 
-        File file = new File(dataFileName);
 
         try {
+            String dataFileName = System.getenv("LABWORKS_FILE_PATH");
+            String tempFileName = String.format("%s/lab_works_temp.json", System.getenv("TEMP"));
+            boolean isMainFile = true;
+
+            File file = new File(dataFileName);
             if (!file.canRead()){
                 if (!file.createNewFile()){
                     isMainFile = false;
@@ -62,16 +63,17 @@ public class App {
                     file.delete();
                 }
             }
+            if (dataFileName.trim().isEmpty() || tempFileName.trim().isEmpty()){
+                consoleManager.error("Ошибка настройки переменного окружения! Программа завершает работу...");
+                App.exit();
+            }
+            run(scanner, dataFileName, tempFileName, consoleManager, labWorkDAO, isMainFile);
 
-        } catch (IOException e){
+        } catch (IOException | NullPointerException e){
             consoleManager.error("Ошбика при работе с файлами");
         }
 
-        if (dataFileName.trim().isEmpty() || tempFileName.trim().isEmpty()){
-            consoleManager.error("Ошибка настройки переменного окружения! Программа завершает работу...");
-            App.exit();
-        }
-        run(scanner, dataFileName, tempFileName, consoleManager, labWorkDAO, isMainFile);
+
 
     }
 }

@@ -29,6 +29,8 @@ dependencies {
     implementation 'com.google.guava:guava:30.1.1-jre'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation 'org.testng:testng:7.1.0'
 }
 
 application {
@@ -36,12 +38,14 @@ application {
     mainClass = 'laba.App'
 }
 
+test {
+    useJUnitPlatform {
+        includeTags 'fast'
+        excludeTags 'slow'
+    }
+}
+
 run {
     standardInput = System.in
 }
 
-jar {
-    manifest {
-        attributes ('Main-Class': 'laba.App')
-    }
-}
