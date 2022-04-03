@@ -18,7 +18,9 @@ public class LabWorkDAO implements DAO<String, LabWork>, MapWork<String, LabWork
 
     @Override
     public int create(String key, LabWork labWork) {
-        labWork.setId(GenerationID.newId());
+        if (labWork.getId() == null){
+            labWork.setId(GenerationID.newId());
+        }
         labWorkList.put(key, labWork);
         return labWork.getId();
     }
