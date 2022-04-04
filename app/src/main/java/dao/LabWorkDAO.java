@@ -63,7 +63,7 @@ public class LabWorkDAO implements DAO<String, LabWork>, MapWork<String, LabWork
 
     @Override
     public void clear() {
-        labWorkList = new LinkedHashMap<>();
+        labWorkList.clear();
     }
 
     @Override
